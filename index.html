@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>宿生会桌游课</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<script>/* 字体后台加载：连不上 Google Fonts 时页面照样立刻显示（用系统字体） */(function(){var l=document.createElement("link");l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Noto+Sans+SC:wght@400;700;900&display=swap";document.head.appendChild(l);})();</script>
+<style>
+/* Layout: a quiet course board. Header, then the three games as a numbered
+   learning order (one column on phones, three on desktop, each tinted with its
+   own box colour), then a three-step "how to use this at game night" strip. */
+:root {
+  /* neutrals: cool paper, ink with a slight blue bias */
+  --bg: #f1f2f4;
+  --surface: #ffffff;
+  --ink: #1b1e25;
+  --ink-2: #535a67;
+  --line: #d9dce2;
+  --focus: #2457c5;
+
+  /* game tints (from the physical boxes/cards) */
+  --dobble: #f2bd0c;      /* yellow tin rim */
+  --dobble-on: #1b1e25;
+  --dobble-ink: #7a5900;
+  --dobble-wash: #fff2c4;
+  --nimmt: #6a3fa3;       /* purple bull */
+  --nimmt-on: #ffffff;
+  --nimmt-ink: #5b3191;
+  --nimmt-wash: #ece4f8;
+  --sushi: #c62f32;       /* maki red */
+  --sushi-on: #ffffff;
+  --sushi-ink: #a92427;
+  --sushi-wash: #fbe2dc;
+
+  /* card art: physical card colours, same in both themes */
+  --art-card: #ffffff;
+  --art-line: #2b2a33;
+  --art-red: #e0393e;
+  --art-blue: #2f7de1;
+  --art-green: #36a35a;
+  --art-orange: #f28c28;
+  --art-purple: #7b4bc4;
+  --art-pink: #ef6a9a;
+  --art-teal: #16a19a;
+  --art-lilac: #e5d9f6;
+  --art-gold: #f7cd3b;
+  --art-salmon: #f47b53;
+  --art-salmon-hi: #ffc0a0;
+  --art-rice: #fffdf6;
+  --art-nori: #263129;
+  --art-cheek: #f6a4b6;
+  --art-belt: #b9bfc9;
+  --art-belt-line: #9aa1ad;
+  --art-shadow: rgba(27, 30, 37, 0.14);
+
+  /* type */
+  --font-display: "Bricolage Grotesque", "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --font-body: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", "Noto Sans CJK SC", sans-serif;
+  --fs-title: clamp(2.25rem, 1.6rem + 2.8vw, 3.5rem);
+  --fs-h2: 1.25rem;
+  --fs-name: 1.375rem;
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-micro: 0.75rem;
+  --radius: 12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #13151a;
+    --surface: #1c1f26;
+    --ink: #eceef2;
+    --ink-2: #a2a8b4;
+    --line: #30343e;
+    --focus: #8fb2ff;
+    --dobble-on: #1b1e25;
+    --dobble-ink: #f5cd4d;
+    --dobble-wash: #362d12;
+    --nimmt: #a985e6;
+    --nimmt-on: #16121f;
+    --nimmt-ink: #c6aaf2;
+    --nimmt-wash: #2a2140;
+    --sushi: #ec6b5c;
+    --sushi-on: #1d0f0e;
+    --sushi-ink: #f59a8c;
+    --sushi-wash: #3a1e1c;
+    --art-belt: #4a505c;
+    --art-belt-line: #3a3f49;
+    --art-shadow: rgba(0, 0, 0, 0.45);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #13151a;
+  --surface: #1c1f26;
+  --ink: #eceef2;
+  --ink-2: #a2a8b4;
+  --line: #30343e;
+  --focus: #8fb2ff;
+  --dobble-on: #1b1e25;
+  --dobble-ink: #f5cd4d;
+  --dobble-wash: #362d12;
+  --nimmt: #a985e6;
+  --nimmt-on: #16121f;
+  --nimmt-ink: #c6aaf2;
+  --nimmt-wash: #2a2140;
+  --sushi: #ec6b5c;
+  --sushi-on: #1d0f0e;
+  --sushi-ink: #f59a8c;
+  --sushi-wash: #3a1e1c;
+  --art-belt: #4a505c;
+  --art-belt-line: #3a3f49;
+  --art-shadow: rgba(0, 0, 0, 0.45);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.65;
+}
+.page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 40px;
+  display: grid;
+  gap: 40px;
+}
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+p { margin: 0; text-wrap: pretty; }
+
+/* ---------- header ---------- */
+.masthead { display: grid; gap: 12px; max-width: 40rem; }
+.kicker {
+  font-size: var(--fs-micro);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--ink-2);
+}
+.masthead h1 {
+  font-family: var(--font-display);
+  font-size: var(--fs-title);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+}
+.lead { color: var(--ink-2); max-width: 34em; }
+
+/* ---------- section heads ---------- */
+.section-head { display: grid; gap: 4px; margin-bottom: 16px; }
+.section-head h2 {
+  font-family: var(--font-display);
+  font-size: var(--fs-h2);
+  font-weight: 900;
+}
+.section-head p { color: var(--ink-2); font-size: var(--fs-small); }
+
+/* ---------- game entries ---------- */
+.games {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+}
+.games > li { min-width: 0; display: flex; }
+.game--dobble { --c: var(--dobble); --c-on: var(--dobble-on); --c-ink: var(--dobble-ink); --c-wash: var(--dobble-wash); }
+.game--nimmt  { --c: var(--nimmt);  --c-on: var(--nimmt-on);  --c-ink: var(--nimmt-ink);  --c-wash: var(--nimmt-wash); }
+.game--sushi  { --c: var(--sushi);  --c-on: var(--sushi-on);  --c-ink: var(--sushi-ink);  --c-wash: var(--sushi-wash); }
+
+.game {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.game:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+/* tinted band on top: learning-order number left, the game's own card art right */
+.game-art {
+  background: var(--c-wash);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px 12px 18px;
+  min-height: 96px;
+}
+.game-art .num {
+  align-self: flex-start;
+  font-family: var(--font-display);
+  font-size: 2.75rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--c-ink);
+  font-variant-numeric: tabular-nums;
+}
+.game-art svg { width: 128px; max-width: 60%; height: auto; display: block; }
+.svg-num { font-family: var(--font-display); font-weight: 800; }
+.game-body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 16px 18px;
+}
+.game-step {
+  font-size: var(--fs-micro);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--c-ink);
+}
+.game-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; }
+.game-name {
+  font-family: var(--font-display);
+  font-size: var(--fs-name);
+  font-weight: 800;
+  line-height: 1.25;
+}
+.game-tag { font-size: var(--fs-small); color: var(--ink-2); }
+.game-hook { font-size: 0.9375rem; line-height: 1.6; }
+/* box facts as a three-column label/value strip, same edges on every entry */
+.game-meta {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding-block: 10px;
+  border-block: 1px solid var(--line);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.35;
+}
+.game-meta div { min-width: 0; display: grid; gap: 2px; }
+.game-meta dt { font-size: var(--fs-micro); color: var(--ink-2); letter-spacing: 0.06em; }
+.game-meta dd { margin: 0; font-size: 0.9375rem; font-weight: 700; }
+.game-foot { margin-top: auto; display: grid; gap: 14px; justify-items: start; padding-top: 4px; }
+.game-foot .game-meta { justify-self: stretch; }
+.game-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: var(--c);
+  color: var(--c-on);
+  font-weight: 700;
+  font-size: 0.9375rem;
+}
+.game-cta .arrow { font-family: var(--font-display); }
+.game-go { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.game-progress {
+  font-size: var(--fs-small);
+  font-weight: 700;
+  color: var(--c-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- how to use ---------- */
+.howto { border-top: 1px solid var(--line); padding-top: 28px; }
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  counter-reset: step;
+}
+.step {
+  min-width: 0;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  counter-increment: step;
+}
+.step-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.step h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.step h3::before {
+  content: counter(step);
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.step p { font-size: 0.9375rem; color: var(--ink-2); }
+.step p strong { color: var(--ink); font-weight: 700; white-space: nowrap; }
+/* a miniature of the game pages' top tabs, current one filled */
+.tabs-mini {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: var(--fs-micro);
+  font-weight: 700;
+  line-height: 1;
+}
+.tabs-mini span { padding: 6px 9px; color: var(--ink-2); }
+.tabs-mini span + span { border-left: 1px solid var(--line); }
+.tabs-mini .on { background: var(--ink); color: var(--bg); }
+
+.notes {
+  display: grid;
+  gap: 6px;
+  font-size: var(--fs-small);
+  color: var(--ink-2);
+  max-width: 46rem;
+}
+
+/* ---------- motion ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .game { transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease; }
+  .game-cta .arrow { transition: transform 160ms ease; }
+}
+@media (hover: hover) {
+  .game:hover { border-color: var(--c); box-shadow: 0 6px 20px var(--art-shadow); }
+  .game:hover .game-cta .arrow { transform: translateX(3px); }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .game:hover { transform: translateY(-2px); }
+}
+.game:active { border-color: var(--c); }
+
+/* ---------- wider screens ---------- */
+@media (min-width: 600px) {
+  .page { padding-inline: max(28px, env(safe-area-inset-left, 0px)) max(28px, env(safe-area-inset-right, 0px)); padding-block: 40px 56px; gap: 48px; }
+  .game-art { padding: 16px 24px 16px 22px; min-height: 132px; }
+  .game-art .num { font-size: 3.25rem; }
+  .game-art svg { width: 176px; }
+  .game-body { padding: 18px 22px 22px; }
+}
+/* tablets: one entry per row, art as a left column so lines stay a readable length */
+@media (min-width: 600px) and (max-width: 899.98px) {
+  .game { grid-template-rows: none; grid-template-columns: 220px minmax(0, 1fr); }
+  .game-art { flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 18px; min-height: 0; }
+  .game-art svg { width: 100%; max-width: 172px; align-self: center; }
+}
+@media (min-width: 900px) {
+  .page { padding-block: 56px 64px; gap: 56px; }
+  .games { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  .game-art { min-height: 150px; }
+  .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+}
+</style>
+</head>
+<body>
+
+<main class="page">
+  <header class="masthead">
+    <p class="kicker">宿生会 · 桌游夜</p>
+    <h1>宿生会桌游课</h1>
+    <p class="lead">三款桌游，大家都是新手也没关系。每款先在手机上走一遍互动教程，亲手出几张牌，再跟机器人打一局，就能坐上真桌子开玩。</p>
+  </header>
+
+  <section aria-labelledby="order-h">
+    <div class="section-head">
+      <h2 id="order-h">按这个顺序学</h2>
+      <p>从规则最少的开始，越往后计分越复杂。人数和时长照盒子上写的。</p>
+    </div>
+
+    <ol class="games">
+      <li>
+        <a class="game game--dobble" href="dobble.html" id="link-dobble">
+          <div class="game-art" aria-hidden="true">
+            <span class="num">1</span>
+            <svg viewBox="0 0 136 84" focusable="false">
+              <defs>
+                <polygon id="hub-star" points="0,-10 2.35,-3.24 9.51,-3.09 3.8,1.24 5.88,8.09 0,4 -5.88,8.09 -3.8,1.24 -9.51,-3.09 -2.35,-3.24"></polygon>
+              </defs>
+              <circle cx="35" cy="42" r="32" fill="var(--art-card)" stroke="var(--dobble)" stroke-width="3.5"></circle>
+              <circle cx="103" cy="42" r="29" fill="var(--art-card)" stroke="var(--dobble)" stroke-width="3.5"></circle>
+              <!-- left card: star (big), drop, leaf, ball -->
+              <use href="#hub-star" transform="translate(27 31) rotate(12) scale(1.25)" fill="var(--art-red)"></use>
+              <path d="M0,-9 C5,-3 7,1 7,4 A7,7 0 0 1 -7,4 C-7,1 -5,-3 0,-9Z" transform="translate(50 29) scale(0.85)" fill="var(--art-blue)"></path>
+              <ellipse cx="0" cy="0" rx="9" ry="4.6" transform="translate(46 55) rotate(-32)" fill="var(--art-green)"></ellipse>
+              <circle cx="22" cy="55" r="6" fill="var(--art-orange)"></circle>
+              <!-- right card: star (small, turned), triangle, square, heart -->
+              <use href="#hub-star" transform="translate(110 55) rotate(-28) scale(0.7)" fill="var(--art-red)"></use>
+              <polygon points="0,-8 7,5 -7,5" transform="translate(93 30) rotate(8)" fill="var(--art-purple)"></polygon>
+              <rect x="-5" y="-5" width="10" height="10" rx="1.5" transform="translate(114 33) rotate(20)" fill="var(--art-teal)"></rect>
+              <path d="M0,5 C-9,-1 -7,-9 0,-4.5 C7,-9 9,-1 0,5Z" transform="translate(90 54) scale(0.9)" fill="var(--art-pink)"></path>
+              <!-- the one shared symbol -->
+              <circle cx="27" cy="31" r="16" fill="none" stroke="var(--art-line)" stroke-width="1.2" stroke-dasharray="3 3"></circle>
+              <circle cx="110" cy="55" r="10.5" fill="none" stroke="var(--art-line)" stroke-width="1.2" stroke-dasharray="3 3"></circle>
+            </svg>
+          </div>
+          <div class="game-body">
+            <p class="game-step">先学 · 只有一条规则</p>
+            <div class="game-title">
+              <h3 class="game-name">嗒宝 Dobble</h3>
+              <span class="game-tag">比眼快</span>
+            </div>
+            <p class="game-hook">任意两张卡都恰好有一个相同的符号。谁先找到并喊出它的名字，谁就拿下这一手。</p>
+            <div class="game-foot">
+              <dl class="game-meta">
+                <div><dt>人数</dt><dd>2–8 人</dd></div>
+                <div><dt>一局</dt><dd>约 15 分钟</dd></div>
+                <div><dt>教程</dt><dd>约 10 分钟</dd></div>
+              </dl>
+              <div class="game-go"><span class="game-cta"><span class="cta-text">开始学 嗒宝</span> <span class="arrow" aria-hidden="true">→</span></span><span class="game-progress" data-progress="dobble" hidden></span></div>
+            </div>
+          </div>
+        </a>
+      </li>
+
+      <li>
+        <a class="game game--nimmt" href="nimmt.html" id="link-nimmt">
+          <div class="game-art" aria-hidden="true">
+            <span class="num">2</span>
+            <svg viewBox="0 0 136 84" focusable="false">
+              <defs>
+                <path id="hub-bull" d="M0,-6 L5,-6 C9,-7 12,-10 13,-15 C16,-10 15,-4 10,-2 C12,1 11,5 8,7 C6,11 3,14 0,14 C-3,14 -6,11 -8,7 C-11,5 -12,1 -10,-2 C-15,-4 -16,-10 -13,-15 C-12,-10 -9,-7 -5,-6Z"></path>
+              </defs>
+              <!-- back card: 104, 1 牛头 -->
+              <g transform="translate(26 14) rotate(-12 23 33)">
+                <rect x="0" y="0" width="46" height="66" rx="5" fill="var(--art-card)" stroke="var(--art-line)" stroke-width="1.5"></rect>
+                <rect x="5" y="15" width="36" height="46" rx="3" fill="var(--art-lilac)"></rect>
+                <use href="#hub-bull" transform="translate(23 37) scale(1.1)" fill="var(--art-purple)"></use>
+                <circle cx="23" cy="7" r="1.9" fill="var(--art-purple)"></circle>
+                <text x="3.5" y="9" class="svg-num" font-size="6.5" fill="var(--art-line)">104</text>
+                <text x="23" y="44" class="svg-num" font-size="13" text-anchor="middle" fill="var(--art-card)" stroke="var(--art-line)" stroke-width="0.8" paint-order="stroke">104</text>
+              </g>
+              <!-- front card: 55, 7 牛头 -->
+              <g transform="translate(66 7) rotate(6 23 33)">
+                <rect x="0" y="0" width="46" height="66" rx="5" fill="var(--art-card)" stroke="var(--art-line)" stroke-width="1.5"></rect>
+                <rect x="5" y="15" width="36" height="46" rx="3" fill="var(--art-gold)"></rect>
+                <use href="#hub-bull" transform="translate(23 37) scale(1.1)" fill="var(--art-purple)"></use>
+                <g fill="var(--art-red)">
+                  <circle cx="15.5" cy="5.5" r="1.7"></circle><circle cx="20.5" cy="5.5" r="1.7"></circle><circle cx="25.5" cy="5.5" r="1.7"></circle><circle cx="30.5" cy="5.5" r="1.7"></circle>
+                  <circle cx="18" cy="10" r="1.7"></circle><circle cx="23" cy="10" r="1.7"></circle><circle cx="28" cy="10" r="1.7"></circle>
+                </g>
+                <text x="23" y="49" class="svg-num" font-size="21" text-anchor="middle" fill="var(--art-red)" stroke="var(--art-card)" stroke-width="2.6" paint-order="stroke">55</text>
+                <text x="3.5" y="9" class="svg-num" font-size="6.5" fill="var(--art-red)">55</text>
+              </g>
+            </svg>
+          </div>
+          <div class="game-body">
+            <p class="game-step">再学 · 四条摆牌规则</p>
+            <div class="game-title">
+              <h3 class="game-name">谁是牛头王</h3>
+              <span class="game-tag">6 nimmt!</span>
+            </div>
+            <p class="game-hook">大家同时出牌，按大小排进 4 列。谁的牌成了某一列的第 6 张，谁就拿走前 5 张，背上它们的牛头。</p>
+            <div class="game-foot">
+              <dl class="game-meta">
+                <div><dt>人数</dt><dd>2–10 人</dd></div>
+                <div><dt>一局</dt><dd>约 45 分钟</dd></div>
+                <div><dt>教程</dt><dd>约 12 分钟</dd></div>
+              </dl>
+              <div class="game-go"><span class="game-cta"><span class="cta-text">开始学 牛头王</span> <span class="arrow" aria-hidden="true">→</span></span><span class="game-progress" data-progress="nimmt" hidden></span></div>
+            </div>
+          </div>
+        </a>
+      </li>
+
+      <li>
+        <a class="game game--sushi" href="sushi-go.html" id="link-sushi">
+          <div class="game-art" aria-hidden="true">
+            <span class="num">3</span>
+            <svg viewBox="0 0 136 84" focusable="false">
+              <!-- conveyor belt -->
+              <rect x="2" y="62" width="132" height="16" rx="8" fill="var(--art-belt)"></rect>
+              <g stroke="var(--art-belt-line)" stroke-width="1.5">
+                <line x1="20" y1="64" x2="20" y2="76"></line><line x1="40" y1="64" x2="40" y2="76"></line><line x1="60" y1="64" x2="60" y2="76"></line>
+                <line x1="80" y1="64" x2="80" y2="76"></line><line x1="100" y1="64" x2="100" y2="76"></line><line x1="120" y1="64" x2="120" y2="76"></line>
+              </g>
+              <!-- plates -->
+              <ellipse cx="44" cy="63" rx="28" ry="5" fill="var(--art-card)" stroke="var(--art-line)" stroke-width="1.2"></ellipse>
+              <ellipse cx="102" cy="63" rx="22" ry="4.5" fill="var(--art-card)" stroke="var(--art-line)" stroke-width="1.2"></ellipse>
+              <!-- salmon nigiri -->
+              <g transform="translate(44 44)">
+                <rect x="-21" y="-6" width="42" height="22" rx="10" fill="var(--art-rice)" stroke="var(--art-line)" stroke-width="1.4"></rect>
+                <path d="M-25,-2 C-25,-14 -12,-18 0,-18 C12,-18 25,-14 25,-2 C25,3 21,4 17,2 C9,-2 -9,-2 -17,2 C-21,4 -25,3 -25,-2Z" fill="var(--art-salmon)" stroke="var(--art-line)" stroke-width="1.4"></path>
+                <g fill="none" stroke="var(--art-salmon-hi)" stroke-width="2.2" stroke-linecap="round">
+                  <path d="M-15,-12 C-12,-8 -12,-5 -14,-2"></path>
+                  <path d="M-4,-15 C-1,-10 -1,-6 -3,-2"></path>
+                  <path d="M8,-15 C11,-10 11,-6 9,-2"></path>
+                </g>
+                <circle cx="-7" cy="7" r="1.9" fill="var(--art-line)"></circle>
+                <circle cx="7" cy="7" r="1.9" fill="var(--art-line)"></circle>
+                <path d="M-3,9.5 Q0,12.5 3,9.5" fill="none" stroke="var(--art-line)" stroke-width="1.3" stroke-linecap="round"></path>
+                <ellipse cx="-12" cy="10" rx="3" ry="1.8" fill="var(--art-cheek)"></ellipse>
+                <ellipse cx="12" cy="10" rx="3" ry="1.8" fill="var(--art-cheek)"></ellipse>
+              </g>
+              <!-- maki roll -->
+              <g transform="translate(102 45)">
+                <path d="M-14,-10 L-14,12 A14,4.5 0 0 0 14,12 L14,-10Z" fill="var(--art-nori)" stroke="var(--art-line)" stroke-width="1.4"></path>
+                <ellipse cx="0" cy="-10" rx="14" ry="4.5" fill="var(--art-rice)" stroke="var(--art-line)" stroke-width="1.4"></ellipse>
+                <ellipse cx="0" cy="-10" rx="5" ry="1.8" fill="var(--art-salmon)"></ellipse>
+                <circle cx="-5" cy="3" r="1.7" fill="var(--art-card)"></circle>
+                <circle cx="5" cy="3" r="1.7" fill="var(--art-card)"></circle>
+                <path d="M-2.5,5.5 Q0,8 2.5,5.5" fill="none" stroke="var(--art-card)" stroke-width="1.2" stroke-linecap="round"></path>
+              </g>
+            </svg>
+          </div>
+          <div class="game-body">
+            <p class="game-step">最后学 · 计分种类最多</p>
+            <div class="game-title">
+              <h3 class="game-name">Sushi Go!</h3>
+              <span class="game-tag">回转寿司传手牌</span>
+            </div>
+            <p class="game-hook">每轮从手牌挑 1 张留下，其余传给左边的人。打完三个回合，总分最高的人赢。</p>
+            <div class="game-foot">
+              <dl class="game-meta">
+                <div><dt>人数</dt><dd>2–5 人</dd></div>
+                <div><dt>一局</dt><dd>约 15 分钟</dd></div>
+                <div><dt>教程</dt><dd>约 15 分钟</dd></div>
+              </dl>
+              <div class="game-go"><span class="game-cta"><span class="cta-text">开始学 Sushi Go!</span> <span class="arrow" aria-hidden="true">→</span></span><span class="game-progress" data-progress="sushi" hidden></span></div>
+            </div>
+          </div>
+        </a>
+      </li>
+    </ol>
+  </section>
+
+  <section class="howto" aria-labelledby="howto-h">
+    <div class="section-head">
+      <h2 id="howto-h">桌游夜怎么用这个网页</h2>
+      <p>三个游戏页的顶部都有同样的三个标签：教程、实战、速查。</p>
+    </div>
+    <ol class="steps">
+      <li class="step">
+        <div class="step-head">
+          <h3>开局前</h3>
+          <span class="tabs-mini" aria-hidden="true"><span class="on">教程</span><span>实战</span><span>速查</span></span>
+        </div>
+        <p>每人用<strong>自己的手机</strong>走一遍教程，等人、摆桌的时候学也行。教程会让你亲手出牌，做错了会告诉你错在哪。</p>
+      </li>
+      <li class="step">
+        <div class="step-head">
+          <h3>想先练一局</h3>
+          <span class="tabs-mini" aria-hidden="true"><span>教程</span><span class="on">实战</span><span>速查</span></span>
+        </div>
+        <p>跟机器人打一整局。第一局默认开着<strong>教练解说</strong>，每一步都会说刚才发生了什么、为什么。</p>
+      </li>
+      <li class="step">
+        <div class="step-head">
+          <h3>上桌以后</h3>
+          <span class="tabs-mini" aria-hidden="true"><span>教程</span><span>实战</span><span class="on">速查</span></span>
+        </div>
+        <p>规则和每种牌一页看完，<strong>忘了就瞄一眼</strong>。说明书没写清楚的地方，这里按官方规则并注明了。</p>
+      </li>
+    </ol>
+  </section>
+
+  <footer class="notes">
+    <p>规则照你们手上的中文说明书整理。</p>
+    <p>嗒宝的实体版是《嗒宝：宝可梦》，网页里用 emoji 代替宝可梦，玩法一样。</p>
+    <p>教程进度只保存在这台设备的浏览器里。</p>
+  </footer>
+</main>
+
+<script>
+/* 教程进度：读三个游戏页各自存在本机的进度（同一个站点，所以读得到）。读不到就什么都不显示。 */
+(function () {
+  function read(k) { try { var v = localStorage.getItem(k); return v == null ? null : JSON.parse(v); } catch (e) { return null; } }
+  var games = {
+    dobble: function () { var p = read('dobble.progress'); if (!p) return null; var d = (p.done || []).filter(Boolean).length; return { done: d, total: 7, finished: !!p.finished }; },
+    nimmt: function () { var p = read('nimmt.v1'); if (!p) return null; return { done: (p.done || []).length, total: 7, finished: !!p.finished }; },
+    sushi: function () { var d = read('sushigo.lessonsDone'); var f = read('sushigo.tutorialDone'); if (!d && !f) return null; return { done: (d || []).length, total: 8, finished: !!f }; }
+  };
+  Object.keys(games).forEach(function (key) {
+    var info; try { info = games[key](); } catch (e) { info = null; }
+    var el = document.querySelector('[data-progress="' + key + '"]');
+    if (!el || !info) return;
+    var cta = el.parentNode.querySelector('.cta-text');
+    var name = cta ? cta.textContent.replace(/^开始学\s*/, '') : '';
+    if (info.finished) {
+      el.textContent = '✓ 教程已学完';
+      if (cta) cta.textContent = '去打一局 ' + name;
+    } else if (info.done > 0) {
+      el.textContent = '教程 ' + Math.min(info.done, info.total) + '/' + info.total;
+      if (cta) cta.textContent = '接着学 ' + name;
+    } else return;
+    el.hidden = false;
+  });
+})();
+</script>
+</body>
+</html>

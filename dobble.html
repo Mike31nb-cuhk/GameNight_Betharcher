@@ -1,0 +1,2505 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>嗒宝 Dobble 新手课</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<script>/* 字体后台加载：连不上 Google Fonts 时页面照样立刻显示（用系统字体） */(function(){var l=document.createElement("link");l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family=Bungee&family=Noto+Sans+SC:wght@900&display=swap";document.head.appendChild(l);})();</script>
+<style>
+/* 嗒宝 Dobble — "the yellow-rimmed tin": deep grape tin interior, white round cards as the hero,
+   tin-yellow rims and arcade buttons, a red that matches the booklet's arrows. One fixed look. */
+:root {
+  color-scheme: dark;
+  --bg: #26124a;
+  --bg-deep: #1a0b35;
+  --panel: #331a60;
+  --panel-2: #42246f;
+  --line: rgba(255, 255, 255, .15);
+  --text: #fbf7ff;
+  --muted: #cbbdee;
+  --yellow: #ffd23f;
+  --yellow-2: #e0ad00;
+  --yellow-ink: #3a2800;
+  --red: #ff4d6d;
+  --red-ink: #c4163a;
+  --green: #35d49a;
+  --green-ink: #0b7a52;
+  --ice: #9be7ff;
+  --ice-ink: #06324a;
+  --card: #ffffff;
+  --card-edge: #e3dcef;
+  --card-layer: #ece6f6;
+  --ink: #26124a;
+  --anim: 1;
+  --font-display: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --font-body: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
+  --font-num: "Bungee", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --font-emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Segoe UI Symbol", sans-serif;
+  --gut: 16px;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; height: 100%; }
+body {
+  background-color: var(--bg);
+  background-image: radial-gradient(rgba(255, 255, 255, .055) 1.4px, transparent 1.6px);
+  background-size: 22px 22px;
+  color: var(--text);
+  font: 15px/1.55 var(--font-body);
+  display: flex; flex-direction: column;
+  height: 100vh; height: 100dvh; overflow: hidden;
+  padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right);
+  -webkit-text-size-adjust: 100%;
+}
+button { font: inherit; color: inherit; }
+a { color: var(--yellow); }
+:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- top bar ---------- */
+.topbar {
+  flex: none; display: flex; align-items: center; gap: 6px;
+  padding: calc(4px + env(safe-area-inset-top)) 12px 4px;
+  background: var(--bg-deep); border-bottom: 3px solid var(--yellow);
+  position: relative; z-index: 20;
+}
+.back { display: flex; align-items: center; min-height: 44px; padding: 0 6px 0 2px; text-decoration: none; font-weight: 700; white-space: nowrap; color: var(--yellow); }
+.brand { font: 900 24px/1 var(--font-display); letter-spacing: .02em; white-space: nowrap; margin: 0 2px; }
+.brand small { font: 13px/1 var(--font-num); color: var(--yellow); margin-left: 4px; letter-spacing: .04em; }
+.tabs { margin-left: auto; display: flex; background: rgba(255, 255, 255, .08); border-radius: 999px; padding: 3px; }
+.tab { border: 0; background: transparent; min-height: 40px; min-width: 46px; padding: 0 11px; border-radius: 999px; color: var(--muted); font-weight: 700; cursor: pointer; }
+.tab[aria-selected="true"] { background: var(--yellow); color: var(--ink); }
+.gear { flex: none; width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--line); background: transparent; display: grid; place-items: center; cursor: pointer; }
+.gear svg { width: 22px; height: 22px; }
+.pop {
+  position: absolute; right: 10px; top: calc(100% + 6px); width: min(320px, calc(100vw - 20px));
+  background: var(--panel); border: 2px solid var(--yellow); border-radius: 14px; padding: 12px 14px 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .45); z-index: 30;
+}
+.pop h3 { margin: 4px 0 6px; font: 15px var(--font-body); font-weight: 700; color: var(--muted); }
+.pop p { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
+@media (max-width: 400px) { .brand small { display: none; } .tab { padding: 0 9px; } }
+@media (max-width: 352px) { .brand { display: none; } }
+
+/* segmented controls */
+.seg { display: flex; background: rgba(0, 0, 0, .25); border-radius: 12px; padding: 3px; gap: 3px; }
+.seg button { flex: 1; min-height: 40px; border: 0; border-radius: 9px; background: transparent; color: var(--muted); font-weight: 700; cursor: pointer; padding: 0 8px; white-space: nowrap; }
+.seg button[aria-checked="true"] { background: var(--text); color: var(--ink); }
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 44px; padding: 0 16px; border-radius: 10px; cursor: pointer;
+  border: 2px solid var(--line); background: var(--panel-2); color: var(--text); font-weight: 700;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, .35); transition: transform .08s;
+}
+.btn:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0, 0, 0, .35); }
+.btn.primary { background: var(--yellow); color: var(--ink); border-color: var(--yellow); box-shadow: 0 4px 0 var(--yellow-2); }
+.btn.ghost { background: transparent; box-shadow: none; }
+.btn.big { min-height: 56px; font-size: 19px; padding: 0 28px; font-family: var(--font-display); font-weight: 900; letter-spacing: .04em; }
+.btn:disabled { opacity: .38; cursor: default; }
+.btn.pulse { animation: pulse calc(1.4s * var(--anim) + .01s) infinite; }
+@keyframes pulse { 0%, 100% { box-shadow: 0 4px 0 var(--yellow-2), 0 0 0 0 rgba(255, 210, 63, .6); } 50% { box-shadow: 0 4px 0 var(--yellow-2), 0 0 0 9px rgba(255, 210, 63, 0); } }
+
+/* ---------- views ---------- */
+main { flex: 1; min-height: 0; position: relative; }
+.view { display: none; height: 100%; }
+.view.on { display: flex; }
+.view.tut.on { display: grid; }
+
+/* ---------- cards ---------- */
+.dcard {
+  position: relative; width: var(--d); height: var(--d); flex: none; border-radius: 50%;
+  background: var(--card); container-type: inline-size;
+  box-shadow: inset 0 0 0 calc(var(--d) * .014) var(--card-edge), 0 calc(var(--d) * .022) 0 rgba(0, 0, 0, .3);
+}
+.dcard.cmp { box-shadow: inset 0 0 0 calc(var(--d) * .014) var(--card-edge), 0 0 0 4px var(--yellow), 0 0 26px 4px rgba(255, 210, 63, .42); }
+.dcard.back {
+  display: grid; place-items: center;
+  box-shadow: inset 0 0 0 calc(var(--d) * .09) var(--yellow), inset 0 0 0 calc(var(--d) * .105) var(--yellow-2), 0 calc(var(--d) * .022) 0 rgba(0, 0, 0, .3);
+}
+.back-logo { font: 900 calc(var(--d) * .2)/1 var(--font-display); color: var(--ink); transform: rotate(-14deg); text-shadow: calc(var(--d) * .012) calc(var(--d) * .012) 0 var(--yellow); }
+.dcard.ghost { background: transparent; box-shadow: inset 0 0 0 2px dashed var(--line); border: 2px dashed var(--line); }
+.sym {
+  position: absolute; transform: translate(-50%, -50%); border: 0; margin: 0; padding: 0;
+  background: transparent; border-radius: 50%; display: grid; place-items: center;
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+button.sym { cursor: pointer; }
+.sym .g {
+  display: block; line-height: 1; pointer-events: none; font-family: var(--font-emoji);
+  filter: drop-shadow(0 0 .6px rgba(38, 18, 74, .55)) drop-shadow(0 0 .6px rgba(38, 18, 74, .55));
+  user-select: none; -webkit-user-select: none;
+}
+button.sym:focus-visible { outline: 3px solid var(--red); outline-offset: 1px; }
+.sym.found { background: rgba(255, 210, 63, .38); box-shadow: 0 0 0 3px var(--yellow), 0 0 0 7px rgba(255, 210, 63, .35); }
+.sym.bad { background: rgba(255, 77, 109, .2); box-shadow: 0 0 0 3px var(--red); animation: shake calc(.36s * var(--anim) + .01s); }
+.sym.hint { animation: hint calc(1.1s * var(--anim) + .01s) infinite; }
+@keyframes hint { 0%, 100% { box-shadow: 0 0 0 0 rgba(255, 77, 109, .0); background: transparent; } 50% { box-shadow: 0 0 0 5px rgba(255, 77, 109, .75); background: rgba(255, 77, 109, .14); } }
+@keyframes shake { 0%, 100% { margin-left: 0; } 25% { margin-left: -5px; } 75% { margin-left: 5px; } }
+.pile { position: relative; width: var(--d); height: var(--d); flex: none; }
+.pile > .layer { position: absolute; inset: 0; border-radius: 50%; background: var(--card-layer); box-shadow: inset 0 0 0 1px #d4cbe6; transform: translateY(calc(var(--k) * 3px)); }
+.pile > .dcard { position: absolute; inset: 0; }
+.empty-spot { width: var(--d); height: var(--d); border-radius: 50%; border: 2px dashed var(--line); display: grid; place-items: center; text-align: center; color: var(--muted); padding: 12%; font-weight: 700; }
+
+/* ---------- table (game view) ---------- */
+.tbl { position: relative; height: 100%; display: flex; flex-direction: column; }
+.opps { flex: none; display: flex; gap: 8px; justify-content: center; padding: 6px 0 4px; }
+.opps { flex-wrap: wrap; }
+.opp { position: relative; display: grid; grid-template-columns: auto auto; grid-template-rows: auto auto; column-gap: 6px; align-items: center; padding: 3px 10px 3px 3px; border-radius: 999px; background: rgba(255, 255, 255, .07); box-shadow: inset 0 0 0 2px var(--c); }
+.opp > .dcard { grid-row: 1 / 3; }
+.opp .av { display: none; }
+.opp .oname { font-size: 12px; color: var(--text); line-height: 1.2; font-weight: 700; white-space: nowrap; }
+.opp .ocount { font: 12px/1.2 var(--font-num); color: var(--yellow); white-space: nowrap; }
+.opp.frozen, .oslot.frozen { opacity: .5; }
+.opp.frozen::after, .oslot.frozen::after { content: "冻结"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--ice); color: var(--ice-ink); font-weight: 800; font-size: 12px; padding: 1px 8px; border-radius: 999px; }
+.dim-opps .opps { opacity: .35; }
+.opps.tight { flex-wrap: nowrap; gap: 5px; }
+.opps.tight .opp { padding: 4px 8px; column-gap: 0; min-width: 0; }
+.opps.tight .opp > .dcard { display: none; }
+.opps.corners { position: absolute; inset: 0; display: block; padding: 0; z-index: 2; pointer-events: none; }
+.opps.corners .opp { position: absolute; display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 5px 4px 4px; border-radius: 14px; min-width: 58px; }
+.opps.corners .opp.c0 { left: 0; top: 0; }
+.opps.corners .opp.c1 { right: 0; top: 0; }
+.opps.corners .opp.c2 { left: 0; bottom: 0; }
+.duo { flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; }
+.duo.side { flex-direction: row; justify-content: center; gap: 48px; }
+.slot { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; position: relative; }
+.lbl { font-size: 13px; line-height: 18px; height: 18px; color: var(--muted); white-space: nowrap; }
+.lbl b { font: 13px/20px var(--font-num); color: var(--yellow); font-weight: 400; }
+.tbl.hfrozen .dcard.ia { filter: grayscale(.5); }
+.tbl.hfrozen .dcard.ia::after {
+  content: "看错了 · 冻结1秒"; position: absolute; inset: 0; border-radius: 50%; display: grid; place-items: center;
+  background: rgba(155, 231, 255, .62); color: var(--ice-ink); font-weight: 800; font-size: max(14px, calc(var(--d) * .065)); z-index: 3;
+  box-shadow: inset 0 0 0 4px var(--ice);
+}
+/* 烫手山芋 */
+.phud { flex: none; display: flex; align-items: center; gap: 10px; padding: 4px 0 6px; flex-wrap: wrap; }
+.phud .rnd { font: 15px var(--font-num); color: var(--yellow); }
+.phud .pen { font-size: 13px; color: var(--muted); }
+.phud .btn { min-height: 40px; margin-left: auto; padding: 0 12px; font-size: 14px; }
+.ogrid { flex: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 10px; }
+.oslot { margin: 0; position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.oslot figcaption { font-size: 13px; display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+.oslot .cnt { font: 13px var(--font-num); color: var(--yellow); font-weight: 400; }
+.oslot .penb { font-size: 11px; font-weight: 700; color: #ffb3c1; background: rgba(255, 77, 109, .18); border-radius: 999px; padding: 0 6px; }
+.oslot .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); }
+.oslot .safe, .safe-spot { white-space: pre-line; line-height: 1.35; display: grid; place-items: center; border-radius: 50%; border: 2px dashed rgba(53, 212, 154, .55); color: var(--green); font-weight: 800; text-align: center; padding: 10%; width: var(--d); height: var(--d); }
+.pile.lost .lost-tag { position: absolute; left: 50%; bottom: -6px; transform: translateX(-50%); white-space: nowrap; z-index: 2; }
+.pbody { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.pbody.side { flex-direction: row-reverse; align-items: center; justify-content: center; gap: 48px; }
+.pbody.side .pmine { flex: none; }
+.pbody.side .ogrid { align-content: center; }
+.pmine { flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+/* practice / duel */
+.prhud { flex: none; display: flex; align-items: baseline; justify-content: center; gap: 14px; padding: 2px 0 4px; }
+.watch { font: 30px/1 var(--font-num); color: var(--yellow); letter-spacing: .03em; min-width: 4.2em; text-align: center; }
+.prhud .sub { font-size: 13px; color: var(--muted); }
+.prhud .btn { min-height: 40px; padding: 0 12px; font-size: 14px; }
+.laps { flex: none; display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; padding-top: 4px; }
+.laps span { font: 12px/22px var(--font-num); padding: 0 8px; border-radius: 999px; background: rgba(255, 255, 255, .1); color: var(--muted); }
+.laps span.last { background: var(--yellow); color: var(--ink); }
+/* overlays inside the table */
+.tover { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(26, 11, 53, .72); z-index: 8; padding: 16px; }
+.tpanel { background: var(--panel); border: 2px solid var(--yellow); border-radius: 16px; padding: 16px 18px; max-width: 420px; width: 100%; text-align: center; box-shadow: 0 8px 0 rgba(0, 0, 0, .3); }
+.tpanel h3 { margin: 0 0 6px; font: 900 24px/1.2 var(--font-display); color: var(--yellow); letter-spacing: .04em; }
+.tpanel p { margin: 6px 0 12px; }
+.tpanel .hintline { font-size: 13px; color: var(--muted); margin-top: 8px; }
+
+/* fx layer: shout bubbles + flying cards */
+#fx { position: fixed; inset: 0; pointer-events: none; z-index: 40; overflow: hidden; }
+.shout {
+  position: absolute; transform: translate(-50%, -100%); background: #fff; color: var(--ink);
+  border-radius: 14px; padding: 4px 11px; font-weight: 800; font-size: 16px; white-space: nowrap;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, .35); animation: pop calc(.22s * var(--anim) + .01s) ease-out;
+}
+.shout::after { content: ""; position: absolute; left: 50%; bottom: -7px; margin-left: -7px; border: 7px solid transparent; border-bottom: 0; border-top-color: #fff; }
+.shout.bad { background: var(--red); color: #fff; }
+.shout.bad::after { border-top-color: var(--red); }
+.shout.late { background: #ddd5ec; color: #4b2d86; }
+.shout.late::after { border-top-color: #ddd5ec; }
+.shout.gone { opacity: 0; transition: opacity .15s; }
+.shout .e { font-family: var(--font-emoji); }
+@keyframes pop { from { transform: translate(-50%, -80%) scale(.6); opacity: 0; } to { transform: translate(-50%, -100%) scale(1); opacity: 1; } }
+.flyer { position: absolute; margin: 0; }
+
+/* ---------- tutorial ---------- */
+.tut { width: 100%; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr) auto; }
+.lmap { display: flex; gap: 6px; padding: 8px var(--gut) 4px; overflow-x: auto; scrollbar-width: none; margin: 0; list-style: none; }
+.lmap::-webkit-scrollbar { display: none; }
+.lchip {
+  flex: none; display: flex; align-items: center; gap: 6px; min-width: 40px; height: 40px; padding: 0 12px;
+  border-radius: 20px; border: 2px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; font-weight: 700;
+}
+.lchip .n { font: 15px/1 var(--font-num); }
+.lchip .t { display: none; white-space: nowrap; }
+.lchip.cur { background: var(--yellow); border-color: var(--yellow); color: var(--ink); }
+.lchip { padding: 0; justify-content: center; }
+.lchip.done:not(.cur) { border-color: var(--green); color: var(--green); }
+.lchip .tick { width: 14px; height: 14px; display: none; }
+.lchip.done .tick { display: block; }
+.coach { display: flex; gap: 10px; align-items: flex-start; padding: 6px var(--gut) 6px; }
+.mascot { flex: none; width: 46px; height: 46px; }
+.bubble {
+  flex: 1; min-width: 0; position: relative; background: #fff; color: var(--ink); border-radius: 4px 16px 16px 16px;
+  padding: 9px 13px; box-shadow: 0 3px 0 rgba(0, 0, 0, .3); min-height: 74px;
+}
+.bubble .say { margin: 0; }
+.bubble .say b, .bubble .say strong { color: #6b2bd9; }
+.bubble .say .e, .fb .e { font-family: var(--font-emoji); }
+.bubble .fb { margin: 4px 0 0; font-weight: 700; min-height: 0; }
+.bubble .fb:empty { display: none; }
+.bubble.fixed-fb .fb, .bubble.fixed-fb .fb:empty { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 3.1em; }
+.fb.bad { color: var(--red-ink); }
+.fb.good { color: var(--green-ink); }
+.fb.warn { color: #9a5a00; }
+.fb.info { color: #4b2d86; }
+.lesson-title { font: 13px/1.2 var(--font-body); color: #7a64aa; font-weight: 700; margin-bottom: 2px; letter-spacing: .02em; }
+.stage { position: relative; min-height: 0; padding: 4px var(--gut); display: flex; flex-direction: column; }
+.thost { flex: 1; min-height: 0; position: relative; }
+.lnav { display: flex; gap: 8px; align-items: center; padding: 8px var(--gut) calc(8px + env(safe-area-inset-bottom)); background: var(--bg-deep); border-top: 1px solid var(--line); }
+.lnav .mid { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 0; }
+.lnav .count { font: 12px/1 var(--font-num); color: var(--muted); }
+.lnav .skip { min-height: 40px; padding: 0 10px; border: 0; background: transparent; color: var(--muted); text-decoration: underline; cursor: pointer; font-weight: 600; }
+.lnav .btn { min-width: 92px; }
+.mapskip { display: none; justify-content: center; min-height: 44px; align-items: center; border: 0; background: transparent; color: var(--muted); text-decoration: underline; font-weight: 700; cursor: pointer; }
+.lnav .mapbtn { display: none; min-height: 40px; padding: 0 12px; border-radius: 999px; border: 2px solid var(--line); background: transparent; color: var(--text); font-weight: 700; cursor: pointer; white-space: nowrap; }
+/* short phone screens (browser toolbars eat the height): lesson map → popover, compact coach */
+@media (max-height: 760px) and (max-width: 899px) {
+  .tut { position: relative; grid-template-rows: auto minmax(0, 1fr) auto; }
+  .lmap { display: none; }
+  .lmap.open {
+    display: flex; flex-direction: column; position: absolute; left: 12px; right: 12px; bottom: calc(62px + env(safe-area-inset-bottom));
+    background: var(--panel); border: 2px solid var(--yellow); border-radius: 14px; padding: 10px; z-index: 25; gap: 6px; box-shadow: 0 10px 30px rgba(0, 0, 0, .5);
+  }
+  .lmap.open .lchip { width: 100%; justify-content: flex-start; padding: 0 12px; border-radius: 10px; }
+  .lmap.open .lchip .t { display: inline; }
+  .mascot, .lesson-title { display: none; }
+  .coach { padding: 6px 12px 2px; }
+  .bubble { font-size: 14px; padding: 7px 11px; min-height: 0; border-radius: 12px; }
+  .bubble.collapsed .say { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; }
+  .lnav { padding-top: 6px; padding-bottom: calc(6px + env(safe-area-inset-bottom)); }
+  .lnav .count { display: none; }
+  .lnav .mapbtn { display: inline-flex; align-items: center; }
+  .lnav .skip { display: none; }
+  .lmap.open .mapskip { display: flex; }
+}
+@media (min-width: 900px) {
+  .tut { grid-template-columns: 250px minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; }
+  .lmap { grid-row: 1 / -1; flex-direction: column; overflow: auto; padding: 18px 12px 18px 20px; border-right: 1px solid var(--line); gap: 8px; }
+  .lchip { height: auto; min-height: 44px; border-radius: 12px; padding: 8px 12px; justify-content: flex-start; }
+  .lchip .t { display: inline; }
+  .coach, .stage, .lnav { grid-column: 2; }
+  .coach { padding-top: 14px; max-width: 980px; }
+  .mascot { width: 56px; height: 56px; }
+  .bubble { font-size: 16px; }
+}
+
+/* scenes (storyboard) */
+.scene { flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; position: relative; }
+.srow { display: flex; align-items: center; justify-content: center; gap: 18px; }
+.srow.col { flex-direction: column; gap: 12px; }
+.who { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 13px; color: var(--muted); }
+.who b { color: var(--text); }
+.tag { display: inline-block; font-size: 12px; font-weight: 800; padding: 2px 9px; border-radius: 999px; background: var(--yellow); color: var(--ink); }
+.tag.red { background: var(--red); color: #fff; }
+.tag.dim { background: rgba(255, 255, 255, .14); color: var(--muted); }
+.deal { animation: deal calc(.7s * var(--anim) + .01s) cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes deal { from { transform: translate(var(--fx, 0), var(--fy, 0)) rotate(-30deg) scale(.5); opacity: 0; } to { transform: none; opacity: 1; } }
+.flip { animation: flip calc(.5s * var(--anim) + .01s) ease-out both; }
+@keyframes flip { from { transform: rotateY(90deg); } to { transform: rotateY(0); } }
+.sbub { position: relative; display: inline-block; background: #fff; color: var(--ink); border-radius: 14px; padding: 4px 12px; font-weight: 800; font-size: 16px; white-space: nowrap; box-shadow: 0 3px 0 rgba(0, 0, 0, .35); margin-bottom: 8px; }
+.sbub::after { content: ""; position: absolute; left: 50%; bottom: -7px; margin-left: -7px; border: 7px solid transparent; border-bottom: 0; border-top-color: #fff; }
+.sbub .e { font-family: var(--font-emoji); }
+.scroller { flex: 1; min-height: 0; width: 100%; max-width: 760px; overflow: auto; padding: 2px 0 8px; }
+.house { background: rgba(53, 212, 154, .12); border: 2px dashed rgba(53, 212, 154, .6); border-radius: 12px; padding: 8px 12px; margin: 0 0 10px; font-size: 14px; line-height: 1.5; }
+.house .tag { background: var(--green); color: #05301f; margin-right: 6px; }
+.ngroup { margin: 0 0 10px; }
+.ngroup h4 { margin: 0 0 5px; font-size: 13px; color: var(--muted); font-weight: 700; }
+.ngroup .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.ngroup .chips span { background: rgba(255, 255, 255, .08); border-radius: 8px; padding: 4px 9px; font-size: 13px; line-height: 1.35; }
+.ngroup.alike .chips span { background: rgba(255, 210, 63, .14); box-shadow: inset 0 0 0 1px rgba(255, 210, 63, .45); }
+.checklist { margin: 0; padding: 0; list-style: none; counter-reset: ck; display: grid; gap: 8px; }
+.checklist li { counter-increment: ck; position: relative; padding: 8px 12px 8px 42px; background: rgba(255, 255, 255, .07); border-radius: 12px; font-size: 14px; line-height: 1.5; }
+.checklist li::before { content: counter(ck); position: absolute; left: 10px; top: 8px; width: 22px; height: 22px; border-radius: 50%; background: var(--yellow); color: var(--ink); font: 13px/22px var(--font-num); text-align: center; }
+.checklist b { color: var(--yellow); }
+.board { width: min(440px, 100%); border-collapse: collapse; font-size: 15px; }
+.board th, .board td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left; }
+.board th { color: var(--muted); font-weight: 600; font-size: 13px; }
+.board .w { color: var(--yellow); font-weight: 800; }
+.finale { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; text-align: center; }
+.finale p { margin: 0; color: var(--muted); max-width: 30em; }
+
+/* ---------- 实战 ---------- */
+.play { flex-direction: column; width: 100%; }
+.screen { display: none; flex: 1; min-height: 0; flex-direction: column; }
+.screen.on { display: flex; }
+.setup { overflow: auto; }
+.setup-in { width: 100%; max-width: 760px; margin: 0 auto; padding: 14px var(--gut) calc(24px + env(safe-area-inset-bottom)); }
+.h2 { font: 900 26px/1.1 var(--font-display); margin: 6px 0 12px; letter-spacing: .04em; }
+.modegrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mode {
+  text-align: left; border: 2px solid var(--line); background: var(--panel); border-radius: 14px; padding: 12px; cursor: pointer;
+  display: flex; flex-direction: column; gap: 2px; min-height: 76px; position: relative;
+}
+.mode .mn { font: 900 21px/1.15 var(--font-display); letter-spacing: .04em; }
+.mode .mk { font: 11px/1 var(--font-num); color: var(--yellow); }
+.mode .ms { font-size: 13px; color: var(--muted); line-height: 1.4; }
+.mode[aria-checked="true"] { border-color: var(--yellow); background: var(--panel-2); box-shadow: 0 0 0 2px var(--yellow) inset; }
+.mode.wide { grid-column: 1 / -1; }
+@media (min-width: 700px) { .modegrid { grid-template-columns: repeat(3, 1fr); } .mode.wide { grid-column: auto; } }
+.opts { margin: 16px 0 6px; display: grid; gap: 12px; }
+.opt { display: grid; grid-template-columns: 104px minmax(0, 1fr); align-items: center; gap: 10px; }
+.opt > span { font-weight: 700; color: var(--muted); font-size: 14px; }
+.stepper { display: flex; align-items: center; gap: 8px; }
+.stepper button { width: 44px; height: 44px; border-radius: 10px; border: 2px solid var(--line); background: var(--panel-2); font-size: 22px; font-weight: 800; cursor: pointer; }
+.stepper output { font: 22px var(--font-num); min-width: 1.6em; text-align: center; color: var(--yellow); }
+.stepper .names { font-size: 13px; color: var(--muted); }
+.switch { display: flex; align-items: center; gap: 10px; min-height: 44px; border: 0; background: transparent; cursor: pointer; padding: 0; text-align: left; }
+.switch .knob { width: 52px; height: 30px; border-radius: 999px; background: rgba(255, 255, 255, .18); position: relative; flex: none; transition: background .15s; }
+.switch .knob::after { content: ""; position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; border-radius: 50%; background: #fff; transition: transform .15s; }
+.switch[aria-checked="true"] .knob { background: var(--green); }
+.switch[aria-checked="true"] .knob::after { transform: translateX(22px); }
+.switch .st { font-size: 13px; color: var(--muted); }
+.startrow {
+  position: sticky; bottom: 0; z-index: 3; margin-top: 10px; display: flex; flex-direction: column; align-items: stretch;
+  padding: 14px 0 calc(10px + env(safe-area-inset-bottom)); background: linear-gradient(rgba(38, 18, 74, 0), var(--bg) 14px);
+}
+.setup-in { padding-bottom: 0; }
+.note { font-size: 13px; color: var(--muted); margin: 6px 0 0; }
+.ghud { flex: none; display: flex; align-items: center; gap: 8px; padding: 6px var(--gut); min-height: 54px; }
+.ghud .title { font: 900 20px/1.1 var(--font-display); letter-spacing: .04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.ghud .title small { font: 12px var(--font-body); color: var(--muted); margin-left: 6px; letter-spacing: 0; }
+.ghud .sp { flex: 1; }
+.clock { font: 18px/1 var(--font-num); color: var(--yellow); background: #11042a; border-radius: 8px; padding: 7px 10px 6px; box-shadow: inset 0 0 0 2px rgba(255, 210, 63, .35); letter-spacing: .05em; }
+.ghud .btn { min-height: 40px; padding: 0 12px; font-size: 14px; white-space: nowrap; flex: none; }
+.ghud .clock, #gExit { flex: none; }
+/* phones: the subtitle (对手2 · 新手 / 连玩1/3) goes under the name, so the name itself is never cut off */
+@media (max-width: 480px) {
+  .ghud .title { display: flex; flex-direction: column; font-size: 18px; }
+  .ghud .title small { margin-left: 0; font-size: 11px; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; }
+}
+.confirm { display: flex; gap: 6px; align-items: center; font-size: 14px; white-space: nowrap; }
+.cbtn { flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 9px; border-radius: 10px; border: 2px solid var(--line); background: transparent; color: var(--muted); font-weight: 700; font-size: 14px; cursor: pointer; white-space: nowrap; }
+.cbtn .kn { width: 24px; height: 14px; border-radius: 999px; background: rgba(255, 255, 255, .2); position: relative; flex: none; }
+.cbtn .kn::after { content: ""; position: absolute; top: 2px; left: 2px; width: 10px; height: 10px; border-radius: 50%; background: #fff; }
+.cbtn[aria-pressed="true"] { color: var(--text); border-color: rgba(53, 212, 154, .7); }
+.cbtn[aria-pressed="true"] .kn { background: var(--green); }
+.cbtn[aria-pressed="true"] .kn::after { left: 12px; }
+.ghost-x { min-width: 44px; }
+.host { flex: 1; min-height: 0; position: relative; padding: 0 var(--gut); }
+.coachline {
+  flex: none; display: flex; gap: 10px; align-items: center; padding: 6px var(--gut) calc(6px + env(safe-area-inset-bottom));
+  background: var(--bg-deep); border-top: 1px solid var(--line); min-height: 58px;
+}
+.coachline svg { width: 34px; height: 34px; flex: none; }
+.coachline .txt { font-size: 14px; line-height: 1.4; min-width: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.coachline .txt.bad { color: #ffb3c1; }
+.coachline .txt.good { color: #9ff0cc; }
+.coachline .txt.warn { color: #ffe08a; }
+.coachline .txt .e { font-family: var(--font-emoji); }
+.result { overflow: auto; }
+.result-in { width: 100%; max-width: 620px; margin: 0 auto; padding: 18px var(--gut) calc(24px + env(safe-area-inset-bottom)); }
+.rtitle { font: 900 clamp(28px, 8.4vw, 40px)/1.15 var(--font-display); color: var(--yellow); letter-spacing: .05em; margin: 8px 0 2px; text-wrap: balance; }
+.rsub { color: var(--muted); margin: 0 0 14px; }
+.rtip { margin: 12px 0 0; font-size: 14px; color: var(--muted); }
+.rlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.rlist li { display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; align-items: center; gap: 10px; background: var(--panel); border-radius: 12px; padding: 10px 14px; border: 2px solid transparent; }
+.rlist li.win { border-color: var(--yellow); }
+.rlist .rk { font: 20px var(--font-num); color: var(--muted); }
+.rlist li.win .rk { color: var(--yellow); }
+.rlist .nm { font-weight: 800; }
+.rlist .nm small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; }
+.rlist .val { font: 18px var(--font-num); color: var(--text); white-space: nowrap; }
+.tbnote { background: rgba(255, 77, 109, .14); border-left: 4px solid var(--red); padding: 8px 12px; border-radius: 4px 10px 10px 4px; margin: 14px 0 0; font-size: 14px; }
+.tally { margin-top: 18px; }
+.tally h4 { margin: 0 0 8px; font-size: 14px; color: var(--muted); }
+.tally .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.tally .chips span { background: rgba(255, 255, 255, .08); border-radius: 999px; padding: 4px 12px; font-size: 14px; }
+.tally .chips b { font-family: var(--font-num); font-weight: 400; color: var(--yellow); margin-left: 4px; }
+.ractions { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+.ractions .btn { flex: 1 1 140px; }
+
+@media (max-height: 500px) {
+  .ghud { min-height: 0; padding: 2px var(--gut); }
+  .ghud .title { font-size: 17px; }
+  .clock { padding: 5px 8px 4px; font-size: 16px; }
+  .coachline { min-height: 0; padding-top: 3px; padding-bottom: calc(3px + env(safe-area-inset-bottom)); }
+  .coachline svg { width: 26px; height: 26px; }
+  .coachline .txt { font-size: 13px; line-height: 1.35; }
+}
+/* in-page question when you leave a game that is still running */
+.askov { z-index: 30; }
+.askrow { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.askrow .btn { flex: 1 1 140px; }
+
+/* ---------- 速查 ---------- */
+.ref { overflow: auto; width: 100%; }
+.ref-in { max-width: 980px; margin: 0 auto; padding: 14px var(--gut) calc(30px + env(safe-area-inset-bottom)); }
+.startbox { background: var(--panel); border: 2px solid var(--yellow); border-radius: 16px; padding: 10px 14px 12px; }
+.startbox h2 { margin: 0 0 4px; font: 900 22px/1.2 var(--font-display); letter-spacing: .04em; color: var(--yellow); }
+.startbox ol { margin: 0; padding-left: 1.3em; font-size: 14px; line-height: 1.5; }
+.startbox li { margin: 3px 0; }
+.startbox .house { margin: 8px 0 0; }
+.core { margin-top: 12px; background: #fff; color: var(--ink); border-radius: 18px; padding: 12px 16px; box-shadow: inset 0 0 0 5px var(--yellow), 0 4px 0 rgba(0, 0, 0, .3); }
+.core h2 { margin: 0 0 4px; font: 900 22px/1.2 var(--font-display); letter-spacing: .04em; }
+.core p { margin: 4px 0; }
+.core .big { font-size: 17px; font-weight: 800; }
+.rchips { display: flex; gap: 6px; margin: 14px 0 0; }
+.rchip { flex: 1 1 0; min-width: 0; min-height: 48px; border-radius: 12px; border: 2px solid var(--line); background: transparent; color: var(--text); font-weight: 800; font-size: 15px; cursor: pointer; padding: 3px 4px; line-height: 1.2; }
+.rchip small { display: block; font: 10px/1.2 var(--font-num); color: var(--yellow); letter-spacing: .04em; }
+.rchip[aria-selected="true"] { background: var(--yellow); color: var(--ink); border-color: var(--yellow); }
+.rchip[aria-selected="true"] small { color: var(--ink); }
+.refgrid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 8px; }
+.refgrid .rcard { display: none; }
+.refgrid .rcard.on { display: block; }
+@media (min-width: 760px) { .rchips { display: none; } .refgrid { grid-template-columns: repeat(3, 1fr); margin-top: 14px; } .refgrid .rcard { display: block; } }
+.rcard { background: var(--panel); border-radius: 14px; padding: 12px 14px; border-top: 5px solid var(--yellow); }
+.rcard h3 { margin: 0 0 6px; font: 900 22px/1.1 var(--font-display); letter-spacing: .04em; }
+.rcard h3 small { font: 11px var(--font-num); color: var(--yellow); margin-left: 6px; letter-spacing: 0; }
+.rcard dl { margin: 0; display: grid; grid-template-columns: 3.4em minmax(0, 1fr); gap: 4px 8px; font-size: 14px; }
+.rcard dt { color: var(--yellow); font-weight: 800; }
+.rcard dd { margin: 0; }
+.rules2 { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px; }
+@media (min-width: 760px) { .rules2 { grid-template-columns: 1fr 1fr; } }
+.rules2 section { background: rgba(255, 255, 255, .06); border-radius: 12px; padding: 10px 14px; }
+.rules2 h3, .names h3, .foot h3 { margin: 0 0 6px; font-size: 16px; }
+.rules2 p { margin: 4px 0; font-size: 14px; }
+.names { margin-top: 18px; }
+.names > p { margin: 0 0 10px; font-size: 13px; color: var(--muted); }
+.names .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 6px; }
+.names .grid span { font-size: 13px; background: rgba(255, 255, 255, .07); border-radius: 8px; padding: 5px 8px; }
+details.emo, details.more { margin-top: 10px; background: rgba(255, 255, 255, .05); border-radius: 12px; padding: 0 12px; }
+details.emo summary, details.more summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-weight: 700; }
+details.emo .grid { padding-bottom: 10px; }
+details.emo .grid span .e { font-family: var(--font-emoji); font-size: 18px; margin-right: 4px; vertical-align: -2px; }
+details.more { font-size: 14px; }
+details.more > div { padding: 0 0 10px; }
+details.more ol, details.more ul { margin: 0; padding-left: 1.4em; }
+details.more li { margin: 4px 0; }
+details.more p { margin: 8px 0 0; }
+.foot { color: var(--muted); font-size: 13px; }
+.foot summary { color: var(--text); font-size: 14px; }
+.reftail { height: 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+  .sym.hint { animation: none; box-shadow: 0 0 0 4px var(--red); background: rgba(255, 77, 109, .18); }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="back" href="index.html">← 大厅</a>
+  <span class="brand">嗒宝<small>DOBBLE</small></span>
+  <nav class="tabs" role="tablist" aria-label="页面">
+    <button class="tab" role="tab" id="tab-tutorial" aria-controls="view-tutorial" aria-selected="true" data-tab="tutorial">教程</button>
+    <button class="tab" role="tab" id="tab-play" aria-controls="view-play" aria-selected="false" data-tab="play">实战</button>
+    <button class="tab" role="tab" id="tab-ref" aria-controls="view-ref" aria-selected="false" data-tab="ref">速查</button>
+  </nav>
+  <button class="gear" id="gear" aria-label="设置" aria-expanded="false" aria-controls="settings">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+  </button>
+  <div class="pop" id="settings" hidden>
+    <h3>动画速度</h3>
+    <div class="seg" role="radiogroup" aria-label="动画速度" data-pref="anim">
+      <button role="radio" data-v="slow">慢</button><button role="radio" data-v="normal">正常</button><button role="radio" data-v="fast">快</button>
+    </div>
+    <h3 style="margin-top:12px">机器人反应速度</h3>
+    <div class="seg" role="radiogroup" aria-label="机器人反应速度" data-pref="bot">
+      <button role="radio" data-v="novice">新手</button><button role="radio" data-v="normal">普通</button><button role="radio" data-v="expert">高手</button>
+    </div>
+    <p id="botNote">新手约7秒、普通约4.5秒、高手约2.8秒找到一次（每次随机±35%）。改了马上生效。</p>
+  </div>
+</header>
+
+<main>
+  <!-- 教程 -->
+  <section class="view tut on" id="view-tutorial" role="tabpanel" aria-labelledby="tab-tutorial">
+    <ol class="lmap" id="lmap" aria-label="课程"></ol>
+    <div class="coach">
+      <svg class="mascot" viewBox="0 0 48 48" aria-hidden="true">
+        <circle cx="24" cy="24" r="20.5" fill="#fff" stroke="#ffd23f" stroke-width="5"/>
+        <circle cx="17.5" cy="21" r="3.4" fill="#26124a"/><circle cx="30.5" cy="21" r="3.4" fill="#26124a"/>
+        <circle cx="18.6" cy="19.8" r="1.1" fill="#fff"/><circle cx="31.6" cy="19.8" r="1.1" fill="#fff"/>
+        <path d="M18 28.5q6 5.5 12 0" stroke="#26124a" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+        <circle cx="13" cy="27" r="2.4" fill="#ff9db0"/><circle cx="35" cy="27" r="2.4" fill="#ff9db0"/>
+      </svg>
+      <div class="bubble" aria-live="polite">
+        <div class="lesson-title" id="ltitle"></div>
+        <p class="say" id="say"></p>
+        <p class="fb" id="fb"></p>
+      </div>
+    </div>
+    <div class="stage" id="tstage"></div>
+    <nav class="lnav" aria-label="课程导航">
+      <button class="btn" id="prevBtn">上一步</button>
+      <div class="mid"><span class="count" id="stepCount"></span><button class="mapbtn" id="mapBtn" aria-expanded="false" aria-controls="lmap"></button><button class="skip" id="skipBtn">跳过本课</button></div>
+      <button class="btn primary" id="nextBtn">下一步</button>
+    </nav>
+  </section>
+
+  <!-- 实战 -->
+  <section class="view play" id="view-play" role="tabpanel" aria-labelledby="tab-play">
+    <div class="screen setup on" id="scr-setup">
+      <div class="setup-in">
+        <h2 class="h2">选一个玩法</h2>
+        <div class="modegrid" role="radiogroup" aria-label="玩法" id="modegrid">
+          <button class="mode" role="radio" data-mode="tower"><span class="mk">玩法1</span><span class="mn">混乱高塔</span><span class="ms">抢抓牌堆顶的牌，最后牌最多的赢</span></button>
+          <button class="mode" role="radio" data-mode="well"><span class="mk">玩法2</span><span class="mn">水井</span><span class="ms">把自己的牌一张张放进中央牌堆，先出完的赢</span></button>
+          <button class="mode" role="radio" data-mode="potato"><span class="mk">玩法3</span><span class="mn">烫手山芋</span><span class="ms">把牌叠到别人牌上，几回合后面前牌最少的赢</span></button>
+          <button class="mode" role="radio" data-mode="evening"><span class="mk">一晚</span><span class="mn">今晚连玩</span><span class="ms">三个玩法各一局，赢得最多的是总冠军</span></button>
+          <button class="mode wide" role="radio" data-mode="practice"><span class="mk">秒表</span><span class="mn">练习</span><span class="ms">没有对手，看你平均几秒找到</span></button>
+        </div>
+        <div class="opts">
+          <div class="opt" data-show="tower well potato evening"><span>对手</span>
+            <div class="stepper"><button id="oppMinus" aria-label="减少对手">−</button><output id="oppN">2</output><button id="oppPlus" aria-label="增加对手">+</button><span class="names" id="oppNames"></span></div>
+          </div>
+          <div class="opt" data-show="tower well potato evening"><span>机器人反应</span>
+            <div class="seg" role="radiogroup" aria-label="机器人反应速度" data-pref="bot">
+              <button role="radio" data-v="novice">新手</button><button role="radio" data-v="normal">普通</button><button role="radio" data-v="expert">高手</button>
+            </div>
+          </div>
+          <div class="opt" data-show="tower well evening"><span>牌堆</span>
+            <div class="seg" role="radiogroup" aria-label="牌堆" data-pref="deck">
+              <button role="radio" data-v="full">完整55张</button><button role="radio" data-v="short">短局25张</button>
+            </div>
+          </div>
+          <div class="opt" data-show="potato evening"><span>山芋回合数</span>
+            <div class="seg" role="radiogroup" aria-label="烫手山芋回合数" data-pref="rounds">
+              <button role="radio" data-v="5">5</button><button role="radio" data-v="7">7</button><button role="radio" data-v="9">9</button>
+            </div>
+          </div>
+          <div class="opt" data-show="practice"><span>题数</span>
+            <div class="seg" role="radiogroup" aria-label="题数" data-pref="practice">
+              <button role="radio" data-v="10">10对</button><button role="radio" data-v="20">20对</button>
+            </div>
+          </div>
+          <div class="opt"><span>教练解说</span>
+            <button class="switch" id="coachSw" role="switch" aria-checked="true"><span class="knob"></span><span class="st" id="coachSt">有人喊对或喊错时，教练用一句话说明。每个玩法的第一局默认打开。</span></button>
+          </div>
+        </div>
+        <p class="note" id="setupNote"></p>
+        <div class="startrow">
+          <button class="btn primary big" id="startBtn">开始</button>
+        </div>
+      </div>
+    </div>
+    <div class="screen game" id="scr-game">
+      <div class="ghud">
+        <div class="title" id="gTitle"></div>
+        <span class="sp"></span>
+        <span class="clock" id="gClock" aria-label="用时">0:00</span>
+        <button class="cbtn" id="coachBtn" aria-pressed="true" aria-label="教练解说">解说<span class="kn" aria-hidden="true"></span></button>
+        <span id="gExit"></span>
+      </div>
+      <div class="host" id="gHost"></div>
+      <div class="coachline" aria-live="polite">
+        <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20.5" fill="#fff" stroke="#ffd23f" stroke-width="5"/><circle cx="17.5" cy="21" r="3.4" fill="#26124a"/><circle cx="30.5" cy="21" r="3.4" fill="#26124a"/><path d="M18 28.5q6 5.5 12 0" stroke="#26124a" stroke-width="2.6" fill="none" stroke-linecap="round"/></svg>
+        <div class="txt" id="gCoach"></div>
+      </div>
+    </div>
+    <div class="screen result" id="scr-result"><div class="result-in" id="resultIn"></div></div>
+  </section>
+
+  <!-- 速查 -->
+  <section class="view ref" id="view-ref" role="tabpanel" aria-labelledby="tab-ref"><div class="ref-in" id="refIn"></div></section>
+</main>
+<div id="fx" aria-hidden="true"></div>
+
+<script src="dobble-engine.js"></script>
+<script>
+(function () {
+'use strict';
+var E = window.DobbleEngine;
+
+/* ================================================================ utilities */
+function $(s, r) { return (r || document).querySelector(s); }
+function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+function h(tag, props) {
+  var el = document.createElement(tag);
+  if (props) for (var k in props) {
+    var v = props[k];
+    if (v == null || v === false) continue;
+    if (k === 'class') el.className = v;
+    else if (k === 'html') el.innerHTML = v;
+    else if (k === 'text') el.textContent = v;
+    else if (k === 'style') { for (var sk in v) { if (sk.indexOf('--') === 0) el.style.setProperty(sk, v[sk]); else el.style[sk] = v[sk]; } }
+    else if (k.indexOf('on') === 0 && typeof v === 'function') el.addEventListener(k.slice(2), v);
+    else el.setAttribute(k, v === true ? '' : v);
+  }
+  for (var i = 2; i < arguments.length; i++) append(el, arguments[i]);
+  return el;
+}
+function append(el, c) {
+  if (c == null || c === false) return;
+  if (Array.isArray(c)) { c.forEach(function (x) { append(el, x); }); return; }
+  el.appendChild(c.nodeType ? c : document.createTextNode(String(c)));
+}
+function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+// a symbol inside a sentence: 「🍉 西瓜」 (the corner brackets keep Chinese text around it free of spaces — H1)
+function symHTML(s) { return '「<span class="e">' + E.symEmoji(s) + '</span> ' + esc(E.symName(s)) + '」'; }
+function fmtClock(ms) { var t = Math.max(0, Math.floor(ms / 1000)); return Math.floor(t / 60) + ':' + ('0' + (t % 60)).slice(-2); }
+function sec(ms) { return (ms / 1000).toFixed(1); }
+var now = function () { return performance.now(); };
+
+var store = {
+  get: function (k, d) { try { var v = window.localStorage.getItem('dobble.' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set: function (k, v) { try { window.localStorage.setItem('dobble.' + k, JSON.stringify(v)); } catch (e) { /* storage blocked: fine */ } }
+};
+
+var BOT_NAMES = ['小东', '小西', '小南', '小北', '阿杰'];
+var COLORS = { '你': '#ffd23f', '小东': '#ff6b6b', '小西': '#4dabf7', '小南': '#40c977', '小北': '#ff922b', '阿杰': '#cc5de8' };
+function colorOf(name) { return COLORS[name] || '#999'; }
+function pron(name) { return name === '小西' ? '她' : '他'; }
+
+/* ================================================================ prefs & speed */
+var prefs = Object.assign({ anim: 'normal', bot: 'novice', mode: 'tower', opp: 2, deck: 'full', rounds: 5, practice: 10, coach: null }, store.get('prefs', {}));
+var progress = Object.assign({ done: [false, false, false, false, false, false, false], finished: false, played: 0 }, store.get('progress', {}));
+function savePrefs() { store.set('prefs', prefs); }
+function saveProgress() { store.set('progress', progress); }
+
+var debugSpeed = 1;
+var debugNoAuto = false;     // test hook: keep between-round / tie panels up until clicked
+var ANIM = { slow: 1.6, normal: 1, fast: 0.55 };
+var reduceMotion = false;
+try {
+  var rmq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  reduceMotion = rmq.matches;
+  if (rmq.addEventListener) rmq.addEventListener('change', function () { reduceMotion = rmq.matches; applyAnimVar(); });
+} catch (e) { /* old browser */ }
+// timeMul: how long things stay on screen (bubbles, the found highlight) — follows the speed setting, NOT reduced motion.
+// animMul: movement (flying cards, pops); 0 under prefers-reduced-motion.
+function timeMul() { return (ANIM[prefs.anim] || 1) * debugSpeed; }
+function animMul() { return reduceMotion ? 0 : timeMul(); }
+function T(ms) { return ms * debugSpeed; }
+function applyAnimVar() { document.documentElement.style.setProperty('--anim', String(animMul())); }
+applyAnimVar();
+
+var fx = document.getElementById('fx');
+function clearFx() { $$('.shout, .flyer', fx).forEach(function (x) { x.remove(); }); }
+
+/* Double-tap guard (house rule H4). After an advance/action button is pressed, or after a new screen / new cards
+   appear on their own, further taps in <main> are ignored for ~400 ms so a second tap can't skip a step, start
+   something on the next screen, or shout on a card that wasn't there yet. Scaled by the test speed only. */
+var tapGuard = { until: 0 };
+function guardInput(ms) { tapGuard.until = Math.max(tapGuard.until, now() + T(ms == null ? 400 : ms)); }
+function inputGuarded() { return now() < tapGuard.until; }
+var ADVANCE = '.btn, .skip, .mapskip, .lchip';
+
+/* ================================================================ card rendering */
+/* opts: d, interactive, role, frame, onTap(sym, cardEl) */
+function cardEl(card, opts) {
+  opts = opts || {};
+  var d = opts.d || 200;
+  var el = h('div', { class: 'dcard' + (opts.frame ? ' cmp' : '') + (opts.interactive ? ' ia' : ''), 'data-cardid': card, 'data-role': opts.role || null });
+  el.style.setProperty('--d', d + 'px');
+  if (!opts.interactive) el.setAttribute('aria-hidden', 'true');
+  var L = E.layoutCard(card);
+  for (var i = 0; i < L.length; i++) {
+    var s = L[i];
+    var b = h(opts.interactive ? 'button' : 'span', { class: 'sym', 'data-sym': s.s });
+    if (opts.interactive) { b.type = 'button'; b.setAttribute('aria-label', E.symName(s.s)); }
+    b.style.left = (50 + s.x * 50).toFixed(2) + '%';
+    b.style.top = (50 + s.y * 50).toFixed(2) + '%';
+    b.style.width = b.style.height = (s.r * 100).toFixed(2) + '%';
+    var g = h('span', { class: 'g', 'aria-hidden': 'true' }, E.symEmoji(s.s));
+    g.style.fontSize = (s.r * 0.78 * d).toFixed(1) + 'px';      // fallback
+    g.style.fontSize = (s.r * 78).toFixed(2) + 'cqw';            // scales with the card (glyph ≈ inscribed square)
+    g.style.transform = 'rotate(' + s.rot + 'deg)';
+    b.appendChild(g);
+    el.appendChild(b);
+  }
+  if (opts.interactive && opts.onTap) {
+    el.addEventListener('click', function (ev) {
+      var btn = ev.target.closest ? ev.target.closest('.sym') : null;
+      var sym = null;
+      if (btn && el.contains(btn)) sym = +btn.getAttribute('data-sym');
+      else {
+        var r = el.getBoundingClientRect();
+        var ux = (ev.clientX - r.left) / r.width * 2 - 1, uy = (ev.clientY - r.top) / r.height * 2 - 1;
+        if (ux * ux + uy * uy > 1.08) return;
+        sym = E.hitTest(card, ux, uy, 0.22);           // generous tap target: nearest symbol
+      }
+      if (sym == null) return;
+      opts.onTap(sym, el);
+    });
+  }
+  return el;
+}
+function backEl(d, extraClass) {
+  var el = h('div', { class: 'dcard back ' + (extraClass || ''), 'aria-hidden': 'true' }, h('span', { class: 'back-logo' }, '嗒宝'));
+  el.style.setProperty('--d', d + 'px');
+  return el;
+}
+function markSym(root, card, sym, cls) {
+  $$('.dcard[data-cardid="' + card + '"] .sym[data-sym="' + sym + '"]', root).forEach(function (x) { x.classList.add(cls); });
+}
+
+/* ================================================================ Table: one live game view */
+function Table(host, o) {
+  var self = this;
+  this.host = host; this.o = o || {};
+  this.s = o.state;
+  this.human = o.human == null ? 0 : o.human;
+  this.level = o.level || E.BOT_LEVELS.normal;
+  this.botsOn = o.botsOn !== false;
+  this.interactive = o.interactive !== false;
+  this.freezeOnWrong = o.freezeOnWrong !== false;
+  this.bots = {}; this.frozen = {}; this.timers = [];
+  this.rand = E.makeRng(o.botSeed || ((Math.random() * 1e9) | 0) + 1);
+  this.prev = null; this.lock = false; this.alive = true; this.fast = 1; this.overlay = null; this.overlayKind = null;
+  this.t0 = now(); this.pairT0 = now(); this.times = [];
+  this.paused = false; this.pauseT = 0; this.pausedMs = 0; this.doneElapsed = null;
+  this.readyAt = now() + T(350);     // fresh cards: ignore a tap that was really the 2nd half of a double-tap
+  this.lastBad = null; this.myBubble = null; this.els = { cards: {}, anchors: {} };
+  this.lastFound = null; this.hintOn = false; this.hintTimer = null; this.lastSize = '';
+  this.cmpT0 = now(); this.myTimes = [];             // how long the human took for each find (shown on the result screen)
+  this.nar = { botSeen: false, streak: 0, tipped: false, standing: false };   // 教练解说: teachable moments said once
+  this.root = h('div', { class: 'tbl' + (o.dimOpps ? ' dim-opps' : '') });
+  host.replaceChildren(this.root);
+  if (window.ResizeObserver) {
+    this.ro = new ResizeObserver(function () {
+      var sz = host.clientWidth + 'x' + host.clientHeight;
+      if (sz === self.lastSize || !self.alive) return;
+      window.requestAnimationFrame(function () { if (self.alive) self.render(); });
+    });
+    this.ro.observe(host);
+  }
+  this.render();
+  this.syncBots();
+  this.armHint();
+  if (o.clockEl || this.s.mode === 'practice') this.tickId = setInterval(function () { self.tick(); }, 100);
+}
+Table.prototype.later = function (fn, ms) {
+  var self = this;
+  var id = setTimeout(function () { self.timers = self.timers.filter(function (x) { return x !== id; }); if (self.alive) fn(); }, Math.max(0, ms));
+  this.timers.push(id);
+  return id;
+};
+Table.prototype.destroy = function () {
+  this.alive = false;
+  this.stopBots();
+  this.timers.forEach(clearTimeout); this.timers = [];
+  clearTimeout(this.hintTimer);
+  clearInterval(this.tickId);
+  if (this.ro) this.ro.disconnect();
+  if (this.root.parentNode) this.root.parentNode.removeChild(this.root);
+  clearFx();
+};
+/* Pause (house rule H5): while the user is on another tab or the browser tab is hidden, bots, the clock, the
+   stopwatch, the hint timer and the round-break auto-advance all stop; on return everything picks up again. */
+Table.prototype.setPaused = function (p) {
+  p = !!p;
+  if (p === this.paused || !this.alive) return;
+  var t = now(), self = this;
+  this.paused = p;
+  if (p) {
+    this.pauseT = t;
+    this.stopBots();
+    clearTimeout(this.hintTimer);
+    if (this.autoNext) { clearTimeout(this.autoNext); this.autoNext = null; }
+    return;
+  }
+  var away = t - this.pauseT;
+  this.pausedMs += away; this.pairT0 += away; this.cmpT0 += away;
+  this.readyAt = Math.max(this.readyAt, t + T(350));
+  if (this.overlay && this.overlayKind === 'round' && !debugNoAuto) this.autoNext = this.later(function () { self.nextRound(); }, T(4000));
+  if (!this.hintOn) this.armHint();
+  this.syncBots();
+};
+Table.prototype.elapsed = function () {
+  if (this.doneElapsed != null) return this.doneElapsed;
+  return (this.paused ? this.pauseT : now()) - this.t0 - this.pausedMs;
+};
+Table.prototype.name = function (p) { return p === this.human ? '你' : this.s.players[p].name; };
+Table.prototype.say = function (html, kind, important) { if (this.o.narrate) this.o.narrate(html, kind || 'info', !!important); };
+
+/* ---------- rendering ---------- */
+Table.prototype.render = function () {
+  this.lastSize = this.host.clientWidth + 'x' + this.host.clientHeight;
+  var W = this.root.clientWidth, H = this.root.clientHeight;     // content box (host may have padding)
+  if (!W || !H) return;
+  this.root.replaceChildren();
+  this.els = { cards: {}, anchors: {} };
+  var m = this.s.mode;
+  this.root.classList.remove('tbl-tower', 'tbl-well', 'tbl-potato', 'tbl-duel', 'tbl-practice');
+  this.root.classList.add('tbl-' + m);
+  if (m === 'tower' || m === 'well') this.renderTwo(W, H);
+  else if (m === 'potato') this.renderPotato(W, H);
+  else this.renderPair(W, H);
+  if (this.overlay) this.root.appendChild(this.overlay);
+  this.applyFrozen();
+  if (this.lastFound && (this.s.finished || this.s.betweenRounds)) markSym(this.root, this.lastFound.a, this.lastFound.sym, 'found'), markSym(this.root, this.lastFound.b, this.lastFound.sym, 'found');
+  if (this.hintOn) this.showHint();
+  // a re-render (e.g. the coach bubble collapsing on the first tap) must not wipe the red ring of a wrong tap
+  if (this.lastBad && now() < this.lastBad.until) markSym(this.root, this.lastBad.card, this.lastBad.sym, 'bad');
+  if (this.o.onRender) this.o.onRender(this);
+};
+Table.prototype.pile = function (arr, d, key, frame, role, interactive) {
+  var self = this;
+  var wrap = h('div', { class: 'pile' });
+  wrap.style.setProperty('--d', d + 'px');
+  var depth = Math.min(3, arr.length - 1);
+  for (var i = depth; i >= 1; i--) { var l = h('i', { class: 'layer' }); l.style.setProperty('--k', i); wrap.appendChild(l); }
+  var c = cardEl(E.top(arr), { d: d, frame: frame, role: role, interactive: interactive, onTap: interactive ? function (sym, el) { self.tap(sym, key, el); } : null });
+  wrap.appendChild(c);
+  this.els.cards[key] = c;
+  return wrap;
+};
+Table.prototype.chip = function (p, cd) {
+  var tower = this.s.mode === 'tower';
+  var el = h('div', { class: 'opp', 'data-p': p.id, style: { '--c': colorOf(p.name) } });
+  var mini = p.pile.length ? cardEl(E.top(p.pile), { d: cd, role: 'opp' }) : h('div', { class: 'dcard ghost', style: { '--d': cd + 'px' } });
+  el.appendChild(mini);
+  el.appendChild(h('span', { class: 'av', 'aria-hidden': 'true' }, p.name.slice(-1)));
+  el.appendChild(h('span', { class: 'oname' }, p.name));
+  el.appendChild(h('span', { class: 'ocount' }, tower ? p.pile.length + '张' : '剩' + p.pile.length + '张'));
+  this.els.anchors[p.id] = el; this.els.cards[p.id] = mini;
+  return el;
+};
+Table.prototype.renderTwo = function (W, H) {
+  var s = this.s, hu = this.human, me = s.players[hu];
+  var tower = s.mode === 'tower';
+  var bots = s.players.filter(function (p) { return p.id !== hu; });
+  var small = W < 620 || H < 450;                 // phone portrait, or a phone on its side
+  var corners = small && bots.length <= 3;        // tuck 1–3 opponents into the empty corners beside the round cards
+  var tight = small && bots.length >= 4;          // many bots: name + count only, one row
+  var strip = h('div', { class: 'opps' + (corners ? ' corners' : '') + (tight ? ' tight' : '') });
+  var cd = W >= 700 && !corners ? 56 : (corners ? 44 : (bots.length > 3 ? 36 : 42));
+  var self = this;
+  bots.forEach(function (p, i) { var c = self.chip(p, cd); if (corners) c.classList.add('c' + i); strip.appendChild(c); });
+  var duo = h('div', { class: 'duo' });
+  this.root.appendChild(strip); this.root.appendChild(duo);
+  var dw = duo.clientWidth, dh = duo.clientHeight;
+  var side = dw >= 620 && dw >= dh * 1.2;
+  var lab = 22;
+  var d = side ? Math.min((dw - 60) / 2, dh - lab - 12, 440) : Math.min(dw - 4, (dh - 2 * lab - 16) / 2, 400);
+  d = Math.max(110, Math.floor(d));
+  duo.classList.toggle('side', side);
+  var cmp = me ? E.comparisons(s, hu)[0] : null;
+  var cs = h('figure', { class: 'slot center' });
+  cs.appendChild(h('figcaption', { class: 'lbl' }, tower ? '抓牌堆 · ' : '中央牌堆 · ', h('b', null, tower ? '剩' + s.center.length + '张' : s.center.length + '张')));
+  if (s.center.length) cs.appendChild(this.pile(s.center, d, 'center', !!cmp, 'center', this.interactive && !!cmp));
+  else cs.appendChild(h('div', { class: 'empty-spot', style: { '--d': d + 'px' } }, '抓牌堆拿完了'));
+  var ms = h('figure', { class: 'slot mine' });
+  if (me.pile.length) ms.appendChild(this.pile(me.pile, d, hu, !!cmp, 'mine', this.interactive && !!cmp));
+  else ms.appendChild(h('div', { class: 'empty-spot', style: { '--d': d + 'px' } }, '你的牌出完了！'));
+  ms.appendChild(h('figcaption', { class: 'lbl' }, '你的牌堆 · ', h('b', null, (tower ? '共' : '还剩') + me.pile.length + '张')));
+  this.els.anchors[hu] = ms;
+  duo.appendChild(cs); duo.appendChild(ms);
+};
+Table.prototype.renderPotato = function (W, H) {
+  var s = this.s, hu = this.human, self = this;
+  var me = hu >= 0 ? s.players[hu] : null;
+  var hud = h('div', { class: 'phud' });
+  if (this.o.tiebreak) {
+    // one-round elimination used to break a 3+ tie: nobody scores here, the last holder is out
+    hud.appendChild(h('span', { class: 'rnd' }, '决胜回合'));
+    hud.appendChild(h('span', { class: 'pen' }, '最后拿着牌的人淘汰'));
+  } else {
+    hud.appendChild(h('span', { class: 'rnd' }, '第' + s.round + '/' + s.rounds + '回合'));
+    hud.appendChild(h('span', { class: 'pen' }, me ? '你面前' + me.penalty + '张 · 最少的赢' : '面前的牌最少的赢'));
+  }
+  var act = E.activePlayers(s);
+  var humanIdle = !me || !me.pile.length;
+  if (humanIdle && act.length > 1 && !s.finished && !s.betweenRounds && this.botsOn) {
+    hud.appendChild(h('button', { class: 'btn', onclick: function () { self.fastForward(); } }, this.fast < 1 ? '快进中…' : '快进'));
+  }
+  this.root.appendChild(hud);
+  var others = s.players.filter(function (p) { return p.id !== hu; });
+  var k = others.length;
+  var grid = h('div', { class: 'ogrid' });
+  var mine = h('div', { class: 'pmine' });
+  var body = h('div', { class: 'pbody' });
+  this.root.appendChild(body);
+  body.appendChild(grid);
+  if (me) body.appendChild(mine);
+  var avail = this.root.clientHeight - hud.offsetHeight - 8;
+  var dO, dMe = 0, best = null, gap = 10, capO = W >= 760 ? 250 : 230;
+  var side = !!me && W >= 760 && W > avail * 1.25;
+  body.classList.toggle('side', side);
+  if (side) {
+    // wide screen: own card on the left, opponents on the right
+    dMe = Math.min(avail - 34, W * 0.4, 420);
+    var rest = W - dMe - 56;
+    for (var c = 1; c <= Math.min(k, 5); c++) {       // a short, wide screen (phone on its side) wants one long row
+      var r = Math.ceil(k / c);
+      var o2 = Math.min((rest - (c - 1) * 12) / c - 6, avail / r - 34, 260);
+      if (!best || o2 > best.o) best = { o: o2 };
+    }
+    dO = best.o;
+    grid.style.maxWidth = rest + 'px';
+  } else if (!me) {
+    var cols0 = Math.min(k, W >= 700 ? 4 : 2), rows0 = Math.ceil(k / cols0);
+    dO = Math.min((W - (cols0 - 1) * 12) / cols0 - 6, avail / rows0 - 34, 300);
+  } else {
+    // try each column count; prefer readable opponent cards, then a big own card
+    for (var cols = 1; cols <= Math.min(k, 3); cols++) {
+      var rows = Math.ceil(k / cols);
+      var minOwn = k >= 4 ? 175 : 210;
+      var o = Math.min((W - (cols - 1) * gap) / cols - 4, capO, (avail - minOwn) / rows - 30);
+      var m = Math.min(W - 6, 380, avail - rows * (o + 30) - 12);
+      if (o < 64 || m < 150) continue;
+      var score = o * 1.2 + m * 0.5;
+      if (!best || score > best.score) best = { score: score, o: o, m: m };
+    }
+    if (!best) best = { o: 64, m: Math.max(120, avail - Math.ceil(k / 3) * 94 - 12) };
+    dO = best.o; dMe = best.m;
+  }
+  dO = Math.max(64, Math.floor(dO)); dMe = Math.floor(dMe);
+  var oppTap = dO >= 210;           // below ~210px the nearest-symbol tap area drops under 40px → look-only (tap your own card)
+  var cmps = me ? E.comparisons(s, hu) : [];
+  var targets = cmps.map(function (c) { return c.other; });
+  others.forEach(function (p) {
+    var slot = h('figure', { class: 'oslot', 'data-p': p.id, style: { '--c': colorOf(p.name) } });
+    var cap = h('figcaption', null, h('span', { class: 'dot' }), p.name, p.pile.length ? h('b', { class: 'cnt' }, p.pile.length + '张') : null, p.penalty ? h('span', { class: 'penb', title: '面前的牌' }, '面前' + p.penalty) : null);
+    slot.appendChild(cap);
+    if (p.pile.length) {
+      var frame = targets.indexOf(p.id) >= 0;
+      slot.appendChild(self.pile(p.pile, dO, p.id, frame, 'opp', self.interactive && frame && oppTap));
+      if (self.interactive && frame && !oppTap) slot.addEventListener('click', function () { self.say('在<b>你自己的牌</b>上点那个相同的符号就行，牌会自动叠给有这个符号的人。', 'warn', true); });
+    } else {
+      slot.appendChild(self.emptyPotato(p, dO));
+    }
+    self.els.anchors[p.id] = slot;
+    grid.appendChild(slot);
+  });
+  if (me) {
+    if (me.pile.length) {
+      mine.appendChild(this.pile(me.pile, dMe, hu, cmps.length > 0, 'mine', this.interactive && cmps.length > 0));
+      mine.appendChild(h('div', { class: 'lbl' }, '你的牌 · ', h('b', null, me.pile.length + '张'), cmps.length ? ' · 可以和' + cmps.length + '个人比' : ''));
+    } else {
+      mine.appendChild(this.emptyPotato(me, Math.min(dMe, 200)));
+    }
+    this.els.anchors[hu] = mine;
+  }
+};
+// empty hand in 烫手山芋: safe — or, right after the round, the loser's taken cards
+Table.prototype.emptyPotato = function (p, d) {
+  var s = this.s, last = s.roundLog[s.roundLog.length - 1];
+  var over = s.betweenRounds || s.finished;
+  if (over && last && last.loser === p.id && last.round === s.round) {
+    var w = h('div', { class: 'pile lost' }); w.style.setProperty('--d', Math.floor(d * 0.8) + 'px');
+    for (var i = Math.min(3, last.n - 1); i >= 1; i--) { var l = h('i', { class: 'layer' }); l.style.setProperty('--k', i); w.appendChild(l); }
+    w.appendChild(backEl(Math.floor(d * 0.8)));
+    w.appendChild(h('span', { class: 'tag red lost-tag' }, this.o.tiebreak ? '淘汰' : '输了这回合 +' + last.n));
+    return w;
+  }
+  var me = p.id === this.human;
+  return h('div', { class: me ? 'safe-spot' : 'safe', style: { '--d': d + 'px' } }, over ? '安全' : (me ? '你手里没牌了\n这回合安全' : '已出手\n安全'));
+};
+Table.prototype.renderPair = function (W, H) {
+  var s = this.s, hu = this.human, self = this;
+  var practice = s.mode === 'practice';
+  if (practice && this.o.stopwatch !== false) {
+    var hud = h('div', { class: 'prhud' });
+    this.watchEl = h('span', { class: 'watch' }, '0.0');
+    hud.appendChild(h('span', { class: 'sub' }, '第' + Math.min(s.practice.found + 1, s.practice.rounds) + '/' + s.practice.rounds + '对'));
+    hud.appendChild(this.watchEl);
+    var avg = this.times.length ? this.times.reduce(function (a, b) { return a + b; }, 0) / this.times.length : 0;
+    hud.appendChild(h('span', { class: 'sub' }, this.times.length ? '平均' + sec(avg) + '秒' : '秒'));
+    this.root.appendChild(hud);
+  } else this.watchEl = null;
+  if (!practice && hu < 0 && !s.finished && this.botsOn) {
+    this.root.appendChild(h('div', { class: 'prhud' }, h('span', { class: 'sub' }, '你在旁观这场对决'), h('button', { class: 'btn', onclick: function () { self.fastForward(); } }, this.fast < 1 ? '快进中…' : '快进')));
+  }
+  var duo = h('div', { class: 'duo' });
+  this.root.appendChild(duo);
+  var laps = null;
+  if (practice && this.o.stopwatch !== false && this.o.laps !== false) {
+    laps = h('div', { class: 'laps', style: { minHeight: '26px' } });
+    this.times.slice(-8).forEach(function (t, i, arr) { laps.appendChild(h('span', { class: i === arr.length - 1 ? 'last' : '' }, sec(t) + 's')); });
+    this.root.appendChild(laps);
+  }
+  var dw = duo.clientWidth, dh = duo.clientHeight;
+  var side = dw >= 620 && dw >= dh * 1.2;
+  // practice pairs need no captions (the two cards are obviously "the two cards"); the space goes to the cards
+  var labels0 = this.o.labels || (practice ? ['', ''] : null);
+  var noLabels = !!labels0 && !labels0[0] && !labels0[1];
+  var lab = noLabels ? 0 : 25;
+  var d = side ? Math.min((dw - 60) / 2, dh - lab - 12, 440) : Math.min(dw - 4, (dh - 2 * lab - 20) / 2, 400);
+  d = Math.max(110, Math.floor(d));
+  duo.classList.toggle('side', side);
+  var cards, labels, keys, owners;
+  if (practice) {
+    cards = [s.pair[0], s.pair[1]]; keys = ['pairA', 'pairB']; owners = [null, null];
+    labels = labels0;
+  } else {
+    var a = hu >= 0 ? 1 - hu : 0, b = hu >= 0 ? hu : 1;
+    cards = [E.top(s.players[a].pile), E.top(s.players[b].pile)]; keys = [a, b]; owners = [a, b];
+    labels = (this.o.labels) || [s.players[a].name + '的牌', hu >= 0 ? '你的牌' : s.players[b].name + '的牌'];
+  }
+  var live = !s.finished;
+  var canTap = this.interactive && hu >= 0 && live;
+  for (var i = 0; i < 2; i++) {
+    var slot = h('figure', { class: 'slot' });
+    var key = keys[i];
+    var c = cardEl(cards[i], { d: d, frame: live, role: practice ? 'pair' : (owners[i] === hu ? 'mine' : 'opp'), interactive: canTap, onTap: canTap ? (function (k) { return function (sym, el) { self.tap(sym, k, el); }; })(key) : null });
+    this.els.cards[key] = c;
+    var cap = noLabels ? null : h('figcaption', { class: 'lbl' }, labels[i]);
+    if (i === 0) { append(slot, cap); slot.appendChild(c); } else { slot.appendChild(c); append(slot, cap); }
+    if (owners[i] != null) this.els.anchors[owners[i]] = slot;
+    else this.els.anchors[i === 0 ? 'A' : 'B'] = slot;
+    duo.appendChild(slot);
+  }
+  if (practice && hu >= 0) this.els.anchors[hu] = this.els.anchors.B;
+};
+
+/* ---------- human input ---------- */
+Table.prototype.tap = function (sym, key, el) {
+  var s = this.s, hu = this.human;
+  if (!this.interactive || s.finished || hu < 0 || !this.alive || this.paused) return;
+  var t = now();
+  // Cards are changing (someone just shouted), or they appeared a moment ago: this tap was aimed at the old
+  // cards (or is the 2nd half of a double-tap). Never count it as a shout; if it was the symbol that was right
+  // a moment ago, say who beat you to it.
+  if (this.lock || t < this.readyAt) { this.lateTap(sym); return; }
+  if (!E.comparisons(s, hu).length) return;          // nothing to compare right now (e.g. the round just ended)
+  if (this.o.onTapAny) this.o.onTapAny();
+  if ((this.frozen[hu] || 0) > t) { this.say('还在冻结中，等一下…', 'warn', true); return; }
+  var other;
+  if (s.mode === 'potato' && typeof key === 'number' && key !== hu) other = key;
+  else if ((s.mode === 'tower' || s.mode === 'well') && key === 'center') other = 'center';
+  var before = E.comparisons(s, hu);
+  var r = E.shout(s, hu, sym, other);
+  this.bubble(hu, sym, r.ok);
+  if (r.ok) {
+    this.myTimes.push(t - this.cmpT0);
+    if (this.o.onHuman) this.o.onHuman(true, r.event, this);
+    this.afterEvent(r.event, before);
+    return;
+  }
+  if (this.prev && t < this.prev.until && this.prev.syms.indexOf(sym) >= 0) {
+    this.say('慢了一步！' + esc(this.prev.who) + '先喊出了' + symHTML(this.prev.sym) + '，牌已经换了。', 'warn', true);
+    return;
+  }
+  if (el) {
+    var b = el.querySelector('.sym[data-sym="' + sym + '"]');
+    if (b) { b.classList.remove('bad'); void b.offsetWidth; b.classList.add('bad'); }
+    this.lastBad = { card: +el.getAttribute('data-cardid'), sym: sym, until: t + 900 };
+  }
+  var msg = this.o.wrongText ? this.o.wrongText(r, sym, key, this) : this.wrongText(r, sym, key);
+  if (this.freezeOnWrong) { this.freeze(hu); this.say(msg + '冻结1秒。', 'bad', true); }
+  else this.say(msg, 'bad', true);
+  if (this.o.onHuman) this.o.onHuman(false, r, this);
+};
+// a tap that arrived while the cards were being replaced
+Table.prototype.lateTap = function (sym) {
+  var p = this.prev;
+  if (!p || now() > p.until || p.syms.indexOf(sym) < 0) return;      // nothing to explain: just ignore it
+  this.bubble(this.human, sym, true, 'late');
+  this.say('慢了一步！' + esc(p.who) + '先喊出了' + symHTML(p.sym) + '。', 'warn', true);
+};
+Table.prototype.wrongText = function (r, sym, key) {
+  var L = symHTML(sym), m = this.s.mode;
+  if (m === 'tower' || m === 'well') {
+    var other = m === 'tower' ? '抓牌堆顶' : '中央牌堆顶';
+    if (r.reason === 'only-mine') return L + '只在你的牌上，' + other + '没有。';
+    if (r.reason === 'only-other') return L + '只在' + other + '，你的牌上没有。';
+    return L + '不在这两张牌上。';
+  }
+  if (m === 'potato') {
+    if (r.reason === 'only-mine') return L + '只在你的牌上，别人亮着的牌上都没有。';
+    if (r.reason === 'only-other') return L + '在' + esc(this.name(key)) + '的牌上，可你的牌上没有。';
+    return L + '不在你的牌上。';
+  }
+  return L + '只在一张卡上，另一张没有。';
+};
+
+/* ---------- events ---------- */
+Table.prototype.afterEvent = function (ev, before) {
+  var s = this.s, hu = this.human, self = this;
+  var beforeKey = (before || []).map(function (c) { return c.other + ':' + c.a + '-' + c.b; }).join('|');
+  var firstBot = ev.p !== hu && !this.nar.botSeen;
+  if (ev.p !== hu && hu >= 0) this.prev = { syms: (before || []).map(function (c) { return c.sym; }), until: now() + 900, who: s.players[ev.p].name, sym: ev.sym };
+  else this.prev = null;
+  this.lastFound = ev; this.lastBad = null;
+  this.hintOn = false; clearTimeout(this.hintTimer);
+  markSym(this.root, ev.a, ev.sym, 'found'); markSym(this.root, ev.b, ev.sym, 'found');
+  var src = this.sourceEl(ev);
+  if (s.mode === 'practice' && ev.p === hu) this.times.push(now() - this.pairT0);
+  this.narrateEvent(ev, firstBot);
+  if (ev.p !== hu) this.nar.botSeen = true;
+  if (this.o.onEvent) this.o.onEvent(ev, this);
+  // the found highlight stays up for a moment even with reduced motion (only the flying card is motion);
+  // the first time a bot wins a card it stays ~1 s, so a newcomer can see where the bot found it
+  var delay = (s.mode === 'practice' ? 420 : (firstBot && this.o.holdFirst && this.o.holdFirst() ? 1000 : 300)) * timeMul();
+  this.lock = true;
+  var go = function () {
+    self.lock = false;
+    var fromRect = src && src.isConnected ? src.getBoundingClientRect() : null;
+    self.render();
+    if (s.mode === 'practice') self.pairT0 = now();
+    if (hu >= 0 && !s.finished && E.compareKey(s, hu) !== beforeKey) {
+      self.readyAt = Math.max(self.readyAt, now() + T(300));   // your cards just changed: a tap now was aimed at the old ones
+      self.dropMyBubble();                                       // and your shout bubble must not cover your new card
+      self.cmpT0 = now();
+    }
+    var to = self.destEl(ev);
+    var flyCard = ev.type === 'pass' ? ev.cards[ev.cards.length - 1] : ev.card;
+    var flew = !!(fromRect && to && flyCard != null) && self.fly(flyCard, fromRect, to);
+    self.syncBots();
+    self.armHint();
+    if (s.finished) self.finish();
+    else if (ev.roundEnd) {
+      // let the passed card land before the round-end panel covers the table
+      if (flew) self.later(function () { self.roundBreak(ev.roundEnd); }, 450 * animMul());
+      else self.roundBreak(ev.roundEnd);
+    }
+  };
+  if (delay <= 0) go(); else this.later(go, delay);
+};
+Table.prototype.sourceEl = function (ev) {
+  var c = this.els.cards;
+  if (ev.type === 'take') return c.center;
+  if (ev.type === 'drop' || ev.type === 'pass') return c[ev.p];
+  return null;
+};
+Table.prototype.destEl = function (ev) {
+  var c = this.els.cards, a = this.els.anchors;
+  if (ev.type === 'take') return c[ev.p] || a[ev.p];
+  if (ev.type === 'drop') return c.center;
+  if (ev.type === 'pass') return c[ev.to] || a[ev.to];
+  return null;
+};
+Table.prototype.fly = function (card, from, toEl) {
+  var dur = 430 * animMul();
+  if (dur <= 0 || !from || !from.width || !toEl.getBoundingClientRect || this.paused) return false;
+  var to = toEl.getBoundingClientRect();
+  if (!to.width) return false;
+  var c = cardEl(card, { d: from.width });
+  c.classList.add('flyer');
+  c.style.left = from.left + 'px'; c.style.top = from.top + 'px';
+  fx.appendChild(c);
+  var sx = to.width / from.width;
+  var dx = (to.left + to.width / 2) - (from.left + from.width / 2), dy = (to.top + to.height / 2) - (from.top + from.height / 2);
+  var hideTo = toEl.classList.contains('dcard');
+  if (hideTo) toEl.style.visibility = 'hidden';
+  var done = function () { if (c.parentNode) c.parentNode.removeChild(c); if (hideTo) toEl.style.visibility = ''; };
+  if (c.animate) {
+    // a small toss mid-flight, but it must LAND at 0deg: the real card underneath is unrotated, so any end angle
+    // shows as a snap when the flyer is removed. The midpoint is exactly halfway so the eased motion stays smooth.
+    var an = c.animate([
+      { transform: 'translate(0,0) scale(1) rotate(0deg)' },
+      { offset: 0.5, transform: 'translate(' + dx / 2 + 'px,' + dy / 2 + 'px) scale(' + (1 + sx) / 2 + ') rotate(10deg)' },
+      { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(' + sx + ') rotate(0deg)' }
+    ], { duration: dur, easing: 'cubic-bezier(.3,.7,.2,1)', fill: 'forwards' });
+    an.onfinish = done;
+  }
+  setTimeout(done, dur + 120);
+  return true;
+};
+// kind: undefined (ok / bad from `ok`) or 'late' (a grey "I saw it too" bubble)
+Table.prototype.bubble = function (p, sym, ok, kind) {
+  var a = this.els && this.els.anchors[p];
+  if (!a || !a.isConnected || this.paused) return;
+  var r = a.getBoundingClientRect();
+  if (!r.width) return;                                  // this view is hidden: never draw over another tab
+  var b = h('div', { class: 'shout' + (kind ? ' ' + kind : (ok ? '' : ' bad')) }, h('span', { class: 'e' }, E.symEmoji(sym)), ' ' + E.symName(sym) + '!');
+  var x = Math.max(70, Math.min(window.innerWidth - 70, r.left + r.width / 2));
+  var y = p === this.human && this.s.mode !== 'potato' ? r.top + 26 : r.top + 8;
+  if (this.s.mode === 'potato' && p === this.human) y = r.top + 20;
+  b.style.left = x + 'px'; b.style.top = Math.max(40, y) + 'px';
+  fx.appendChild(b);
+  if (p === this.human) {
+    if (this.myBubble && this.myBubble.parentNode) this.myBubble.parentNode.removeChild(this.myBubble);
+    this.myBubble = b;
+  }
+  // how long it stays is timing, not motion: reduced motion keeps the bubble (it only drops the pop)
+  var life = Math.max(0, 1150 * timeMul());
+  setTimeout(function () { if (b.parentNode) b.parentNode.removeChild(b); }, life);
+};
+Table.prototype.dropMyBubble = function () {
+  var b = this.myBubble; this.myBubble = null;
+  if (!b || !b.parentNode) return;
+  b.classList.add('gone');
+  setTimeout(function () { if (b.parentNode) b.parentNode.removeChild(b); }, 170);
+};
+Table.prototype.freeze = function (p) {
+  var ms = T(1000), self = this;
+  this.frozen[p] = now() + ms;
+  this.applyFrozen();
+  this.later(function () { self.applyFrozen(); if (p !== self.human) self.syncBots(); }, ms + 5);
+};
+Table.prototype.applyFrozen = function () {
+  var t = now(), self = this;
+  this.root.classList.toggle('hfrozen', this.human >= 0 && (this.frozen[this.human] || 0) > t);
+  this.s.players.forEach(function (p) {
+    if (p.id === self.human) return;
+    var a = self.els && self.els.anchors[p.id];
+    if (a && a.classList) a.classList.toggle('frozen', (self.frozen[p.id] || 0) > t);
+  });
+};
+/* 教练解说: one or two short lines (they must fit the 2-line coach strip). Teachable moments are said once:
+   the first card a bot wins, a tip after the bots win 3 in a row, and the standing near the end. */
+Table.prototype.narrateEvent = function (ev, firstBot) {
+  var s = this.s, hu = this.human, L = symHTML(ev.sym), n = esc(this.name(ev.p)), nar = this.nar;
+  var me = ev.p === hu, txt = '', pr = pron(this.name(ev.p));
+  if (me) nar.streak = 0; else nar.streak++;
+  var tip = !me && !firstBot && hu >= 0 && !s.finished && nar.streak >= 3 && !nar.tipped && E.comparisons(s, hu).length > 0;
+  if (tip) nar.tipped = true;
+  if (ev.type === 'take') {
+    if (s.finished) txt = (me ? '对！这张归你。' : n + '抢到' + L + '。') + '抓牌堆拿完了！';
+    else if (s.center.length === 5 && hu >= 0 && !nar.standing) {
+      nar.standing = true;
+      var mine = s.players[hu].pile.length, best = null;
+      s.players.forEach(function (p) { if (p.id !== hu && (!best || p.pile.length > best.pile.length)) best = p; });
+      txt = (me ? '对！这张归你。' : n + '抢到' + L + '。') + '抓牌堆还剩5张：你' + mine + '张，' +
+        (mine > best.pile.length ? '暂时领先！' : mine === best.pile.length ? '和' + esc(best.name) + '一样多。' : esc(best.name) + best.pile.length + '张领先。');
+    }
+    else if (me) txt = '对！' + L + '两张都有。这张归你，你的顶牌换了。';
+    else if (firstBot) txt = n + '喊出' + L + '，拿走了抓牌堆顶。桌上就是边喊边伸手拿。';
+    else if (tip) txt = n + '又抢到了。窍门：盯住抓牌堆顶的一个符号，去你的牌上找，先看颜色。';
+    else txt = n + '抢到' + L + '，抓牌堆顶换了，重新找！';
+  } else if (ev.type === 'drop') {
+    var left = s.players[ev.p].pile.length;
+    if (me) txt = left ? '对！' + L + '，你的顶牌进了中央牌堆，还剩' + left + '张。接着找！' : '对！最后一张也进了中央牌堆，你出完了！';
+    else if (!left) txt = n + '喊出' + L + '，最后一张也放进了中央牌堆，' + pr + '出完了！';
+    else if (left === 2 && hu >= 0 && !nar.standing) { nar.standing = true; txt = n + '喊出' + L + '，只剩2张了！你还剩' + s.players[hu].pile.length + '张，快找！'; }
+    else if (firstBot) txt = n + '喊出' + L + '，把顶牌放到了中央牌堆。中央换牌了，你也要重新比！';
+    else if (tip) txt = n + '又抢先了。窍门：盯住中央牌堆顶的一个符号，去你的牌上找，先看颜色。';
+    else txt = n + '喊出' + L + '，中央换牌了（' + pr + '还剩' + left + '张）。';
+  } else if (ev.type === 'pass') {
+    var to = esc(this.name(ev.to)), re = ev.roundEnd, tie = !!this.o.tiebreak;
+    if (me) txt = '对！' + L + '，你把牌叠到了' + to + '的牌上。你手里空了，' + (tie ? '不会被淘汰！' : '这回合安全！');
+    else if (ev.to === hu) txt = n + '喊出' + L + '，把' + (ev.n > 1 ? ev.n + '张牌全' : '牌') + '叠到了你牌上！' + (re ? '' : '用新顶牌和别人比。');
+    else if (tip) txt = n + '又抢先了。窍门：盯住你牌上的一个符号，挨个去别人牌上找，先看颜色。';
+    else txt = n + '喊出' + L + '，把' + (ev.n > 1 ? ev.n + '张牌' : '牌') + '叠给了' + to + '。';
+    // between rounds the round-end panel says who lost; only the last round (no panel) says it here
+    if (re && s.finished) {
+      var lose = re.loser === hu, ln = esc(this.name(re.loser));
+      txt += lose ? '只剩你拿着牌，' + (tie ? '你被淘汰了。' : '你输了这回合。') : '只剩' + ln + '拿着牌，' + pron(ln) + (tie ? '被淘汰。' : '输了这回合。');
+    }
+  } else if (ev.type === 'duel') {
+    txt = me ? '对！' + L + '，你赢了这次对决！' : n + '先喊出' + L + '，赢了这次对决。';
+  } else if (ev.type === 'found') {
+    txt = '对！' + L + '，用时' + sec(this.times[this.times.length - 1] || 0) + '秒。';
+  }
+  this.say(txt, me ? 'good' : 'info', false);
+};
+Table.prototype.roundBreak = function (re) {
+  if (!this.alive || this.overlay) return;
+  var s = this.s, self = this;
+  var isMe = re.loser === this.human;
+  var who = esc(this.name(re.loser));
+  var msg = isMe ? '只剩你拿着牌：这回合你输了，' + re.n + '张牌放在你面前。' : '只剩' + who + '拿着牌：这回合' + pron(who) + '输了，' + re.n + '张牌放在' + pron(who) + '面前。';
+  var panel = h('div', { class: 'tpanel' },
+    h('h3', null, '第' + re.round + '回合结束'),
+    h('p', { html: msg }),
+    h('p', { class: 'hintline' }, '面前的牌：' + s.players.map(function (p) { return self.name(p.id) + p.penalty + '张'; }).join(' · ')),
+    h('button', { class: 'btn primary', id: 'nextRoundBtn', onclick: function () { self.nextRound(); } }, '下一回合（' + (s.round + 1) + '/' + s.rounds + '）'),
+    h('p', { class: 'hintline' }, '几秒后自动开始'));
+  this.overlay = h('div', { class: 'tover' }, panel);
+  this.overlayKind = 'round';
+  this.root.appendChild(this.overlay);
+  clearFx();                          // the panel says what happened; no shout bubble floating over it
+  guardInput(400);                    // it popped up by itself: a tap meant for the cards must not press 下一回合
+  if (!debugNoAuto && !this.paused) this.autoNext = this.later(function () { self.nextRound(); }, T(4000));
+};
+Table.prototype.nextRound = function () {
+  if (!this.overlay || !this.alive) return;
+  clearTimeout(this.autoNext); this.autoNext = null;
+  this.overlay = null; this.overlayKind = null; this.fast = 1; this.lastFound = null; this.lastBad = null;
+  E.nextRound(this.s);
+  this.readyAt = now() + T(350); this.cmpT0 = now();
+  this.render(); this.syncBots(); this.armHint();
+  this.say('第' + this.s.round + '回合：每人一张新牌，亮牌！', 'info');
+  if (this.o.onRound) this.o.onRound(this);
+};
+Table.prototype.finish = function () {
+  var self = this;
+  this.doneElapsed = this.elapsed();
+  this.stopBots();
+  clearInterval(this.tickId);
+  this.later(function () { if (self.o.onEnd) self.o.onEnd(self.s, self); }, 650 * timeMul());
+};
+Table.prototype.tick = function () {
+  if (this.paused) return;
+  if (this.o.clockEl && !this.s.finished) this.o.clockEl.textContent = fmtClock(this.elapsed());
+  if (this.watchEl && !this.s.finished && !this.lock) this.watchEl.textContent = sec(now() - this.pairT0);
+};
+Table.prototype.armHint = function () {
+  var self = this;
+  clearTimeout(this.hintTimer);
+  if (!this.o.hintAfter || this.s.finished || this.paused) return;
+  this.hintTimer = setTimeout(function () {
+    if (!self.alive || self.s.finished || self.paused || self.overlay) return;
+    if (self.human < 0 || !E.comparisons(self.s, self.human).length) return;
+    if (self.o.hintOk && !self.o.hintOk()) return;
+    self.hintOn = true; self.showHint();
+    self.say('提示：看看红圈标出的地方——两张卡上各有一个。', 'warn', true);   // true with or without motion (reduced motion: a steady ring)
+  }, T(this.o.hintAfter));
+};
+Table.prototype.showHint = function () {
+  var c = E.comparisons(this.s, this.human)[0];
+  if (!c) return;
+  markSym(this.root, c.a, c.sym, 'hint'); markSym(this.root, c.b, c.sym, 'hint');
+};
+
+/* ---------- bots ---------- */
+Table.prototype.stopBots = function () {
+  for (var p in this.bots) { clearTimeout(this.bots[p].timer); this.bots[p].timer = null; this.bots[p].key = null; }
+};
+Table.prototype.setBots = function (on) {
+  var was = this.botsOn;
+  this.botsOn = on;
+  if (!on) this.stopBots(); else this.syncBots();
+  if (was !== on && this.s.mode === 'potato' && this.alive) this.render();
+};
+Table.prototype.fastForward = function () { this.fast = 0.22; this.stopBots(); this.syncBots(); this.render(); };
+// Re-plan any bot whose pair of cards changed; keep timers of bots whose view is unchanged.
+Table.prototype.syncBots = function () {
+  if (!this.alive) return;
+  var s = this.s, self = this;
+  s.players.forEach(function (p) {
+    if (p.id === self.human) return;
+    var b = self.bots[p.id] || (self.bots[p.id] = { timer: null, key: null });
+    var key = (self.botsOn && !self.paused && !s.finished && !s.betweenRounds && !self.overlay) ? E.compareKey(s, p.id) : '';
+    if (key === b.key && (b.timer || !key)) return;
+    clearTimeout(b.timer); b.timer = null; b.key = key;
+    if (!key) return;
+    var plan = E.botPlan(s, p.id, self.level, self.rand);
+    if (!plan) return;
+    var wait = Math.max(0, (self.frozen[p.id] || 0) - now()) + plan.delay * debugSpeed * self.fast;
+    b.plan = plan; b.due = now() + wait;
+    b.timer = setTimeout(function () { b.timer = null; self.botFire(p.id, plan); }, wait);
+  });
+};
+// test hook: make bot p shout the right symbol now
+Table.prototype.forceMove = function (p) {
+  var c = E.comparisons(this.s, p)[0];
+  if (!c || this.lock) return false;
+  var before = this.human >= 0 ? E.comparisons(this.s, this.human) : [];
+  var r = E.shout(this.s, p, c.sym, c.other);
+  this.bubble(p, c.sym, r.ok);
+  if (r.ok) this.afterEvent(r.event, before);
+  return r.ok;
+};
+Table.prototype.botFire = function (p, plan) {
+  var s = this.s, self = this;
+  if (!this.alive || s.finished || !this.botsOn || this.paused) return;
+  if (this.lock || this.overlay) { var b = this.bots[p]; b.timer = setTimeout(function () { b.timer = null; self.botFire(p, plan); }, 60); return; }
+  if (E.compareKey(s, p) !== plan.key || (this.frozen[p] || 0) > now()) { this.bots[p].key = null; this.syncBots(); return; }
+  var before = this.human >= 0 ? E.comparisons(s, this.human) : [];
+  var r = E.shout(s, p, plan.sym, plan.other);
+  this.bubble(p, plan.sym, r.ok);
+  if (r.ok) { this.afterEvent(r.event, before); return; }
+  this.freeze(p);
+  this.say(esc(s.players[p].name) + '喊了' + symHTML(plan.sym) + '，喊错了，冻结1秒。', 'info', false);
+};
+
+/* ================================================================ tabs & settings */
+var currentTab = 'tutorial';
+function showTab(name) {
+  currentTab = name;
+  $$('.tab').forEach(function (t) { t.setAttribute('aria-selected', String(t.getAttribute('data-tab') === name)); });
+  $$('.view').forEach(function (v) { v.classList.toggle('on', v.id === 'view-' + name); });
+  clearFx();                          // bubbles / flying cards of one tab must never float over another
+  syncPause();
+  if (name === 'tutorial') { window.requestAnimationFrame(function () { if (tut.rerender) tut.rerender(); }); }
+}
+/* House rule H5: whatever is not on screen is paused — the 实战 game while you are on 教程/速查, while the
+   「还有一局没打完」 question is up, or while the browser tab is hidden; the tutorial's live table likewise. */
+function playPaused() { return currentTab !== 'play' || document.hidden || !!play.ask; }
+function syncPause() {
+  if (tut.table) tut.table.setPaused(currentTab !== 'tutorial' || document.hidden);
+  if (play.table) play.table.setPaused(playPaused());
+  if (playPaused()) pauseAuto(); else armAuto();
+}
+document.addEventListener('visibilitychange', function () { if (document.hidden) clearFx(); syncPause(); });
+$$('.tab').forEach(function (t) { t.addEventListener('click', function () { showTab(t.getAttribute('data-tab')); }); });
+var gear = $('#gear'), pop = $('#settings');
+gear.addEventListener('click', function (e) { e.stopPropagation(); var open = pop.hidden; pop.hidden = !open; gear.setAttribute('aria-expanded', String(open)); });
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pop.hidden) { pop.hidden = true; gear.setAttribute('aria-expanded', 'false'); gear.focus(); } });
+
+function syncSegs() {
+  $$('.seg[data-pref]').forEach(function (seg) {
+    var k = seg.getAttribute('data-pref');
+    $$('button', seg).forEach(function (b) { b.setAttribute('aria-checked', String(String(prefs[k]) === b.getAttribute('data-v'))); });
+  });
+}
+$$('.seg[data-pref]').forEach(function (seg) {
+  seg.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    var k = seg.getAttribute('data-pref'), v = b.getAttribute('data-v');
+    prefs[k] = (k === 'rounds' || k === 'practice') ? +v : v;
+    savePrefs(); syncSegs();
+    if (k === 'anim') applyAnimVar();
+    if (k === 'deck') syncSetup();       // the 水井 note quotes how many cards each player gets
+    // takes effect at once (the popover says so); the game header shows the new level
+    if (k === 'bot' && play.table && !play.table.s.finished) { play.table.level = E.BOT_LEVELS[prefs.bot]; refreshGameTitle(); }
+  });
+});
+syncSegs();
+
+/* ================================================================ 教程 */
+var tut = { L: 0, S: 0, done: false, table: null, timers: [], rerender: null, botsWanted: false, mem: {} };
+var bubbleEl = $('.bubble'), lmap = $('#lmap'), tStage = $('#tstage'), sayEl = $('#say'), fbEl = $('#fb'), ltitle = $('#ltitle');
+var prevBtn = $('#prevBtn'), nextBtn = $('#nextBtn'), skipBtn = $('#skipBtn'), stepCount = $('#stepCount'), mapBtn = $('#mapBtn');
+mapBtn.addEventListener('click', function (e) { e.stopPropagation(); var open = !lmap.classList.contains('open'); lmap.classList.toggle('open', open); mapBtn.setAttribute('aria-expanded', String(open)); });
+/* One capture-phase gate for every click on the page:
+   1. a tap outside an open popover (⚙ settings, lesson map) only closes it — it must not also shout on a card
+      or press a button underneath;
+   2. the double-tap guard (H4): while it is active, taps in <main> are swallowed; pressing an advance/action
+      button starts it. */
+document.addEventListener('click', function (e) {
+  var t = e.target, inMain = !!(t && t.closest && t.closest('main')), swallow = false;
+  if (!pop.hidden && !pop.contains(t) && !gear.contains(t)) { pop.hidden = true; gear.setAttribute('aria-expanded', 'false'); swallow = inMain; }
+  if (lmap.classList.contains('open') && !lmap.contains(t) && !mapBtn.contains(t)) { lmap.classList.remove('open'); mapBtn.setAttribute('aria-expanded', 'false'); swallow = swallow || inMain; }
+  if (!swallow && inMain && inputGuarded()) swallow = true;
+  if (swallow) { e.stopPropagation(); e.preventDefault(); return; }
+  if (inMain && t.closest(ADVANCE)) guardInput(400);
+}, true);
+$('.bubble').addEventListener('click', function () { this.classList.remove('collapsed'); });
+
+function setFb(html, kind) { fbEl.className = 'fb ' + (kind || 'info'); fbEl.innerHTML = html || ''; }
+
+// scripted pairs for lessons (deterministic)
+function pickPairs(n, seed, pred) {
+  var rand = E.makeRng(seed), out = [], used = {};
+  var guard = 0;
+  while (out.length < n && guard++ < 5000) {
+    var a = Math.floor(rand() * 55), b = Math.floor(rand() * 55);
+    if (a === b || used[a] || used[b]) continue;
+    var s = E.shared(a, b), A = E.slotOf(a, s), B = E.slotOf(b, s);
+    if (pred && !pred(A, B)) continue;
+    used[a] = used[b] = true;
+    out.push([a, b]);
+  }
+  return out;
+}
+var EASY = pickPairs(6, 11, function (A, B) { return A.m >= 0.9 && B.m >= 0.9; });
+var CONTRAST = E.contrastPairs(1)[0];
+
+function stepCtx() {
+  return {
+    stage: tStage,
+    say: function (html) { sayEl.innerHTML = html; },
+    fb: setFb,
+    done: function (html, kind) {
+      tut.done = true; if (html != null) setFb(html, kind || 'good');
+      // finishing the last step's task completes the lesson, even if you then leave through the lesson map
+      if (tut.S === LESSONS[tut.L].steps.length - 1 && !progress.done[tut.L]) markDone(tut.L);
+      updateNav();
+    },
+    later: function (fn, ms) { var id = setTimeout(fn, T(ms)); tut.timers.push(id); return id; },
+    table: function (state, opts) {
+      if (tut.table) { tut.table.destroy(); tut.table = null; }
+      var host = h('div', { class: 'thost' });
+      tStage.replaceChildren(host);
+      tut.rerender = null;
+      opts = Object.assign({ state: state, narrate: function (t, k) { setFb(t, k); }, onTapAny: function () { bubbleEl.classList.add('collapsed'); } }, opts || {});
+      tut.botsWanted = opts.botsOn !== false && state.players.length > 1;
+      bubbleEl.classList.toggle('fixed-fb', opts.interactive !== false || tut.botsWanted);
+      tut.table = new Table(host, opts);
+      tut.table.setPaused(currentTab !== 'tutorial' || document.hidden);
+      return tut.table;
+    },
+    scene: function (build) {
+      if (tut.table) { tut.table.destroy(); tut.table = null; }
+      var draw = function () {
+        var W = tStage.clientWidth - 32, H = tStage.clientHeight - 8;
+        if (W <= 0 || H <= 0) return;
+        tStage.replaceChildren(build(W, H));
+      };
+      tut.rerender = draw; draw();
+    },
+    mem: tut.mem
+  };
+}
+function cleanupStep() {
+  tut.timers.forEach(clearTimeout); tut.timers = [];
+  if (tut.table) { tut.table.destroy(); tut.table = null; }
+  tut.rerender = null; tut.botsWanted = false;
+  bubbleEl.classList.remove('fixed-fb', 'collapsed');
+  tStage.replaceChildren();
+  clearFx();
+}
+function lessonGo(L, S) {
+  cleanupStep();
+  if (L !== tut.L) tut.mem = {};
+  tut.L = L; tut.S = S || 0;
+  renderLessonMap();
+  var lesson = LESSONS[L], step = lesson.steps[tut.S];
+  tut.done = !step.action;
+  ltitle.textContent = '第' + (L + 1) + '课 · ' + lesson.title;
+  sayEl.innerHTML = typeof step.say === 'function' ? step.say() : step.say;
+  setFb('');
+  updateNav();
+  var ctx = stepCtx(); ctx.mem = tut.mem;
+  step.enter(ctx);
+  // reaching a lesson's closing explanation (no task) completes it
+  if (!step.action && tut.S === lesson.steps.length - 1 && !progress.done[L]) markDone(L);
+  store.set('lastLesson', L);
+}
+function updateNav() {
+  var lesson = LESSONS[tut.L];
+  var last = tut.S === lesson.steps.length - 1;
+  var finalStep = last && tut.L === LESSONS.length - 1;
+  prevBtn.disabled = tut.L === 0 && tut.S === 0;
+  nextBtn.disabled = !tut.done;
+  nextBtn.textContent = finalStep ? '开始实战' : (last ? '下一课' : '下一步');
+  nextBtn.classList.toggle('pulse', tut.done && LESSONS[tut.L].steps[tut.S].action === true);
+  stepCount.textContent = (tut.S + 1) + ' / ' + lesson.steps.length;
+  mapBtn.textContent = '第' + (tut.L + 1) + '课 · ' + (tut.S + 1) + '/' + lesson.steps.length + ' ▴';
+  skipBtn.textContent = tut.L === LESSONS.length - 1 ? '跳到实战' : '跳过本课';
+}
+function markDone(L) { progress.done[L] = true; saveProgress(); renderLessonMap(); }
+function finishTutorial() {
+  markDone(LESSONS.length - 1);
+  progress.finished = true; saveProgress();
+  cleanupStep();
+  lessonGo(LESSONS.length - 1, LESSONS[LESSONS.length - 1].steps.length - 1);
+  goPlaySetup();
+}
+prevBtn.addEventListener('click', function () {
+  if (tut.S > 0) lessonGo(tut.L, tut.S - 1);
+  else if (tut.L > 0) lessonGo(tut.L - 1, LESSONS[tut.L - 1].steps.length - 1);
+});
+nextBtn.addEventListener('click', function () {
+  if (!tut.done) return;
+  var lesson = LESSONS[tut.L];
+  if (tut.S < lesson.steps.length - 1) lessonGo(tut.L, tut.S + 1);
+  else if (tut.L < LESSONS.length - 1) { markDone(tut.L); lessonGo(tut.L + 1, 0); }
+  else finishTutorial();
+});
+skipBtn.addEventListener('click', function () {
+  if (tut.L < LESSONS.length - 1) lessonGo(tut.L + 1, 0);
+  else { cleanupStep(); lessonGo(tut.L, tut.S); goPlaySetup(); }
+});
+function renderLessonMap() {
+  lmap.classList.remove('open'); if (mapBtn) mapBtn.setAttribute('aria-expanded', 'false');
+  lmap.replaceChildren();
+  LESSONS.forEach(function (l, i) {
+    var chip = h('button', { class: 'lchip' + (i === tut.L ? ' cur' : '') + (progress.done[i] ? ' done' : ''), 'aria-current': i === tut.L ? 'step' : null, 'aria-label': '第' + (i + 1) + '课：' + l.title + (progress.done[i] ? '（已完成）' : '') },
+      h('span', { class: 'n' }, String(i + 1)), h('span', { class: 't' }, l.title),
+      h('svg', { class: 'tick', viewBox: '0 0 16 16', 'aria-hidden': 'true', html: '<path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' }));
+    chip.addEventListener('click', function () { lessonGo(i, 0); });
+    lmap.appendChild(h('li', null, chip));
+  });
+  lmap.appendChild(h('li', null, h('button', { class: 'mapskip', id: 'mapSkip', onclick: function () { skipBtn.click(); } }, tut.L === LESSONS.length - 1 ? '跳到实战 →' : '跳过本课 →')));
+  var cur = lmap.children[tut.L];
+  if (cur && cur.scrollIntoView && window.innerWidth < 900) { try { cur.firstChild.scrollIntoView({ block: 'nearest', inline: 'center' }); } catch (e) { /* ignore */ } }
+}
+if (window.ResizeObserver) {
+  var lastStage = '';
+  new ResizeObserver(function () {
+    var sz = tStage.clientWidth + 'x' + tStage.clientHeight;
+    if (sz === lastStage) return; lastStage = sz;
+    if (tut.rerender) window.requestAnimationFrame(function () { if (tut.rerender) tut.rerender(); });
+  }).observe(tStage);
+}
+
+/* ---------- tutorial helpers ---------- */
+var SLOW = { median: 8500, mistake: 0.03 };
+function practiceState(pair, rounds, seed) {
+  if (pair) return E.newGame({ mode: 'practice', players: [{ name: '你', human: true }], deck: [pair[1], pair[0]], practiceRounds: rounds || 1 });
+  return E.newGame({ mode: 'practice', players: [{ name: '你', human: true }], seed: seed || 5, practiceRounds: rounds || 5 });
+}
+function oneCardWrong(r, sym, key, tb) {
+  // 上面/下面 or 左边/右边 from where the two cards really are (a phone on its side shows them side by side)
+  var a = tb && tb.els.cards.pairA, b = tb && tb.els.cards.pairB, side = window.innerWidth >= 900;
+  if (a && b && a.isConnected && b.isConnected) {
+    var ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
+    side = Math.abs(ra.top - rb.top) < Math.abs(ra.left - rb.left);
+  }
+  var where = side ? (key === 'pairA' ? '左边这张' : '右边这张') : (key === 'pairA' ? '上面这张' : '下面这张');
+  return symHTML(sym) + '只在' + where + '卡上，另一张没有。再找找！';
+}
+function findPairStep(pair, doneText, opts) {
+  return function (ctx) {
+    ctx.table(practiceState(pair, 1), Object.assign({
+      stopwatch: false, freezeOnWrong: false, hintAfter: 8000, labels: ['', ''], wrongText: oneCardWrong,
+      narrate: function (t, k) { if (k !== 'good' && k !== 'info') setFb(t, k); },
+      onEnd: function (s, tb) { ctx.done(doneText(tb.lastFound.sym)); }
+    }, opts || {}));
+  };
+}
+// two cards to look at; tapMsg answers a curious tap (they are not a task yet)
+function staticPair(pair, tapMsg) {
+  return function (ctx) {
+    var tb = ctx.table(practiceState(pair, 1), { stopwatch: false, interactive: false, labels: ['', ''] });
+    if (tapMsg) tb.root.addEventListener('click', function () { setFb(tapMsg, 'info'); });
+  };
+}
+function players(n) { var a = [{ name: '你', human: true }]; for (var i = 0; i < n; i++) a.push({ name: BOT_NAMES[i] }); return a; }
+function cardSize(W, H, frac) { return Math.max(70, Math.floor(Math.min(W * frac, H * frac))); }
+// two cards: side by side on wide stages, stacked on phones
+function pairD(W, H) { return Math.max(90, Math.floor(W < 560 ? Math.min(W * 0.8, (H - 16) / 2) : Math.min((W - 40) / 2, H, 380))); }
+function retryOverlay(tb, label, fn) {
+  var ov = h('div', { class: 'tover' }, h('div', { class: 'tpanel' }, h('p', { html: label }), h('button', { class: 'btn primary', id: 'retryBtn', onclick: fn }, '再来一次')));
+  tb.overlay = ov; tb.root.appendChild(ov);
+}
+function board(head, rows) {
+  return h('table', { class: 'board' }, h('tr', null, h('th', null, head[0]), h('th', null, head[1])),
+    rows.map(function (r) { return h('tr', null, h('td', { class: r[2] ? 'w' : null }, r[0]), h('td', { class: r[2] ? 'w' : null }, r[1])); }));
+}
+var TIE_ROWS = [['2人', '对决：各翻一张，先喊出的赢', true], ['3人或更多', '先玩烫手山芋，每回合最后拿着牌的人淘汰，剩2人再对决', true]];
+
+/* The physical deck's 57 names, sorted by kind so a newcomer can narrow down a picture they don't know. */
+var NAME_KINDS = [
+  ['属性标志', ['火属性', '草属性', '电属性', '水属性']],
+  ['道具和食物', ['精灵球', '大师球', '手机洛托姆', '文柚果', '橙橙果', '宝芬']],
+  ['人物', ['小智', '大木博士']]
+];
+var NAME_ALIKE = ['精灵球 · 大师球', '伊布 · 月亮伊布 · 冰伊布 · 仙子伊布', '小火龙 · 喷火龙', '超梦 · 梦幻', '文柚果 · 橙橙果'];
+function nameGroups() {
+  var used = {};
+  NAME_KINDS.forEach(function (g) { g[1].forEach(function (n) { used[n] = true; }); });
+  var mons = E.POKEMON.filter(function (n) { return !used[n]; });
+  return NAME_KINDS.concat([['宝可梦（' + mons.length + '个）', mons]]);
+}
+var HOUSE_NAMES = '<span class="tag">自定规则</span>不认识宝可梦？开局前一起翻说明书的符号表看1分钟；喊不出名字时，<b>指着符号喊「这个！」</b>也算（开局前大家说好）。';
+// 速查 has the names list (and the booklet's symbol pages) right below, so its copy of the house rule is just the rule
+var HOUSE_NAMES_REF = '<span class="tag">自定规则</span>喊不出宝可梦的名字？<b>指着符号喊「这个！」</b>也算（开局前大家说好）。';
+function namesEl() {
+  var wrap = h('div', null);
+  wrap.appendChild(h('div', { class: 'ngroup alike' }, h('h4', null, '长得像或名字像，别喊错（形状和颜色都一样才算同一个）'), h('div', { class: 'chips' }, NAME_ALIKE.map(function (n) { return h('span', null, n); }))));
+  nameGroups().forEach(function (g) {
+    wrap.appendChild(h('div', { class: 'ngroup', 'data-kind': g[0] }, h('h4', null, g[0]), h('div', { class: 'chips' }, g[1].map(function (n) { return h('span', { class: 'pn' }, n); }))));
+  });
+  return wrap;
+}
+
+/* ---------- lessons ---------- */
+var LESSONS = [
+  { title: '核心秘密', steps: [
+    { say: '嗒宝有55张圆卡，每张8个符号。神奇的是：<b>随便拿两张卡，一定有、而且只有1个符号相同。</b><br>实体卡上是宝可梦，网页用 emoji 代替，玩法完全一样。下一步你来找。',
+      enter: staticPair(EASY[0], '先别急，点「下一步」就轮到你来找。') },
+    { action: true, say: '找出这两张卡上<b>一样的那个符号</b>，点它。不计时，慢慢看。',
+      enter: findPairStep(EASY[0], function (s) { return '找到了！' + symHTML(s) + '两张卡上都有。形状和颜色一样就算。'; }) },
+    { action: true, say: '再来一对。记住：<b>一定有，也只有一个</b>。',
+      enter: findPairStep(EASY[1], function (s) { return '对！就是' + symHTML(s) + '。'; }) },
+    { action: true, say: '第三对。窍门：先盯住一张卡上的<b>某一个</b>符号，再去另一张卡里扫一圈；没有就换下一个。',
+      enter: findPairStep(EASY[2], function (s) { return '漂亮！' + symHTML(s) + '。这就是嗒宝唯一的秘密。'; }) },
+    { say: '不管玩哪种迷你游戏，都是同一件事：<b>比两张卡 → 找到相同符号 → 抢先喊出它的名字</b>。下一课练速度。',
+      enter: function (ctx) {
+        ctx.scene(function (W, H) {
+          var d = pairD(W, H - 40);
+          return h('div', { class: 'scene' },
+            h('div', { class: 'srow' + (W < 560 ? ' col' : '') }, cardEl(EASY[3][0], { d: d }), cardEl(EASY[3][1], { d: d })),
+            h('p', { class: 'tag' }, '任意两张 = 恰好1个相同'));
+        });
+      } }
+  ] },
+  { title: '大小和角度会骗人', steps: [
+    { action: true, say: '同一个符号，在两张卡上可能<b>一大一小、方向也不同</b>。找找这对！',
+      enter: findPairStep([CONTRAST.a, CONTRAST.b], function (s) {
+        var A = E.slotOf(CONTRAST.a, s), B = E.slotOf(CONTRAST.b, s);
+        return '看到了吗？' + symHTML(s) + '在一张卡上大约是另一张的' + (Math.max(A.r, B.r) / Math.min(A.r, B.r)).toFixed(1) + '倍大，还转了个方向。';
+      }) },
+    { say: '三个小窍门：<br>1. 大符号最抢眼，大家都先看它；可答案大小是随机的，<b>小符号也要扫到</b>；<br>2. 先认<b>颜色</b>，比认形状快；<br>3. 别管方向，倒过来它还是它。',
+      enter: function (ctx) {
+        ctx.scene(function (W, H) {
+          var s = CONTRAST.sym, d = pairD(W, H - 40);
+          var a = cardEl(CONTRAST.a, { d: d }), b = cardEl(CONTRAST.b, { d: d });
+          a.querySelector('.sym[data-sym="' + s + '"]').classList.add('found');
+          b.querySelector('.sym[data-sym="' + s + '"]').classList.add('found');
+          return h('div', { class: 'scene' }, h('div', { class: 'srow' + (W < 560 ? ' col' : '') }, a, b), h('p', { class: 'tag' }, E.symName(s) + '：一大一小，方向不同'));
+        });
+      } },
+    { action: true, say: '<b>秒表练习</b>：连找5对，看你平均几秒。点错冻结1秒（网页版的规矩，桌上没有）。',
+      enter: function (ctx) {
+        ctx.table(practiceState(null, 5, 22), {
+          stopwatch: true, laps: false,       // phones: every pixel goes to the two cards (the HUD shows the average)
+          narrate: function (t, k) { setFb(t, k); },
+          onEnd: function (s, tb) {
+            var avg = tb.times.reduce(function (a, b) { return a + b; }, 0) / tb.times.length;
+            var best = Math.min.apply(null, tb.times);
+            ctx.done('5对完成！平均' + sec(avg) + '秒，最快' + sec(best) + '秒。' + (avg < 5000 ? '上桌没问题了。' : '多练会快很多（实战有「练习」）。'));
+          }
+        });
+      } }
+  ] },
+  { title: '喊出名称 · 谁先 · 平手', steps: [
+    { action: true, say: '在桌上，找到后要<b>大声喊出符号的名字</b>。网页里：<b>点一下符号 = 喊出名称</b>，会冒出气泡。试试！',
+      enter: findPairStep(EASY[4], function (s) { return '听到了！桌上要大声喊「' + E.symName(s) + '」。实体卡上喊宝可梦的名字，如「皮卡丘」。'; }, { hintAfter: 10000 }) },
+    { action: true, say: '<b>谁是第一位</b>：最先喊出名字的人赢下这一次。这次小东也在找，比他快！',
+      enter: function (ctx) {
+        var tries = 0;
+        var start = function () {
+          tries++;
+          var st = E.newGame({ mode: 'duel', players: players(1), seed: 300 + tries });
+          var tb = ctx.table(st, { level: { median: 9000, mistake: 0 }, labels: ['翻开的卡（小东也在看）', '翻开的卡'],
+            narrate: function (t, k) { if (k === 'bad' || k === 'warn') setFb(t, k); },
+            onEnd: function (s, tb2) {
+              if (s.result.winners[0] === 0) ctx.done('你比小东快，这一下归你！要是两人<b>同时</b>喊出呢？下一步说。');
+              else {
+                setFb('小东先喊出了' + symHTML(tb2.lastFound.sym) + '，这一下归他。' + (tries >= 2 ? '可以点「下一步」继续，也可以再试。' : '再来一次！'), 'warn');
+                if (tries >= 2) { tut.done = true; updateNav(); }
+                retryOverlay(tb2, '小东先喊出来了。', start);
+              }
+            } });
+          return tb;
+        };
+        start();
+      } },
+    { say: '桌上常有两人<b>同时</b>喊出。这时看<b>谁先动手</b>：按玩法先把牌拿到、放下或叠上的人算赢。每个玩法怎么「动手」，后面三课会说。',
+      enter: function (ctx) {
+        ctx.scene(function (W, H) {
+          var pair = EASY[3], sym = E.shared(pair[0], pair[1]);
+          var d = Math.max(80, Math.min(170, Math.floor(Math.min((W - 24) / 2, H - 150))));
+          var bub = function () { return h('span', { class: 'sbub' }, h('span', { class: 'e' }, E.symEmoji(sym)), ' ' + E.symName(sym) + '!'); };
+          var a = cardEl(pair[0], { d: d }), b = cardEl(pair[1], { d: d });
+          a.querySelector('.sym[data-sym="' + sym + '"]').classList.add('found');
+          b.querySelector('.sym[data-sym="' + sym + '"]').classList.add('found');
+          return h('div', { class: 'scene' },
+            h('div', { class: 'srow' }, h('div', { class: 'who' }, bub(), h('b', null, '小东')), h('div', { class: 'who' }, bub(), h('b', null, '你'))),
+            h('div', { class: 'srow' }, a, b),
+            h('p', { class: 'tag' }, '同时喊出 → 看谁先动手'));
+        });
+      } },
+    { action: true, say: '<b>平手怎么办</b>：迷你游戏结束时两人并列第一，就来一场<b>对决</b>。两人各抽一张背面朝上的牌，同时翻开，先喊出这两张卡相同符号的人赢。',
+      enter: function (ctx) {
+        var tries = 0;
+        var showBacks = function () {
+          ctx.scene(function (W, H) {
+            var d = cardSize(W, H - 60, 0.4);
+            return h('div', { class: 'scene' },
+              h('div', { class: 'srow' }, h('div', { class: 'who' }, backEl(d, 'deal'), h('b', null, '小东')), h('div', { class: 'who' }, backEl(d, 'deal'), h('b', null, '你'))),
+              h('button', { class: 'btn primary big', id: 'flipBtn', onclick: duel }, '同时翻开'));
+          });
+        };
+        var duel = function () {
+          tries++;
+          var st = E.newGame({ mode: 'duel', players: players(1), seed: 500 + tries });
+          ctx.table(st, { level: { median: 10000, mistake: 0 },
+            narrate: function (t, k) { if (k === 'bad' || k === 'warn') setFb(t, k); },
+            onEnd: function (s, tb) {
+              if (s.result.winners[0] === 0) ctx.done('对决获胜！平手就这样一张牌定胜负。');
+              else { ctx.done('小东赢了这次对决。可以继续，也可以再来一次。', 'warn'); retryOverlay(tb, '小东赢了对决。', duel); }
+            } });
+        };
+        showBacks();
+      } },
+    { say: '<b>3个人或更多</b>平手时，要用到玩法3<b>烫手山芋</b>先减到2人，第6课学完它再细说。',
+      enter: function (ctx) {
+        ctx.scene(function () {
+          return h('div', { class: 'scene' }, board(['几个人平手', '怎么决出胜者'], [['2人', '对决：各翻一张，先喊出的赢', true], ['3人或更多', '先用烫手山芋减到2人（第6课）']]));
+        });
+      } }
+  ] },
+  { title: '混乱高塔（玩法1）', steps: [
+    { say: '<b>混乱高塔</b>。准备：洗牌，给每人发<b>1张背面朝上</b>的牌；剩下的牌<b>正面朝上</b>放在中间，叫<b>抓牌堆</b>。目标：拿到<b>最多</b>的卡牌。',
+      enter: function (ctx) { ctx.scene(function (W, H) { return setupScene('tower', W, H); }); } },
+    { say: '开始！大家同时翻开自己的牌。你比：<b>你的顶牌</b> ↔ <b>抓牌堆顶</b>（黄框）。小东也拿他的顶牌比<b>同一张</b>抓牌堆顶，大家抢的是同一张牌。',
+      enter: function (ctx) { ctx.table(E.newGame({ mode: 'tower', players: players(1), seed: 41, deckSize: 17 }), { botsOn: false, interactive: false, dimOpps: false }); } },
+    { action: true, say: '试试：找出<b>你的牌</b>和<b>抓牌堆顶</b>的相同符号。小东先等你。',
+      enter: function (ctx) {
+        ctx.table(E.newGame({ mode: 'tower', players: players(1), seed: 41, deckSize: 17 }), { botsOn: false, dimOpps: true,
+          onEvent: function (ev) { if (ev.p === 0) ctx.done('那张归你了，盖在你的牌上：<b>你的顶牌变了</b>，抓牌堆也翻出新牌。两张都换了！'); } });
+      } },
+    { action: true, say: '短局：抓牌堆15张，对手小东（慢速）。<b>牌最多的赢</b>。同时喊出，谁先<b>拿到</b>那张算谁的。',
+      enter: function (ctx) {
+        var tries = 0;
+        var go = function () {
+          tries++;
+          ctx.table(E.newGame({ mode: 'tower', players: players(1), seed: 400 + tries, deckSize: 17 }), { level: SLOW, holdFirst: function () { return true; },
+            onEnd: function (s, tb) {
+              var me = s.players[0].pile.length, him = s.players[1].pile.length;
+              var txt = '你' + me + '张，小东' + him + '张。' + (me > him ? '你赢了！' : me < him ? '小东赢了，没关系。' : '平手！桌上就进行对决。');
+              ctx.done(txt + '（每人开局那张也算）', me >= him ? 'good' : 'warn');
+              retryOverlay(tb, txt, go);
+              $('#retryBtn').textContent = '再玩一局';
+            } });
+        };
+        go();
+      } }
+  ] },
+  { title: '水井（玩法2）', steps: [
+    { say: '<b>水井</b>。准备：洗牌，<b>1张正面朝上</b>放中间，叫<b>中央牌堆</b>；剩下的<b>平均发给所有人</b>（除不尽的放回盒子），背面朝上，作为每人自己的抓牌堆。目标：<b>最先把自己的牌出完</b>。',
+      enter: function (ctx) { ctx.scene(function (W, H) { return setupScene('well', W, H); }); } },
+    { say: '开始！大家把自己那叠<b>整叠翻过来</b>。你比：<b>你的顶牌</b> ↔ <b>中央牌堆顶</b>（黄框）。',
+      enter: function (ctx) { ctx.table(E.newGame({ mode: 'well', players: players(1), seed: 52, deckSize: 13 }), { botsOn: false, interactive: false }); } },
+    { action: true, say: '试试：找到相同符号，把顶牌<b>放上中央牌堆</b>。',
+      enter: function (ctx) {
+        ctx.table(E.newGame({ mode: 'well', players: players(1), seed: 52, deckSize: 13 }), { botsOn: false, dimOpps: true,
+          onEvent: function (ev) { if (ev.p === 0) ctx.done('进了水井！<b>中央牌堆顶变了</b>，你的顶牌也换了。大家都得重新找！'); } });
+      } },
+    { action: true, say: '短局：每人6张，对手小东（慢速）。<b>先出完的赢</b>。同时喊出，谁的牌先<b>放上中央牌堆</b>算谁的。',
+      enter: function (ctx) {
+        var tries = 0;
+        var go = function () {
+          tries++;
+          ctx.table(E.newGame({ mode: 'well', players: players(1), seed: 500 + tries, deckSize: 13 }), { level: SLOW, holdFirst: function () { return true; },
+            onEnd: function (s, tb) {
+              var win = s.result.winners[0] === 0;
+              var txt = win ? '你先出完了，你赢！' : '小东先出完了，你还剩' + s.players[0].pile.length + '张。';
+              ctx.done(txt, win ? 'good' : 'warn');
+              retryOverlay(tb, txt, go);
+              $('#retryBtn').textContent = '再玩一局';
+            } });
+        };
+        go();
+      } }
+  ] },
+  { title: '烫手山芋（玩法3）', steps: [
+    { say: '<b>烫手山芋</b>要玩好几个<b>回合</b>（至少5个）。每回合：每人发<b>1张</b>牌，剩下的放一边。目标：所有回合结束后，<b>你面前的牌最少</b>。',
+      enter: function (ctx) { ctx.scene(function (W, H) { return setupScene('potato', W, H); }); } },
+    { say: '大家<b>同时亮牌</b>（实体卡平放在手掌上）。你的牌可以和<b>任何一个</b>别人的牌比，黄框都是候选。',
+      enter: function (ctx) { ctx.table(E.newGame({ mode: 'potato', players: players(2), seed: 61, rounds: 1 }), { botsOn: false, interactive: false }); } },
+    { action: true, say: '找到你和<b>任意一人</b>的相同符号就喊，把牌<b>叠到他牌上</b>，你就安全了。同时喊出，谁先叠上去算谁的。',
+      enter: function (ctx) {
+        ctx.table(E.newGame({ mode: 'potato', players: players(2), seed: 61, rounds: 1 }), { botsOn: false,
+          onEvent: function (ev, tb) {
+            if (ev.p === 0) {
+              var to = tb.name(ev.to);
+              ctx.done('叠到了' + to + '的牌上，你安全了！' + to + '要用<b>新顶牌</b>（你那张）继续比。');
+              ctx.mem.firstTarget = ev.to; ctx.mem.firstSym = ev.sym;
+            }
+          } });
+      } },
+    { action: true, say: '看他们俩抢：先找到的人把手里<b>所有</b>牌叠到对方牌上。<b>只剩一人拿着牌</b>时，他输这回合。',
+      enter: function (ctx) {
+        var st = E.newGame({ mode: 'potato', players: players(2), seed: 61, rounds: 1 });
+        var c = E.comparisons(st, 0).filter(function (x) { return ctx.mem.firstTarget == null || x.other === ctx.mem.firstTarget; })[0];
+        E.shout(st, 0, c.sym, c.other);
+        ctx.table(st, { level: { median: 2600, mistake: 0 },
+          onEnd: function (s, tb) {
+            var re = s.roundLog[0], ln = tb.name(re.loser);
+            ctx.done('只剩' + ln + '拿着牌：这回合' + pron(ln) + '输了，' + re.n + '张牌放在' + pron(ln) + '面前，最后算分。', 'info');
+          } });
+      } },
+    { action: true, say: '完整的一回合：你对小东、小西（慢速）。别做最后拿着牌的人！',
+      enter: function (ctx) {
+        var tries = 0;
+        var go = function () {
+          tries++;
+          ctx.table(E.newGame({ mode: 'potato', players: players(2), seed: 600 + tries, rounds: 1 }), { level: { median: 7000, mistake: 0.03 }, holdFirst: function () { return true; },
+            onEnd: function (s, tb) {
+              var re = s.roundLog[0], ln = tb.name(re.loser);
+              var txt = re.loser === 0 ? '这回合你最后拿着牌，' + re.n + '张放在你面前。下回合加油！' : '你安全了！' + ln + '拿着' + re.n + '张，' + pron(ln) + '输了这回合。';
+              ctx.done(txt, re.loser === 0 ? 'warn' : 'good');
+              retryOverlay(tb, txt, go);
+              $('#retryBtn').textContent = '再来一回合';
+            } });
+        };
+        go();
+      } },
+    { say: '所有回合打完，<b>面前牌最少的人赢</b>。平手怎么办？看第二张表，这就是第3课说的「3人以上平手」。',
+      enter: function (ctx) {
+        ctx.scene(function () {
+          return h('div', { class: 'scene' },
+            board(['5回合后', '面前的牌'], [['你', '3张 · 最少，赢！', true], ['小东', '6张'], ['小西', '6张']]),
+            board(['平手', '怎么办'], TIE_ROWS));
+        });
+      } }
+  ] },
+  { title: '怎么组织一晚', steps: [
+    { say: '三个迷你游戏<b>顺序随意</b>，也可以重复。每赢一个记1次胜利，最后<b>赢得最多的人是总冠军</b>。说明书还建议：正式开始前先<b>热身几轮</b>，翻开两张牌，大家抢着喊。',
+      enter: function (ctx) {
+        ctx.scene(function () {
+          return h('div', { class: 'scene' }, board(['迷你游戏', '赢家'], [['水井（玩法2）', '小东'], ['混乱高塔（玩法1）', '你'], ['烫手山芋（玩法3）', '你'], ['总冠军', '你（赢2个）', true]]));
+        });
+      } },
+    { say: '实体卡上是宝可梦，认不全很正常。下面按种类分好了；黄框里的几组长得像或名字像，<b>形状和颜色都一样</b>才算同一个。',
+      enter: function (ctx) {
+        ctx.scene(function () {
+          return h('div', { class: 'scene' }, h('div', { class: 'scroller namegrid' }, h('p', { class: 'house', html: HOUSE_NAMES }), namesEl()));
+        });
+      } },
+    { say: '<b>上真桌子</b>：网页替你做的几件事，桌上要自己来。',
+      enter: function (ctx) {
+        ctx.scene(function () {
+          return h('div', { class: 'scene' }, h('div', { class: 'scroller' }, h('ol', { class: 'checklist', html:
+            '<li><b>洗牌发牌</b>：一人洗匀55张，按玩法发牌、摆牌，速查页都写了。水井用整副牌：中间1张，剩下的54张平分（4人每人13张，多出的2张放回盒子），比教程的短局长。</li>' +
+            '<li><b>没有黄框</b>：自己认清比哪两张。喊对的人<b>自己动手</b>拿牌、放牌、叠牌，大家盯着谁先。</li>' +
+            '<li><b>记分</b>：拿纸笔记下每个玩法的赢家；烫手山芋输的牌放在自己面前，打完一起数。</li>' +
+            '<li><b>先玩哪个</b>：第一次建议混乱高塔 → 水井 → 烫手山芋（最乱，熟了再玩）。</li>' +
+            '<li><b>和网页不一样</b>：喊错没有冻结，罚不罚开局前说好。</li>' })));
+        });
+      } },
+    { say: '教程完成！实战里可以选任何一个玩法，或者「今晚连玩」三个都来。上桌时打开<b>速查</b>页，最上面就是开局步骤。',
+      enter: function (ctx) {
+        progress.done[6] = true; saveProgress(); renderLessonMap();
+        ctx.scene(function () {
+          return h('div', { class: 'finale' }, h('button', { class: 'btn primary big', id: 'goPlay', onclick: finishTutorial }, '开始实战'),
+            h('p', null, '对手是机器人：新手约7秒、普通4.5秒、高手2.8秒找到一次。第一局建议选新手。'));
+        });
+      } }
+  ] }
+];
+
+function setupScene(kind, W, H) {
+  var dMid = cardSize(W, H, kind === 'potato' ? 0.3 : 0.34), dS = Math.floor(dMid * 0.62);
+  var scene = h('div', { class: 'scene' });
+  var stackBacks = function (n, d, cls) {
+    var w = h('div', { class: 'pile' + (cls ? ' ' + cls : '') }); w.style.setProperty('--d', d + 'px');
+    for (var i = Math.min(3, n - 1); i >= 1; i--) { var l = h('i', { class: 'layer' }); l.style.setProperty('--k', i); w.appendChild(l); }
+    w.appendChild(backEl(d)); return w;
+  };
+  var dealt = function (el, fy, delay) { el.classList.add('deal'); el.style.setProperty('--fy', fy + 'px'); el.style.animationDelay = (delay * animMul()) + 's'; return el; };
+  if (kind === 'tower') {
+    scene.appendChild(h('div', { class: 'who' }, dealt(backEl(dS), dMid, 0.1), h('b', null, '小东'), '1张，背面朝上'));
+    var p = h('div', { class: 'pile' }); p.style.setProperty('--d', dMid + 'px');
+    for (var i = 3; i >= 1; i--) { var l = h('i', { class: 'layer' }); l.style.setProperty('--k', i); p.appendChild(l); }
+    p.appendChild(cardEl(30, { d: dMid }));
+    scene.appendChild(h('div', { class: 'who' }, p, h('span', { class: 'tag' }, '抓牌堆 · 正面朝上')));
+    scene.appendChild(h('div', { class: 'who' }, dealt(backEl(dS), -dMid, 0.35), h('b', null, '你'), '1张，背面朝上'));
+  } else if (kind === 'well') {
+    scene.appendChild(h('div', { class: 'who' }, dealt(stackBacks(6, dS), dMid, 0.1), h('b', null, '小东'), '自己的抓牌堆，背面朝上'));
+    scene.appendChild(h('div', { class: 'who' }, cardEl(12, { d: dMid }), h('span', { class: 'tag' }, '中央牌堆 · 1张正面朝上')));
+    scene.appendChild(h('div', { class: 'who' }, dealt(stackBacks(6, dS), -dMid, 0.35), h('b', null, '你'), '自己的抓牌堆，背面朝上'));
+  } else {
+    scene.appendChild(h('div', { class: 'srow' },
+      h('div', { class: 'who' }, dealt(backEl(dS), dMid, 0.1), h('b', null, '小东')),
+      h('div', { class: 'who' }, dealt(backEl(dS), dMid, 0.25), h('b', null, '小西'))));
+    scene.appendChild(h('div', { class: 'who' }, stackBacks(20, Math.floor(dS * 0.8)), h('span', { class: 'tag dim' }, '剩下的牌 · 放一边待用')));
+    scene.appendChild(h('div', { class: 'who' }, dealt(backEl(dS), -dMid, 0.4), h('b', null, '你'), h('span', { class: 'tag' }, '第1回合：每人1张')));
+  }
+  return scene;
+}
+
+/* ================================================================ 实战 */
+var play = { table: null, botsWanted: true, mode: null, session: { wins: {} }, evening: null, notes: [], titleKind: 'normal', ask: null };
+var gHost = $('#gHost'), gCoach = $('#gCoach'), gTitle = $('#gTitle'), gClock = $('#gClock'), gExit = $('#gExit');
+function showScreen(name) {
+  $$('.screen').forEach(function (s) { s.classList.toggle('on', s.id === 'scr-' + name); });
+  play.screen = name;
+  if (name === 'setup') { syncSetup(); $('#scr-setup').scrollTop = 0; }
+  if (name === 'result') { $('#scr-result').scrollTop = 0; guardInput(500); }   // it appears by itself: a late tap must not press 再来一局
+}
+/* 教练解说 default: ON for your first game of EACH mini-game (练习 and tie-breaks don't use it up); once you flip
+   the switch (setup or the in-game 「解说」 button) your choice holds. 'dobble.coached' is separate from
+   'dobble.progress', whose shape the hub page reads (H9). */
+var coached = Object.assign({ tower: false, well: false, potato: false }, store.get('coached', {}));
+function coachOn(mode) {
+  mode = mode || prefs.mode;
+  if (prefs.coach != null) return !!prefs.coach;
+  if (mode === 'evening') return !coached.tower || !coached.well || !coached.potato;
+  return coached[mode] !== true;
+}
+var coachSw = $('#coachSw'), coachBtn = $('#coachBtn');
+function syncCoachSw() { coachSw.setAttribute('aria-checked', String(coachOn(prefs.mode))); }
+coachSw.addEventListener('click', function () { prefs.coach = !coachOn(prefs.mode); savePrefs(); syncCoachSw(); });
+syncCoachSw();
+function coachOffLine() { return '教练解说已关闭，点右上「解说」可以打开。点符号 = 喊出名称。'; }
+function syncCoachBtn() { coachBtn.setAttribute('aria-pressed', String(!!play.coach)); }
+coachBtn.addEventListener('click', function () {
+  play.coach = !play.coach;
+  prefs.coach = play.coach; savePrefs();             // your choice holds for later games too
+  if (play.evening) play.evening.coach = play.coach;
+  syncCoachBtn(); syncCoachSw();
+  gCoach.className = 'txt info';
+  gCoach.innerHTML = play.coach ? (play.titleKind === 'normal' ? startLine(play.mode) : '教练解说打开了。') : coachOffLine();
+});
+
+var MODE_INFO = {
+  tower: '每人1张牌，其余正面朝上做抓牌堆。比<b>你的顶牌</b>和<b>抓牌堆顶</b>，喊对了就把那张拿过来。',
+  well: function () {                 // the real numbers for this setup (the engine boxes what can't be split evenly)
+    var rest = (prefs.deck === 'short' ? 25 : 55) - 1, n = prefs.opp + 1, left = rest % n;
+    return '中央牌堆1张，其余每人' + Math.floor(rest / n) + '张' + (left ? '（多出的' + left + '张放回盒子）' : '') +
+      '。比<b>你的顶牌</b>和<b>中央牌堆顶</b>，喊对了就把你的顶牌放上去。';
+  },
+  potato: '每回合每人1张。比<b>你的牌</b>和<b>任何人</b>的牌，喊对了就把你手里的牌全叠到他牌上。',
+  evening: '依次玩混乱高塔 → 水井 → 烫手山芋，赢的迷你游戏最多的人是总冠军。',
+  practice: '两张卡，找相同符号，秒表计时。看你平均几秒。'
+};
+function syncSetup() {
+  $$('.mode').forEach(function (b) { b.setAttribute('aria-checked', String(b.getAttribute('data-mode') === prefs.mode)); });
+  $$('.opt[data-show]').forEach(function (o) { o.hidden = o.getAttribute('data-show').split(' ').indexOf(prefs.mode) < 0; });
+  $('#oppN').textContent = prefs.opp;
+  $('#oppNames').textContent = BOT_NAMES.slice(0, prefs.opp).join('、');
+  var name = { tower: '混乱高塔', well: '水井', potato: '烫手山芋', evening: '今晚连玩', practice: '练习' }[prefs.mode];
+  $('#startBtn').textContent = '开始' + name;
+  var info = MODE_INFO[prefs.mode];
+  $('#setupNote').innerHTML = (typeof info === 'function' ? info() : info) + (!progress.finished ? '还没看教程？先去「教程」玩一遍更顺手。' :
+    (progress.played === 0 && prefs.mode !== 'practice' ? '第一局建议：对手2个，机器人选「新手」。' : ''));
+  syncSegs(); syncCoachSw();
+}
+$('#modegrid').addEventListener('click', function (e) { var b = e.target.closest('.mode'); if (!b) return; prefs.mode = b.getAttribute('data-mode'); savePrefs(); syncSetup(); });
+$('#oppMinus').addEventListener('click', function () { prefs.opp = Math.max(1, prefs.opp - 1); savePrefs(); syncSetup(); });
+$('#oppPlus').addEventListener('click', function () { prefs.opp = Math.min(5, prefs.opp + 1); savePrefs(); syncSetup(); });
+$('#startBtn').addEventListener('click', function () { startFromSetup(); });
+syncSetup();
+
+function playersList() { return players(prefs.opp); }
+function playNarrate(html, kind, important) {
+  if (!play.coach && !important) return;
+  gCoach.className = 'txt ' + (kind || 'info');
+  gCoach.innerHTML = html;
+}
+function modeTitle(mode) { return { tower: '混乱高塔', well: '水井', potato: '烫手山芋', duel: '对决', practice: '练习' }[mode]; }
+function gameTitleHTML(mode) {
+  var ev = play.evening ? '（连玩' + (play.evening.idx + 1) + '/3）' : '';
+  return esc(modeTitle(mode)) + '<small>' + esc(ev || (mode === 'practice' ? '秒表' : '对手' + prefs.opp + ' · ' + E.BOT_LEVELS[prefs.bot].label)) + '</small>';
+}
+function refreshGameTitle() { if (play.screen === 'game' && play.titleKind === 'normal' && play.table) gTitle.innerHTML = gameTitleHTML(play.mode); }
+function setExit(confirming) {
+  gExit.replaceChildren();
+  coachBtn.hidden = !!confirming;     // room for 「退出这局？ 退出 / 继续」 on a phone
+  if (!confirming) gExit.appendChild(h('button', { class: 'btn ghost-x', id: 'exitBtn', onclick: function () { setExit(true); } }, '退出'));
+  gClock.hidden = !!confirming;
+  if (confirming) gExit.appendChild(h('span', { class: 'confirm' }, '退出这局？',
+    h('button', { class: 'btn', id: 'exitYes', onclick: function () { quitGame(); } }, '退出'),
+    h('button', { class: 'btn primary', id: 'exitNo', onclick: function () { setExit(false); } }, '继续')));
+}
+
+/* auto-start timer of the tie-break panel: pauses with the game (H5) */
+var autoT = { id: null, fn: null, ms: 0 };
+function setAuto(fn, ms) { clearAuto(); autoT.fn = fn; autoT.ms = ms; armAuto(); }
+function armAuto() {
+  if (!autoT.fn || autoT.id || debugNoAuto || playPaused()) return;
+  autoT.id = setTimeout(function () { var f = autoT.fn; autoT.fn = null; autoT.id = null; if (f) f(); }, autoT.ms);
+}
+function pauseAuto() { clearTimeout(autoT.id); autoT.id = null; }
+function clearAuto() { pauseAuto(); autoT.fn = null; }
+
+/* Leaving a running game from the tutorial (「开始实战」/「跳到实战」) never throws it away silently (H5):
+   the game stays paused under an in-page question. */
+function gameInProgress() {
+  if (play.screen === 'game') return !play.table || !play.table.s.finished;     // a live table, or a tie-break panel
+  return play.screen === 'result' && !!play.evening;                              // between games of 今晚连玩
+}
+function goPlaySetup() {
+  syncSetup();                        // the setup screen must reflect a just-finished tutorial even while it is hidden
+  var busy = gameInProgress();
+  if (busy) openAsk();
+  showTab('play');
+  if (!busy) showScreen('setup');
+}
+function openAsk() {
+  closeAsk(true);
+  var what = play.evening ? '<b>今晚连玩</b>' : '这局<b>' + esc(modeTitle(play.mode) || '') + '</b>';
+  var panel = h('div', { class: 'tpanel', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'askTitle' },
+    h('h3', { id: 'askTitle' }, '还有一局没打完'),
+    h('p', { html: '实战里' + what + '还没打完' + (play.screen === 'game' ? '，已经暂停' : '') + '。接着玩，还是放弃它、重新选玩法？' }),
+    h('div', { class: 'askrow' },
+      h('button', { class: 'btn primary', id: 'askKeep', onclick: function () { closeAsk(); } }, '接着玩'),
+      h('button', { class: 'btn', id: 'askQuit', onclick: function () { quitGame(); } }, '放弃，重新选玩法')));
+  play.ask = h('div', { class: 'tover askov' }, panel);
+  $('#view-play').appendChild(play.ask);
+  syncPause();
+  window.requestAnimationFrame(function () { var b = $('#askKeep'); if (b) b.focus({ preventScroll: true }); });
+}
+function closeAsk(silent) {
+  if (!play.ask) return;
+  play.ask.remove(); play.ask = null;
+  if (!silent) syncPause();
+}
+function quitGame() {
+  clearAuto();
+  closeAsk(true);
+  if (play.table) { play.table.destroy(); play.table = null; }
+  play.evening = null; play.titleKind = 'normal';
+  clearFx();
+  setExit(false); showScreen('setup');
+  syncPause();
+}
+function startFromSetup() {
+  play.notes = [];
+  if (prefs.mode === 'evening') {
+    // the coach stays as it was at the start of the evening for all three games (no setup screen in between)
+    play.evening = { queue: ['tower', 'well', 'potato'], idx: 0, wins: {}, results: [], coach: coachOn('evening') };
+    startSingle('tower');
+  } else { play.evening = null; startSingle(prefs.mode); }
+}
+function newSeed() { return ((Math.random() * 4294967295) >>> 0) || 7; }
+function startSingle(mode, prebuilt) {
+  clearAuto(); closeAsk(true);
+  play.mode = mode; play.notes = []; play.titleKind = 'normal';
+  if (/^(tower|well|potato)$/.test(mode)) setRefMode(mode);     // 速查 opens on the card of the game you are playing
+  var opts = { mode: mode, seed: newSeed(), players: mode === 'practice' ? [{ name: '你', human: true }] : playersList() };
+  if ((mode === 'tower' || mode === 'well') && prefs.deck === 'short') opts.deckSize = 25;
+  if (mode === 'potato') opts.rounds = prefs.rounds;
+  if (mode === 'practice') opts.practiceRounds = prefs.practice;
+  var st = prebuilt || E.newGame(opts);
+  play.coach = play.evening && play.evening.coach != null ? play.evening.coach : coachOn(mode);
+  syncCoachBtn();
+  gTitle.innerHTML = gameTitleHTML(mode);
+  gCoach.className = 'txt info';
+  gCoach.innerHTML = play.coach ? startLine(mode) : coachOffLine();
+  setExit(false);
+  showScreen('game');
+  mountPlayTable(st, function (s, tb) { onGameEnd(s, tb); });
+}
+function startLine(mode) {
+  return {
+    tower: '比<b>你的顶牌</b>和<b>抓牌堆顶</b>（黄框），找到相同的就点。抓牌堆拿完时，牌最多的赢。',
+    well: '比<b>你的顶牌</b>和<b>中央牌堆顶</b>（黄框），找到就点，你的顶牌就放上去。先出完的赢。',
+    potato: '比<b>你的牌</b>和<b>任何人</b>的牌（黄框），找到就点，把牌叠到他牌上。最后拿着牌的人输这回合。',
+    practice: '找出两张卡上相同的符号，越快越好。'
+  }[mode] || '';
+}
+function mountPlayTable(st, onEnd, extra) {
+  clearAuto();
+  if (play.table) { play.table.destroy(); play.table = null; }
+  play.botsWanted = true;
+  // stuck for 15 s → the red-ring hint, when the coach is on (always in 练习: no opponent will move the cards on)
+  var practice = st.mode === 'practice';
+  play.table = new Table(gHost, Object.assign({ state: st, level: E.BOT_LEVELS[prefs.bot], clockEl: gClock, narrate: playNarrate, onEnd: onEnd,
+    hintAfter: 15000, hintOk: function () { return practice || !!play.coach; }, holdFirst: function () { return !!play.coach; } }, extra || {}));
+  play.table.setPaused(playPaused());
+  return play.table;
+}
+function nameOf(s, id) { return s.players[id].name; }
+
+/* tie → 对决 (2) or 烫手山芋 rounds among the tied (3+), then 对决.
+   done(winnerName, notes, order) — order = { eliminated: [names, in the order they were knocked out], duelLoser } */
+function runTiebreak(group, label, done) {
+  // group: [{name, human}]
+  var notes = [], order = { eliminated: [], duelLoser: null };
+  var step = function (g, afterPotato) {
+    var plan = E.tiebreakStep(g.map(function (_, i) { return i; }));
+    var names = g.map(function (p) { return p.name; }).join('、');
+    var hasHuman = g.some(function (p) { return p.human; });
+    if (plan.kind === 'potato') {
+      interstitial(names + '平手', g.length + '人平手 → 先在' + (hasHuman ? '你们' : '他们') + '之间玩一回合<b>烫手山芋</b>，最后拿着牌的人淘汰。', '开始烫手山芋', function () {
+        var st = E.newGame({ mode: 'potato', seed: newSeed(), rounds: 1, players: g.map(function (p) { return { name: p.name, human: p.human }; }) });
+        var hu = -1; st.players.forEach(function (p, i) { if (p.human) hu = i; });
+        play.titleKind = 'tie';
+        gTitle.innerHTML = '烫手山芋<small>' + esc(label) + '平手决胜</small>';
+        gCoach.className = 'txt info';
+        gCoach.innerHTML = hu >= 0 ? '决胜回合：用<b>你的牌</b>和别人的牌比，找到就把牌叠过去。最后拿着牌的人淘汰。' : '看' + esc(names) + '玩决胜回合：最后拿着牌的人淘汰。';
+        mountPlayTable(st, function (s) {
+          var loser = s.players[s.roundLog[0].loser].name;
+          order.eliminated.push(loser);
+          notes.push(names + '平手，先玩一回合烫手山芋：' + loser + '最后拿着牌，被淘汰。');
+          step(g.filter(function (p) { return p.name !== loser; }), true);
+        }, { human: hu, tiebreak: true });
+      });
+    } else {
+      interstitial(afterPotato ? '剩下' + names : names + '平手', (afterPotato ? '剩下两人' : '两人平手') + ' → <b>对决</b>：各抽一张牌同时翻开，先喊出相同符号的人赢。', '翻牌对决', function () {
+        var st = E.newGame({ mode: 'duel', seed: newSeed(), players: g.map(function (p) { return { name: p.name, human: p.human }; }) });
+        var hu = -1; st.players.forEach(function (p, i) { if (p.human) hu = i; });
+        play.titleKind = 'tie';
+        gTitle.innerHTML = '对决<small>' + esc(names) + '</small>';
+        gCoach.className = 'txt info';
+        gCoach.innerHTML = hu >= 0 ? '对决！比这两张卡，先喊出相同符号的人赢。' : '看' + esc(names) + '对决。';
+        mountPlayTable(st, function (s) {
+          var wi = s.result.winners[0], w = s.players[wi].name;
+          order.duelLoser = s.players[1 - wi].name;
+          notes.push((afterPotato ? '剩下' : '') + names + '对决：' + w + '赢了。');
+          done(w, notes, order);
+        }, { human: hu });
+      });
+    }
+  };
+  step(group, false);
+}
+function interstitial(title, html, btn, go) {
+  if (play.table) { play.table.destroy(); play.table = null; }
+  play.titleKind = 'tie';
+  setExit(false);
+  gTitle.innerHTML = '平手决胜<small>' + esc(title) + '</small>';
+  gCoach.className = 'txt info'; gCoach.innerHTML = '说明书：平手的人用对决决出胜者（3人以上先玩烫手山芋）。';
+  var fired = false;
+  var fire = function () { if (fired) return; fired = true; clearAuto(); go(); };
+  gHost.replaceChildren(h('div', { class: 'tover', style: { position: 'absolute' } }, h('div', { class: 'tpanel' }, h('h3', null, title), h('p', { html: html }), h('button', { class: 'btn primary', id: 'tieGo', onclick: fire }, btn), h('p', { class: 'hintline' }, '几秒后自动开始'))));
+  guardInput(400);                    // it appears by itself after the game: a late tap must not start the tie-break
+  setAuto(fire, T(4500));
+}
+
+function onGameEnd(s, tb) {
+  progress.played++; saveProgress();
+  var mode = s.mode;
+  if (coached[mode] === false) { coached[mode] = true; store.set('coached', coached); }   // its first game is done
+  syncCoachSw();
+  var elapsed = tb.elapsed();          // time actually played (paused time not counted)
+  var myTimes = tb.myTimes.slice();
+  if (mode === 'practice') { showPracticeResult(tb.times, elapsed); return; }
+  var finalize = function (winnerName, notes, order) {
+    play.session.wins[winnerName] = (play.session.wins[winnerName] || 0) + 1;
+    if (play.evening) { play.evening.wins[winnerName] = (play.evening.wins[winnerName] || 0) + 1; play.evening.results.push({ mode: mode, winner: winnerName }); }
+    showResult(s, winnerName, notes || [], elapsed, order, myTimes);
+  };
+  if (s.result.tied) {
+    var group = s.result.winners.map(function (id) { return { name: s.players[id].name, human: s.players[id].human }; });
+    var pre = group.map(function (p) { return p.name; }).join('、') + (mode === 'tower' ? '都是' + s.players[s.result.winners[0]].pile.length + '张' : '面前都是' + s.players[s.result.winners[0]].penalty + '张');
+    play.lastState = s;
+    runTiebreak(group, modeTitle(mode), function (w, notes, order) { finalize(w, ['平手：' + pre + '。'].concat(notes), order); });
+  } else finalize(s.players[s.result.winners[0]].name, []);
+}
+function valueText(s, p) {
+  if (s.mode === 'tower') return p.pile.length + '张';
+  if (s.mode === 'well') return p.pile.length ? '剩' + p.pile.length + '张' : '出完了';
+  if (s.mode === 'potato') return p.penalty + '张';
+  return '';
+}
+// one line of feedback on your own speed. Only the finds you won are timed (a find a bot beat you to has no time),
+// so the average flatters you. Set it next to the bots' typical time only when you won: after a loss the bots took
+// every card you were slower on, and "1.5秒 vs 7秒" right under a 5–47 defeat reads as "I was faster".
+function speedLine(times, won, tipOk, nOpp) {
+  if (!times || times.length < 2) return '';
+  var avg = times.reduce(function (a, b) { return a + b; }, 0) / times.length, lv = E.BOT_LEVELS[prefs.bot];
+  if (won) return '你抢到的' + times.length + '次，平均约' + sec(avg) + '秒找到一次；「' + lv.label + '」机器人一般要' + (lv.median / 1000) + '秒左右。';
+  return '你抢到的' + times.length + '次平均约' + sec(avg) + '秒，其余的都是机器人先找到的。' +
+    (tipOk ? '想赢回来？先去「练习」热热身' + (nOpp > 1 ? '，或下局少一个对手' : prefs.bot !== 'novice' ? '，或把机器人换成「新手」' : '') + '。' : '');
+}
+function showResult(s, winner, notes, elapsed, order, myTimes) {
+  clearAuto();
+  if (play.table) { play.table.destroy(); play.table = null; }
+  var R = $('#resultIn');
+  R.replaceChildren();
+  var youWin = winner === '你';
+  R.appendChild(h('div', { class: 'rtitle' }, youWin ? '你赢了！' : winner + '赢了'));
+  R.appendChild(h('p', { class: 'rsub' }, modeTitle(s.mode) + ' · 用时' + fmtClock(elapsed) + ' · ' + { tower: '牌最多的赢', well: '先出完的赢', potato: '面前的牌最少的赢' }[s.mode]));
+  var list = h('ol', { class: 'rlist' });
+  // Tied players are placed by how the tie-break went (E.standings): winner, the 对决 loser, then whoever was
+  // knocked out of the tie-break 烫手山芋 (the last one out ranks highest) — distinct places, no shared rank.
+  var idOf = function (n) { for (var i = 0; i < s.players.length; i++) if (s.players[i].name === n) return i; return null; };
+  var tb = s.result.tied ? { winner: idOf(winner), duelLoser: order ? idOf(order.duelLoser) : null, eliminated: order ? order.eliminated.map(idOf) : [] } : null;
+  E.standings(s, tb).forEach(function (r) {
+    var p = s.players[r.p];
+    var extra = [];
+    if (s.mode === 'potato') {
+      var lost = s.roundLog.filter(function (x) { return x.loser === p.id; }).map(function (x) { return x.round; });
+      extra.push(lost.length ? '输了第' + lost.join('、') + '回合' : '每回合都安全');
+    }
+    if (r.tiebreak === 'won') extra.push('平手决胜胜出');
+    else if (r.tiebreak === 'duel') extra.push('平手决胜：对决输了');
+    else if (r.tiebreak === 'out') extra.push('平手决胜：烫手山芋淘汰');
+    else if (!r.tied && p.name === winner && s.mode === 'tower') extra.push('拿到最多');   // 水井: the value already says 出完了
+    list.appendChild(h('li', { class: p.name === winner ? 'win' : '' }, h('span', { class: 'rk' }, String(r.rank)), h('span', { class: 'nm' }, p.name, extra.length ? h('small', null, extra.join(' · ')) : null), h('span', { class: 'val' }, valueText(s, p))));
+  });
+  R.appendChild(list);
+  if (notes.length) R.appendChild(h('p', { class: 'tbnote' }, notes.join('')));
+  var sp = speedLine(myTimes, youWin, !play.evening, s.players.length - 1);   // mid-evening: no "change the setup" tip
+  if (sp) R.appendChild(h('p', { class: 'rtip', id: 'speedLine' }, sp));
+  R.appendChild(tallyEl('今晚战绩（赢的迷你游戏数）', play.session.wins));
+  var acts = h('div', { class: 'ractions' });
+  if (play.evening) {
+    play.evening.idx++;
+    if (play.evening.idx < 3) {
+      var nextMode = play.evening.queue[play.evening.idx];
+      acts.appendChild(h('button', { class: 'btn primary big', id: 'nextGameBtn', onclick: function () { startSingle(nextMode); } }, '下一个：' + modeTitle(nextMode) + '（' + (play.evening.idx + 1) + '/3）'));
+    } else acts.appendChild(h('button', { class: 'btn primary big', id: 'eveningBtn', onclick: showEveningResult }, '看今晚总冠军'));
+    acts.appendChild(h('button', { class: 'btn', id: 'setupBtn', onclick: function () { play.evening = null; showScreen('setup'); } }, '结束连玩'));
+  } else {
+    acts.appendChild(h('button', { class: 'btn primary big', id: 'againBtn', onclick: function () { startSingle(s.mode); } }, '再来一局'));
+    acts.appendChild(h('button', { class: 'btn', id: 'setupBtn', onclick: function () { showScreen('setup'); } }, '换个玩法'));
+  }
+  R.appendChild(acts);
+  showScreen('result');
+}
+function tallyEl(title, wins) {
+  var chips = h('div', { class: 'chips' });
+  Object.keys(wins).sort(function (a, b) { return wins[b] - wins[a]; }).forEach(function (n) { chips.appendChild(h('span', null, n, h('b', null, String(wins[n])))); });
+  return h('div', { class: 'tally' }, h('h4', null, title), chips);
+}
+function showEveningResult() {
+  var ev = play.evening;
+  if (!ev) return;
+  var leaders = E.tallyWins(ev.wins);
+  var show = function (champ, notes) {
+    var R = $('#resultIn');
+    R.replaceChildren();
+    R.appendChild(h('div', { class: 'rtitle' }, champ === '你' ? '你是今晚总冠军！' : champ + '是今晚总冠军'));
+    R.appendChild(h('p', { class: 'rsub' }, '三个迷你游戏，赢得最多的人是总冠军。'));
+    var list = h('ol', { class: 'rlist' });
+    ev.results.forEach(function (r, i) { list.appendChild(h('li', { class: r.winner === champ ? 'win' : '' }, h('span', { class: 'rk' }, String(i + 1)), h('span', { class: 'nm' }, modeTitle(r.mode)), h('span', { class: 'val' }, r.winner))); });
+    R.appendChild(list);
+    if (notes && notes.length) R.appendChild(h('p', { class: 'tbnote' }, notes.join('')));
+    R.appendChild(tallyEl('赢的迷你游戏数', ev.wins));
+    R.appendChild(h('div', { class: 'ractions' },
+      h('button', { class: 'btn primary big', id: 'againBtn', onclick: function () { prefs.mode = 'evening'; startFromSetup(); } }, '再来一晚'),
+      h('button', { class: 'btn', id: 'setupBtn', onclick: function () { play.evening = null; showScreen('setup'); } }, '换个玩法')));
+    play.evening = null;
+    clearAuto();
+    if (play.table) { play.table.destroy(); play.table = null; }
+    showScreen('result');
+  };
+  if (leaders.length > 1) {
+    showScreen('game');
+    gTitle.innerHTML = '总冠军平手';
+    setExit(false);
+    var group = leaders.map(function (n) { return { name: n, human: n === '你' }; });
+    runTiebreak(group, '总冠军', function (w, notes) { show(w, ['总冠军平手：' + leaders.join('、') + '各赢' + ev.wins[leaders[0]] + '个。'].concat(notes)); });
+  } else show(leaders[0], []);
+}
+function showPracticeResult(times, elapsed) {
+  clearAuto();
+  if (play.table) { play.table.destroy(); play.table = null; }
+  var R = $('#resultIn');
+  R.replaceChildren();
+  var avg = times.reduce(function (a, b) { return a + b; }, 0) / Math.max(1, times.length);
+  var best = Math.min.apply(null, times);
+  R.appendChild(h('div', { class: 'rtitle' }, '平均' + sec(avg) + '秒'));
+  R.appendChild(h('p', { class: 'rsub' }, times.length + '对 · 最快' + sec(best) + '秒 · 总用时' + fmtClock(elapsed)));
+  // each tier quotes its bot's median, and you only beat it when you are actually faster than that number
+  var verdict = avg < 2800 ? '比「高手」机器人（约2.8秒）还快！' : avg < 4500 ? '比「普通」机器人（约4.5秒）快。' : avg < 7000 ? '比「新手」机器人（约7秒）快。再练练就能挑战普通。' : '多练几次，先挑战「新手」机器人。';
+  R.appendChild(h('p', null, verdict));
+  var list = h('div', { class: 'laps', style: { justifyContent: 'flex-start' } });
+  times.forEach(function (t) { list.appendChild(h('span', null, sec(t) + 's')); });
+  R.appendChild(list);
+  R.appendChild(h('div', { class: 'ractions' },
+    h('button', { class: 'btn primary big', id: 'againBtn', onclick: function () { startSingle('practice'); } }, '再练一次'),
+    h('button', { class: 'btn', id: 'setupBtn', onclick: function () { showScreen('setup'); } }, '换个玩法')));
+  showScreen('result');
+}
+
+/* ================================================================ 速查
+   Order on a phone (H7): 开局步骤 → the one rule → the chosen mini-game's card (chips switch it; desktop shows all
+   three) → 平手 / 一晚 → the physical deck's names → collapsible: emoji table, 说明书没写清楚的地方, 小窍门. */
+var REF_MODES = [
+  ['tower', '玩法1', '混乱高塔',
+    '<dt>准备</dt><dd>每人1张，背面朝上；其余<b>正面朝上</b>叠在中间做抓牌堆。喊「开始」后大家同时翻开自己那张。</dd>' +
+    '<dt>比</dt><dd><b>你的顶牌</b> ↔ <b>抓牌堆顶</b>，大家抢同一张。</dd>' +
+    '<dt>喊对</dt><dd>把抓牌堆顶那张拿来，正面朝上盖在你的牌上（你的顶牌换了）。</dd>' +
+    '<dt>同时</dt><dd>谁先把那张<b>拿到手</b>，算谁的。</dd>' +
+    '<dt>结束</dt><dd>抓牌堆拿完，<b>牌最多</b>的赢（开局那张也算）。</dd>'],
+  ['well', '玩法2', '水井',
+    '<dt>准备</dt><dd>1张正面朝上放中间，叫中央牌堆；其余平均发给每人（4人每人13张，除不尽的放回盒子），背面朝上做自己的抓牌堆。开始时整叠翻过来。</dd>' +
+    '<dt>比</dt><dd><b>你的顶牌</b> ↔ <b>中央牌堆顶</b>。</dd>' +
+    '<dt>喊对</dt><dd>把你的顶牌放到中央牌堆上。中央换牌了，大家重新找。</dd>' +
+    '<dt>同时</dt><dd>谁的牌先<b>放上去</b>，算谁的。</dd>' +
+    '<dt>结束</dt><dd><b>最先出完</b>的赢。</dd>'],
+  ['potato', '玩法3', '烫手山芋',
+    '<dt>准备</dt><dd>先定回合数（至少5）。每回合从放一边的牌里给每人发1张，大家同时亮牌，<b>平放在手掌上</b>。</dd>' +
+    '<dt>比</dt><dd><b>你的牌</b> ↔ <b>任何一个</b>还拿着牌的人。</dd>' +
+    '<dt>喊对</dt><dd>把你手里<b>所有</b>牌叠到那人牌上，你这回合安全。他用新顶牌接着比。</dd>' +
+    '<dt>同时</dt><dd>谁先把牌<b>叠上去</b>，算谁的。</dd>' +
+    '<dt>结束</dt><dd>只剩一人拿着牌：他输这回合，牌放自己面前。全部回合打完，<b>面前牌最少</b>的赢。</dd>']
+];
+var refMode = store.get('refMode', null) || (/^(tower|well|potato)$/.test(prefs.mode) ? prefs.mode : 'tower');
+function buildRef() {
+  var R = $('#refIn');
+  var groups = nameGroups();
+  var html = '' +
+    '<section class="startbox" aria-labelledby="refStart"><h2 id="refStart">开局步骤</h2><ol>' +
+    '<li><b>洗匀</b>55张，先<b>热身</b>几轮：翻两张，抢着喊。</li>' +
+    '<li>选好玩法，一人照下面的「准备」摆牌。</li>' +
+    '<li>桌上没有黄框，也没人帮你挪牌：喊对的人<b>自己动手</b>，大家盯着谁先。</li>' +
+    '<li>用<b>纸笔</b>记下每局赢家，赢最多的是总冠军。</li>' +
+    '<li>要喊<b>宝可梦的名字</b>。喊错不会冻结，罚不罚开局前说好<sup>1</sup>。</li>' +
+    '</ol><p class="house">' + HOUSE_NAMES_REF + '</p></section>' +
+    '<div class="core"><h2>唯一的规则</h2>' +
+    '<p class="big">任意两张卡，有且只有1个相同符号。</p>' +
+    '<p>形状、颜色一样就算，<b>大小和方向可以不同</b>。找到就<b>大声喊出它的名字</b>，最先喊对的人赢下这一次。</p></div>' +
+    '<div class="rchips" role="tablist" aria-label="玩法">' +
+    REF_MODES.map(function (m) { return '<button class="rchip" role="tab" id="rchip-' + m[0] + '" data-m="' + m[0] + '" aria-controls="rcard-' + m[0] + '"><small>' + m[1] + '</small>' + m[2] + '</button>'; }).join('') +
+    '</div><div class="refgrid">' +
+    REF_MODES.map(function (m) { return '<section class="rcard" id="rcard-' + m[0] + '" data-m="' + m[0] + '" role="tabpanel" aria-labelledby="rchip-' + m[0] + '"><h3>' + m[2] + '<small>' + m[1] + '</small></h3><dl>' + m[3] + '</dl></section>'; }).join('') +
+    '</div>' +
+    '<div class="rules2">' +
+    '<section><h3>平手怎么办</h3><p>2人平手：各抽一张背面朝上的牌同时翻开，先喊出相同符号的赢（对决）。3人以上平手：先玩烫手山芋减到2人，再对决。<sup>2</sup></p></section>' +
+    '<section><h3>一晚怎么算</h3><p>玩法顺序随意、可以重复。每赢一个玩法记1次，<b>赢得最多的是总冠军</b>。</p></section>' +
+    '</div>' +
+    '<div class="names"><h3>实体卡上的57个符号</h3><p>说明书里的「符号名称示例」两页有图，上桌前一起看看。下面按种类分好了。</p>' +
+    '<div class="ngroup alike"><h4>长得像或名字像，别喊错（形状和颜色都一样才算同一个）</h4><div class="chips">' +
+    NAME_ALIKE.map(function (n) { return '<span>' + esc(n) + '</span>'; }).join('') + '</div></div>' +
+    groups.map(function (g) { return '<div class="ngroup"><h4>' + esc(g[0]) + '</h4><div class="chips">' + g[1].map(function (n) { return '<span class="pn">' + esc(n) + '</span>'; }).join('') + '</div></div>'; }).join('') +
+    '</div>' +
+    '<details class="emo"><summary>网页版 emoji 符号对照（57个）</summary><div class="grid">' +
+    E.SYMBOLS.map(function (s) { return '<span><span class="e">' + s.e + '</span>' + esc(s.n) + '</span>'; }).join('') + '</div></details>' +
+    '<details class="more foot"><summary>说明书没写清楚的地方</summary><div><ol>' +
+    '<li>喊错名字：说明书没写。网页版喊错冻结1秒，是网页自己的约定，不是官方规则。</li>' +
+    '<li>3人以上平手「用烫手山芋减到2位」：说明书没写怎么减。网页版每回合淘汰最后拿着牌的人，直到剩2人。</li>' +
+    '<li>水井发牌除不尽时，多出来的放回盒子，保证每人张数一样（说明书只写「平均发给所有玩家」）。</li>' +
+    '<li>烫手山芋里，如果你牌上的那个符号同时出现在两个人的牌上，桌上由你自己选叠给谁。网页版：电脑大屏上可以点那个人牌上的符号来选；手机上只能点自己牌上的符号，牌会叠给座位顺序上第一个有这个符号的人。</li>' +
+    '</ol><p>说明书没写清楚，这里按官方规则：混乱高塔结束时数自己面前的全部牌，开局发的那张也算。</p></div></details>' +
+    '<details class="more"><summary>小窍门</summary><div><ul>' +
+    '<li>先盯住一张卡上的<b>一个</b>符号，去另一张卡上找；没有就换下一个。</li>' +
+    '<li>先认<b>颜色</b>，比认形状快。别管方向，倒过来它还是它。</li>' +
+    '<li>大符号最抢眼，可答案大小是随机的，小符号也要扫到。</li>' +
+    '<li>混乱高塔和水井：中间那张一换，马上重新看，别还盯着旧的。</li>' +
+    '<li>烫手山芋：你的牌能和任何人比，别只盯一家。</li>' +
+    '</ul></div></details><div class="reftail"></div>';
+  R.innerHTML = html;
+  $$('.rchip', R).forEach(function (b) { b.addEventListener('click', function () { setRefMode(b.getAttribute('data-m')); }); });
+  setRefMode(refMode);
+}
+function setRefMode(m) {
+  refMode = m; store.set('refMode', m);
+  $$('#refIn .rchip').forEach(function (b) { var on = b.getAttribute('data-m') === m; b.setAttribute('aria-selected', String(on)); });
+  $$('#refIn .rcard').forEach(function (c) { c.classList.toggle('on', c.getAttribute('data-m') === m); });
+}
+buildRef();
+
+/* ================================================================ boot */
+(function boot() {
+  var firstUndone = progress.done.indexOf(false);
+  if (progress.finished) {
+    lessonGo(0, 0);
+    showTab('play'); showScreen('setup');
+  } else {
+    showTab('tutorial');
+    lessonGo(firstUndone < 0 ? 0 : firstUndone, 0);
+    showScreen('setup');
+  }
+})();
+
+/* ================================================================ test hook */
+function activeTable() { return currentTab === 'tutorial' ? tut.table : (currentTab === 'play' ? play.table : null); }
+window.GameDebug = {
+  setSpeed: function (f) {
+    debugSpeed = Math.max(0, +f || 0); applyAnimVar();
+    // the double-tap guard and the fresh-card grace scale with the test speed (0 = none)
+    tapGuard.until = Math.min(tapGuard.until, now() + T(400));
+    [tut.table, play.table].forEach(function (tb) { if (tb) tb.readyAt = Math.min(tb.readyAt, now() + T(350)); });
+    [tut.table, play.table].forEach(function (tb) { if (tb && tb.botsOn) { tb.stopBots(); tb.syncBots(); } });
+  },
+  getSpeed: function () { return debugSpeed; },
+  getState: function () {
+    var tb = activeTable();
+    return JSON.parse(JSON.stringify({
+      tab: currentTab, lesson: tut.L + 1, step: tut.S + 1, steps: LESSONS[tut.L].steps.length, stepDone: tut.done,
+      screen: play.screen, mode: play.mode, evening: play.evening, wins: play.session.wins, progress: progress,
+      game: tb ? tb.s : null, human: tb ? tb.human : null, frozen: tb ? tb.frozen : null, times: tb ? tb.times : null,
+      paused: play.table ? play.table.paused : null, ask: !!play.ask, elapsed: play.table ? Math.round(play.table.elapsed()) : null,
+      coach: !!play.coach, coached: coached
+    }));
+  },
+  lesson: function (i, step) { showTab('tutorial'); lessonGo(Math.max(0, Math.min(LESSONS.length - 1, (i | 0) - 1)), step ? step - 1 : 0); return this.getState(); },
+  lessons: function () { return LESSONS.map(function (l) { return { title: l.title, steps: l.steps.length }; }); },
+  table: function () { return activeTable(); },
+  bots: function (on) { var tb = activeTable(); if (!tb) return false; if (tb === tut.table) tut.botsWanted = !!on; else play.botsWanted = !!on; tb.setBots(!!on); return true; },
+  solve: function () {
+    var tb = activeTable(); if (!tb || tb.human < 0) return null;
+    var c = E.comparisons(tb.s, tb.human);
+    return c.length ? { sym: c[0].sym, other: c[0].other, a: c[0].a, b: c[0].b, all: c } : null;
+  },
+  // click the right symbol on the human's own card (real DOM click)
+  // ready(): would a real tap be accepted right now? (not locked, not frozen, past the double-tap guard)
+  ready: function () { var tb = activeTable(); return !!tb && !tb.lock && !tb.paused && now() >= tb.readyAt && !inputGuarded() && !((tb.frozen[tb.human] || 0) > now()); },
+  tapCorrect: function () {
+    var tb = activeTable();
+    if (!this.ready()) return false;
+    var sol = this.solve(); if (!sol) return false;
+    var el = document.querySelector('.tbl .dcard.ia[data-cardid="' + sol.a + '"] button.sym[data-sym="' + sol.sym + '"]');
+    if (!el) return false;
+    el.click(); return true;
+  },
+  tapWrong: function () {
+    var tb = activeTable();
+    if (!tb || tb.lock || tb.paused || now() < tb.readyAt || inputGuarded()) return false;
+    var sol = this.solve(); if (!sol) return false;
+    var good = sol.all.map(function (c) { return c.sym; });
+    var btn = $$('.tbl .dcard.ia[data-cardid="' + sol.a + '"] button.sym').filter(function (b) { return good.indexOf(+b.getAttribute('data-sym')) < 0; })[0];
+    if (!btn) return false;
+    btn.click(); return +btn.getAttribute('data-sym');
+  },
+  // start a 实战 game from engine options (e.g. a stacked deck to force a tie); same end/tiebreak flow
+  startCustom: function (engineOpts) {
+    showTab('play'); play.evening = null;
+    var o = Object.assign({ seed: 1, players: playersList() }, engineOpts);
+    startSingle(o.mode, E.newGame(o));
+    return this.getState();
+  },
+  noAuto: function (on) { debugNoAuto = !!on; },
+  // jump to the end of an evening where 你/小东/小西 each won one mini-game (overall tie path)
+  eveningTie: function () {
+    showTab('play');
+    play.evening = { queue: ['tower', 'well', 'potato'], idx: 3, wins: { '你': 1, '小东': 1, '小西': 1 },
+      results: [{ mode: 'tower', winner: '你' }, { mode: 'well', winner: '小东' }, { mode: 'potato', winner: '小西' }] };
+    showEveningResult();
+    return this.getState();
+  },
+  botMove: function (p) { var tb = activeTable(); return tb ? tb.forceMove(p) : false; },
+  start: function (opts) {
+    opts = opts || {};
+    ['mode', 'opp', 'bot', 'deck', 'rounds', 'practice'].forEach(function (k) { if (opts[k] != null) prefs[k] = opts[k]; });
+    if (opts.coach != null) prefs.coach = !!opts.coach;
+    showTab('play'); syncSetup(); startFromSetup();
+    return this.getState();
+  },
+  E: E
+};
+})();
+</script>
+</body>
+</html>

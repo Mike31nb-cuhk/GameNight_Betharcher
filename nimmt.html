@@ -1,0 +1,2299 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>谁是牛头王 新手课</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<script>/* 字体后台加载：连不上 Google Fonts 时页面照样立刻显示（用系统字体） */(function(){var l=document.createElement("link");l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family=Lilita+One&family=ZCOOL+QingKe+HuangYou&display=swap";document.head.appendChild(l);})();</script>
+<style>
+:root{
+  color-scheme: dark;
+  --felt:#1b5741; --felt-2:#15493a; --felt-3:#0f3a2c; --felt-hi:#2a7556;
+  --line:rgba(255,255,255,.12); --line-2:rgba(255,255,255,.24);
+  --on:#f6f3e8; --on-2:rgba(246,243,232,.80); --on-3:rgba(246,243,232,.58);
+  --top:#241a4f; --top-2:#35286f; --top-line:#f7d335;
+  --paper:#fbf8ef; --paper-2:#f2ecde; --paper-line:#dcd2bb;
+  --ink:#221848; --ink-2:#554c77; --ink-3:#857e9f;
+  --bull:#4b309f; --bull-deep:#2a1966;
+  --face1:#ebe5fb; --face2:#86c3ef; --face3:#a6d65f; --face5:#e5473c; --face7:#f7cf2c;
+  --pip1:#4b309f; --pip2:#1b6cb6; --pip3:#3a8a1b; --pip5:#cf2a1f; --pip7:#c98600;
+  --back:#3a2885; --back-2:#2a1c66;
+  --yellow:#f7d335; --yellow-2:#ffe680; --yellow-ink:#2b2000;
+  --red:#e2402f; --red-2:#ff8b7d; --red-bg:rgba(226,64,47,.24);
+  --amber:#ffb43d;
+  --ok-bg:#e2f5e8; --ok-ink:#135a30; --bad-bg:#fde7e3; --bad-ink:#8a1c11; --note-bg:#e9ecfb; --note-ink:#2a2f73;
+  --spd:1;
+  --gut:max(16px, env(safe-area-inset-left), env(safe-area-inset-right));
+  --font-ui:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC","Noto Sans SC",sans-serif;
+  --font-display:"ZCOOL QingKe HuangYou","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+  --font-num:"Lilita One","Arial Black","Arial Bold","PingFang SC","Microsoft YaHei",sans-serif;
+  --low-ink:#2a1800;
+  --ok-line:#2f9a5a;
+  --tick:#3fb86b;
+  --five-bg:#7a5a00;
+  --btn-off:#8f8a76;
+  --ready:#8fe3a8;
+  --yellow-edge:#b8951a;
+  --toggle-off:#bdb6a3;
+  --btn-off-ink:#e6e2d4;
+  --white:#fff;
+  --crown-bg:#fff3bf;
+  --win-bg:#fff6c9;
+}
+@media (prefers-reduced-motion: reduce){ :root{ --spd:0 !important; } }
+*{ box-sizing:border-box; }
+[hidden]{ display:none !important; }
+html{ -webkit-text-size-adjust:100%; background:var(--felt-3); }
+body{
+  margin:0; min-height:100vh; color:var(--on); font:15px/1.6 var(--font-ui);
+  background-color:var(--felt);
+  background-image:
+    radial-gradient(120% 70% at 50% 0%, rgba(255,255,255,.07), transparent 60%),
+    radial-gradient(120% 80% at 50% 110%, rgba(0,0,0,.35), transparent 60%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,.018) 0 2px, transparent 2px 5px);
+  background-attachment: fixed;
+}
+button{ font:inherit; color:inherit; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+button:disabled{ cursor:default; }
+:focus-visible{ outline:3px solid var(--yellow); outline-offset:2px; }
+b, strong{ font-weight:700; }
+.sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+.num{ font-variant-numeric: tabular-nums; }
+
+/* ---------- top bar ---------- */
+.top{ background:var(--top); border-bottom:3px solid var(--top-line); padding-top:env(safe-area-inset-top); }
+.top-in{ max-width:1180px; margin:0 auto; padding:0 var(--gut); height:56px; display:flex; align-items:center; gap:10px; }
+.back{ color:var(--on-2); text-decoration:none; font-size:14px; white-space:nowrap; min-height:40px; display:flex; align-items:center; padding-right:2px; }
+.back:hover{ color:var(--on); }
+.brand{ display:flex; align-items:center; gap:6px; min-width:0; flex:0 1 auto; overflow:hidden; }
+.brand svg{ width:26px; height:26px; fill:var(--yellow); flex:none; }
+.brand h1{ margin:0; font:400 23px/1 var(--font-display); color:var(--yellow); letter-spacing:.02em; white-space:nowrap; }
+.brand h1 .pre{ display:inline; }
+.brand small{ font:13px/1 var(--font-num); color:var(--on-3); letter-spacing:.02em; white-space:nowrap; }
+.tabs{ margin-left:auto; display:flex; background:rgba(0,0,0,.28); border-radius:11px; padding:2px; gap:2px; }
+.tabs button{ border:0; background:transparent; color:var(--on-2); min-width:46px; height:40px; padding:0 12px; border-radius:8px; font-size:15px; font-weight:600; white-space:nowrap; }
+.tabs button[aria-selected="true"]{ background:var(--yellow); color:var(--yellow-ink); }
+.set-wrap{ position:relative; }
+.icon-btn{ width:40px; height:40px; border-radius:10px; border:1px solid var(--line-2); background:transparent; display:grid; place-items:center; }
+.icon-btn svg{ width:20px; height:20px; stroke:var(--on); fill:none; stroke-width:2; stroke-linecap:round; }
+.popover{ position:absolute; right:0; top:48px; z-index:40; width:250px; background:var(--paper); color:var(--ink); border-radius:12px; padding:14px; box-shadow:0 10px 30px rgba(0,0,0,.4); color-scheme:light; }
+.popover h4{ margin:0 0 8px; font-size:13px; color:var(--ink-2); font-weight:600; }
+.popover .seg{ margin-bottom:12px; }
+.back-wrap{ position:relative; flex:none; }
+.leave-pop{ left:0; right:auto; width:236px; }
+.leave-pop p{ margin:0 0 10px; font-size:14px; line-height:1.5; }
+.leave-acts{ display:flex; gap:8px; }
+.leave-acts .btn{ flex:1; padding:0 10px; display:inline-flex; align-items:center; justify-content:center; text-decoration:none; }
+.popover .btn.ghost{ color:var(--ink); border-color:var(--paper-line); }
+.popover .linkish{ border:0; background:none; color:var(--ink-2); text-decoration:underline; padding:6px 0; font-size:13px; min-height:40px; }
+@media (max-width:420px){
+  .top-in{ gap:6px; }
+  .brand small{ display:none; }
+  .brand h1{ font-size:21px; }
+  .brand h1 .pre{ display:none; }
+  .tabs button{ padding:0 9px; min-width:44px; }
+  .coach{ gap:7px; }
+  .coach > .coach-ava{ width:34px; height:34px; }
+  .coach > .coach-ava svg{ width:25px; height:25px; }
+  .bubble{ font-size:14.5px; line-height:1.55; padding:8px 11px; }
+}
+@media (max-width:350px){
+  .lesson-map ol{ gap:3px !important; }
+  .lesson-map .lm-btn{ width:36px; height:36px; }
+}
+@media (max-width:385px){
+  .brand svg{ display:none; }
+  .top-in{ gap:5px; }
+  .back{ font-size:13px; }
+  .tabs button{ padding:0 7px; min-width:40px; font-size:14px; }
+}
+
+/* ---------- layout ---------- */
+main{ max-width:1180px; margin:0 auto; padding:16px var(--gut) calc(24px + env(safe-area-inset-bottom)); }
+/* in a game the sticky tray's resting place is the screen bottom, so scrolling to the end never shifts it */
+body.in-game main{ padding-bottom:0; }
+@media (min-width:600px){ body.in-game main{ padding-bottom:calc(8px + env(safe-area-inset-bottom)); } }
+.panel-title{ font:400 26px/1.2 var(--font-display); margin:4px 0 12px; color:var(--yellow); letter-spacing:.02em; }
+.paper{ background:var(--paper); color:var(--ink); border-radius:14px; box-shadow:0 2px 0 rgba(0,0,0,.18), 0 12px 28px rgba(0,0,0,.25); color-scheme:light; }
+
+/* segmented + toggles + buttons */
+.seg{ display:flex; background:var(--paper-2); border-radius:10px; padding:3px; gap:3px; }
+.seg button{ flex:1; border:0; background:transparent; color:var(--ink-2); min-height:40px; border-radius:8px; font-weight:600; font-size:14px; padding:0 8px; }
+.seg button[aria-pressed="true"]{ background:var(--ink); color:var(--white); }
+.btn{ border:0; border-radius:12px; min-height:44px; padding:0 18px; font-weight:700; font-size:15px; }
+.btn.primary{ background:var(--yellow); color:var(--yellow-ink); box-shadow:0 3px 0 var(--yellow-edge); }
+.btn.primary:active{ transform:translateY(2px); box-shadow:0 1px 0 var(--yellow-edge); }
+.btn.primary:disabled{ background:var(--btn-off); color:var(--btn-off-ink); box-shadow:none; }
+.btn.ghost{ background:transparent; color:var(--on); border:1.5px solid var(--line-2); }
+.paper .btn.ghost{ color:var(--ink); border-color:var(--paper-line); }
+.btn.big{ min-height:56px; font-size:18px; padding:0 28px; }
+.btn.pulse{ animation:pulse calc(1400ms * var(--spd)) ease-in-out infinite; }
+@keyframes pulse{ 0%,100%{ box-shadow:0 3px 0 var(--yellow-edge), 0 0 0 0 rgba(247,211,53,.55);} 50%{ box-shadow:0 3px 0 var(--yellow-edge), 0 0 0 8px rgba(247,211,53,0);} }
+.toggle{ display:inline-flex; align-items:center; gap:10px; border:0; background:none; padding:4px 0; min-height:40px; color:inherit; text-align:left; }
+.toggle .knob{ flex:none; width:46px; height:28px; border-radius:14px; background:var(--toggle-off); position:relative; transition:background calc(160ms * var(--spd)); }
+.toggle .knob::after{ content:""; position:absolute; top:3px; left:3px; width:22px; height:22px; border-radius:50%; background:var(--white); box-shadow:0 1px 3px rgba(0,0,0,.3); transition:left calc(160ms * var(--spd)); }
+.toggle[aria-pressed="true"] .knob{ background:var(--felt); }
+.toggle[aria-pressed="true"] .knob::after{ left:21px; }
+.toggle:disabled{ opacity:.45; }
+
+/* ---------- cards ---------- */
+.card{
+  --cw:56px; position:relative; flex:none; width:var(--cw); height:calc(var(--cw) * 1.38);
+  font-size:calc(var(--cw) * .2); border-radius:calc(var(--cw) * .12); background:var(--white); color:var(--bull-deep);
+  box-shadow:0 1px 0 rgba(0,0,0,.18), 0 3px 7px rgba(0,0,0,.28);
+  display:flex; flex-direction:column; padding:.24em; gap:.16em; user-select:none; -webkit-user-select:none;
+}
+.c-top{ display:flex; align-items:flex-start; justify-content:space-between; height:1.5em; gap:.1em; }
+.c-corner{ font:1.08em/1.05 var(--font-num); letter-spacing:-.02em; }
+.c-heads{ display:flex; flex-wrap:wrap; justify-content:flex-end; align-content:flex-start; gap:0 .04em; max-width:3.1em; }
+.c-heads svg{ width:.74em; height:.74em; fill:var(--pip); display:block; }
+.c-heads.h5{ max-width:2.4em; } .c-heads.h7{ max-width:3.1em; }
+.c-face{ flex:1; border-radius:.42em; background:var(--face); position:relative; display:grid; place-items:center; overflow:hidden; }
+.c-bull{ position:absolute; left:3%; top:4%; width:94%; height:96%; fill:var(--bull); opacity:.95; }
+.c-big{ position:relative; font:2.35em/1 var(--font-num); color:var(--white); letter-spacing:-.03em;
+  -webkit-text-stroke:.1em var(--bull-deep); paint-order:stroke fill; text-shadow:0 .07em 0 var(--bull-deep); }
+.card.n3 .c-big{ font-size:1.8em; }
+.card.b1{ --face:var(--face1); --pip:var(--pip1); }
+.card.b2{ --face:var(--face2); --pip:var(--pip2); }
+.card.b3{ --face:var(--face3); --pip:var(--pip3); }
+.card.b5{ --face:var(--face5); --pip:var(--pip5); }
+.card.b7{ --face:var(--face7); --pip:var(--pip7); }
+.card.b5 .c-bull, .card.b7 .c-bull{ fill:var(--bull-deep); }
+.card.tiny .c-top{ display:none; }
+.cback{ --cw:40px; width:var(--cw); height:calc(var(--cw) * 1.38); border-radius:calc(var(--cw) * .12); flex:none;
+  background:var(--back); border:2px solid var(--white); box-shadow:0 2px 6px rgba(0,0,0,.3); display:grid; place-items:center; }
+.cback svg{ width:62%; height:62%; fill:none; stroke:var(--yellow); stroke-width:6; opacity:.85; }
+.cempty{ --cw:40px; width:var(--cw); height:calc(var(--cw) * 1.38); border-radius:calc(var(--cw) * .12); border:1.5px dashed var(--line-2); flex:none; }
+
+/* ---------- rows (the hero) ---------- */
+.rows{ --cw:40px; display:grid; grid-template-columns:minmax(0,1fr); gap:8px; min-width:0; width:fit-content; max-width:100%; margin-inline:auto; }
+.row{ position:relative; display:grid; grid-template-columns:24px auto minmax(48px, 1fr); align-items:center; gap:6px;
+  padding:6px; border-radius:12px; background:rgba(0,0,0,.16); border:1px solid var(--line); }
+.row-no{ font:15px/1 var(--font-num); color:var(--on-3); text-align:center; }
+.slots{ display:flex; gap:4px; }
+.slot{ width:var(--cw); height:calc(var(--cw) * 1.38); border-radius:calc(var(--cw) * .12); border:1.5px dashed rgba(255,255,255,.16); flex:none; position:relative; }
+.slot:has(.card){ border-color:transparent; }
+.slot .card{ --cw:inherit; position:absolute; inset:-1.5px; width:var(--cw); }
+.slot.s5:not(:has(.card)){ border-color:rgba(255,139,125,.38); }
+.row-info{ justify-self:end; min-width:44px; display:flex; flex-direction:column; align-items:center; gap:1px; padding-right:2px; }
+.ri-b{ font:22px/1 var(--font-num); color:var(--on); display:flex; align-items:center; gap:2px; }
+.ri-b svg{ width:14px; height:14px; fill:var(--on-2); }
+.ri-c{ font-size:12px; color:var(--on-3); font-variant-numeric:tabular-nums; }
+.ri-c.warn{ color:var(--amber); font-weight:700; }
+.ri-c.danger{ color:var(--white); background:var(--red); border-radius:6px; padding:0 6px; font-weight:700; }
+.row.full{ border-color:rgba(226,64,47,.6); background:rgba(226,64,47,.12); }
+.row.target{ border-color:var(--yellow); box-shadow:0 0 0 2px rgba(247,211,53,.45); }
+.row.taking{ border-color:var(--red); background:var(--red-bg); box-shadow:0 0 0 3px rgba(226,64,47,.55); }
+.row-hit{ position:absolute; inset:-1px; border-radius:12px; border:2px solid rgba(247,211,53,.0); background:transparent; display:flex; align-items:flex-end; justify-content:center; padding:0; }
+.row-hit:hover{ border-color:rgba(247,211,53,.7); background:rgba(247,211,53,.06); }
+.rows.ask .row{ border-color:rgba(247,211,53,.55); }
+.rows.ask .row-hit{ animation:askGlow calc(1600ms * var(--spd)) ease-in-out infinite; }
+@keyframes askGlow{ 0%,100%{ box-shadow:0 0 0 0 rgba(247,211,53,0);} 50%{ box-shadow:0 0 0 3px rgba(247,211,53,.45);} }
+.cost{ position:absolute; right:6px; bottom:-9px; background:var(--paper); color:var(--ink); font-size:12px; font-weight:700; padding:1px 8px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.3); white-space:nowrap; z-index:2; }
+.cost.cheap{ background:var(--yellow); color:var(--yellow-ink); }
+.rows.ask{ gap:14px; }
+.take-tag{ position:absolute; right:8px; top:50%; z-index:3; background:var(--red); color:var(--white); font-weight:800; font-size:14px; line-height:1.3; padding:4px 10px; border-radius:8px; white-space:nowrap; box-shadow:0 3px 10px rgba(0,0,0,.35); pointer-events:none;
+  transform:translateY(-50%); animation:tagIn calc(260ms * var(--spd)) ease-out both; }
+@keyframes tagIn{ from{ opacity:0; transform:translateY(-50%) scale(.7);} to{ opacity:1; transform:translateY(-50%) scale(1);} }
+
+/* ---------- reveal strip / zone ---------- */
+.zone{ background:rgba(0,0,0,.18); border:1px solid var(--line); border-radius:12px; padding:8px 10px 10px; }
+.zone-label{ font-size:12px; color:var(--on-3); margin-bottom:6px; display:flex; justify-content:space-between; gap:8px; }
+.reveal{ --cw:40px; display:flex; gap:6px; justify-content:center; flex-wrap:wrap; }
+.rv{ display:flex; flex-direction:column; align-items:center; gap:3px; border:0; background:none; padding:0; color:inherit; }
+.rv .card{ --cw:inherit; transition:transform calc(200ms * var(--spd)), opacity calc(200ms * var(--spd)); }
+.rv-name{ font-size:11px; line-height:1.2; color:var(--on-2); max-width:calc(var(--cw) + 10px); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.rv.me .rv-name{ color:var(--yellow); font-weight:700; }
+.rv.done{ opacity:.28; }
+.rv.cur .card{ transform:translateY(-4px); box-shadow:0 0 0 3px var(--yellow), 0 6px 14px rgba(0,0,0,.35); }
+button.rv{ min-width:40px; min-height:40px; border-radius:10px; }
+button.rv:hover .card{ transform:translateY(-3px); }
+
+/* ---------- hand ---------- */
+.hand{ --cw:60px; --cols:5; display:grid; grid-template-columns:repeat(var(--cols), var(--cw)); justify-content:center; gap:14px 8px; }
+.hcard{ position:relative; border:0; padding:0; background:none; border-radius:calc(var(--cw) * .12); transition:transform calc(160ms * var(--spd)); min-width:40px; }
+.hcard .card{ --cw:inherit; }
+.hcard:hover:not(:disabled) .card{ box-shadow:0 0 0 2px rgba(247,211,53,.6), 0 4px 10px rgba(0,0,0,.3); }
+.hcard.sel{ transform:translateY(-8px); }
+.hcard.sel .card{ box-shadow:0 0 0 3px var(--yellow), 0 8px 18px rgba(0,0,0,.4); }
+.hcard:disabled .card{ filter:saturate(.85) brightness(.96); }
+.hint{ position:absolute; left:50%; bottom:-12px; transform:translateX(-50%); font-size:11px; line-height:15px; padding:0 5px; border-radius:6px; background:rgba(0,0,0,.55); color:var(--on); white-space:nowrap; pointer-events:none; font-weight:600; }
+.hint.danger{ background:var(--red); color:var(--white); }
+.hint svg{ width:10px; height:10px; fill:currentColor; display:inline-block; vertical-align:-1px; margin-left:1px; }
+.hint .dot{ display:inline-block; width:3px; height:3px; border-radius:50%; background:currentColor; vertical-align:middle; margin:0 2px; opacity:.85; }
+.hand.tight .hint{ font-size:10.5px; padding:0 2px; letter-spacing:-.03em; }
+.hand.tight .hint .dot{ margin:0 1px; }
+.hand.snug .hint.danger .rw, .hand.snug .hint.danger .dot{ display:none; }   /* phone-size cards: the red label is 拿N🐂 (列N·拿N🐂 needs ~70px) */
+.hint.low{ background:var(--amber); color:var(--low-ink); }
+.hint.five{ background:var(--five-bg); color:var(--white); }
+
+/* ---------- chips / scoreboard ---------- */
+.sb-grid{ display:grid; gap:6px; grid-template-columns:repeat(var(--sbcols, 4), minmax(0, 1fr)); }
+.chip{ position:relative; background:rgba(0,0,0,.2); border:1px solid var(--line); border-radius:10px; padding:4px 7px 5px; min-width:0; text-align:left; color:var(--on); }
+.chip.me{ border-color:rgba(247,211,53,.7); background:rgba(247,211,53,.10); }
+.chip-top{ display:flex; justify-content:space-between; align-items:center; gap:4px; min-height:17px; }
+.chip-name{ flex:none; max-width:100%; font-size:13px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.chip-state{ min-width:0; overflow:hidden; font-size:11px; color:var(--on-3); white-space:nowrap; }
+.chip-state.ready{ color:var(--ready); font-weight:700; }
+.chip-state.think::after{ content:"…"; animation:dots calc(900ms * var(--spd)) steps(3) infinite; }
+.sb-grid.narrow .chip-state .lbl{ display:none; }
+.sb-grid.narrow .chip.has-round .chip-score .unit{ display:none; }
+@keyframes dots{ 0%{ opacity:.3 } 50%{ opacity:1 } }
+.chip-score{ display:flex; align-items:baseline; gap:4px; }
+.chip-score b{ font:19px/1.05 var(--font-num); }
+.chip-score .unit{ font-size:11px; color:var(--on-3); }
+.chip-round{ font-size:11px; color:var(--red-2); font-weight:700; margin-left:auto; white-space:nowrap; }
+.chip-bar{ height:4px; border-radius:2px; background:rgba(255,255,255,.12); margin-top:4px; overflow:hidden; }
+.chip-bar i{ display:block; height:100%; background:var(--yellow); border-radius:2px; transition:width calc(500ms * var(--spd)); }
+.chip-bar i.hot{ background:var(--red); }
+button.chip{ min-height:52px; font:inherit; }
+button.chip:hover{ border-color:var(--yellow); }
+.floater{ position:absolute; left:50%; top:-10px; transform:translateX(-50%); background:var(--red); color:var(--white); font-weight:800; font-size:14px; padding:3px 9px; border-radius:8px; white-space:nowrap; pointer-events:none; z-index:30; box-shadow:0 3px 10px rgba(0,0,0,.35);
+  animation:floatUp calc(1500ms * var(--spd)) ease-out forwards; }
+@keyframes floatUp{ 0%{ opacity:0; transform:translate(-50%, 8px) scale(.8);} 15%{ opacity:1; transform:translate(-50%, 0) scale(1.08);} 75%{ opacity:1; } 100%{ opacity:0; transform:translate(-50%, -18px);} }
+
+/* flying clones */
+.flyer{ position:fixed !important; margin:0 !important; z-index:60; pointer-events:none; transform-origin:0 0; }
+
+/* ---------- tutorial ---------- */
+.learn{ display:grid; gap:14px; }
+.lesson-map ol{ list-style:none; margin:0; padding:0; display:flex; gap:8px; justify-content:space-between; }
+.lesson-map li{ flex:1; display:flex; justify-content:center; }
+.lm-btn{ position:relative; width:40px; height:40px; border-radius:50%; border:2px solid var(--line-2); background:rgba(0,0,0,.18); color:var(--on-2); display:flex; align-items:center; justify-content:center; padding:0; }
+.lm-btn .ln{ font:17px/1 var(--font-num); }
+.lm-btn .lt{ display:none; }
+.lm-btn .tick{ position:absolute; right:-4px; top:-4px; width:17px; height:17px; border-radius:50%; background:var(--tick); display:none; place-items:center; border:2px solid var(--felt); }
+.lm-btn .tick svg{ width:9px; height:9px; stroke:var(--white); stroke-width:4; fill:none; }
+.lm-btn.done .tick{ display:grid; }
+.lm-btn.cur{ background:var(--yellow); color:var(--yellow-ink); border-color:var(--yellow); }
+.lesson-map .lm-head{ display:none; }
+.lplayer{ min-width:0; }
+.lesson-head{ display:flex; align-items:baseline; gap:10px; margin:2px 0 10px; }
+.lesson-head .lno{ font:14px/1 var(--font-num); color:var(--yellow); white-space:nowrap; }
+.lesson-head h2{ margin:0; font:400 22px/1.25 var(--font-display); color:var(--on); letter-spacing:.02em; flex:1; min-width:0; }
+.lesson-head .lstep{ font-size:12px; color:var(--on-3); white-space:nowrap; font-variant-numeric:tabular-nums; }
+.coach{ position:sticky; top:0; z-index:20; display:flex; gap:10px; align-items:flex-start; padding:8px 0 10px; background:linear-gradient(var(--felt) 85%, rgba(27,87,65,0)); }
+.coach-ava{ flex:none; width:44px; height:44px; border-radius:50%; background:var(--yellow); display:grid; place-items:center; box-shadow:0 2px 0 var(--yellow-edge); margin-top:2px; }
+.coach-ava svg{ width:32px; height:32px; fill:var(--bull); }
+.bubble{ position:relative; flex:1; min-width:0; background:var(--paper); color:var(--ink); border-radius:4px 14px 14px 14px; padding:10px 13px; font-size:15px; line-height:1.6; box-shadow:0 3px 10px rgba(0,0,0,.25); color-scheme:light;
+  max-height:calc(40vh - 10px); overflow:auto; overscroll-behavior:contain; }
+.bubble b{ color:var(--bull-deep); }
+.bubble .carry{ color:var(--ok-ink); font-size:14px; margin-bottom:4px; padding-left:20px; position:relative; }
+.bubble .carry::before, .fb.ok::before{ content:""; position:absolute; left:3px; top:.45em; width:9px; height:5px; border-left:2.5px solid currentColor; border-bottom:2.5px solid currentColor; transform:rotate(-45deg); }
+.fb{ margin-top:8px; padding:8px 10px 8px 30px; border-radius:10px; font-size:14px; position:relative; }
+.lesson-ctrl .fb{ margin:0 0 8px; line-height:1.5; max-height:32vh; overflow:auto; box-shadow:0 4px 14px rgba(0,0,0,.32); color-scheme:light; }
+.fb.ok{ background:var(--ok-bg); color:var(--ok-ink); }
+.fb.ok::before{ left:12px; top:1em; }
+.fb.bad{ background:var(--bad-bg); color:var(--bad-ink); }
+.fb.bad::before{ content:"!"; position:absolute; left:10px; top:8px; width:14px; height:14px; border-radius:50%; background:var(--bad-ink); color:var(--white); font:700 11px/14px var(--font-ui); text-align:center; }
+/* a legal move that the 教学局 still asks you to redo (规则4 lets you take any 列): neutral, never styled as an error */
+.fb.note{ background:var(--note-bg); color:var(--note-ink); }
+.fb.note::before{ content:"i"; position:absolute; left:10px; top:8px; width:14px; height:14px; border-radius:50%; background:var(--note-ink); color:var(--white); font:italic 700 11px/14px Georgia, serif; text-align:center; }
+.fb .tag{ font-weight:700; }
+.stage{ display:grid; grid-template-columns:minmax(0,1fr); gap:12px; padding:12px; border-radius:16px; background:rgba(0,0,0,.12); border:1px solid var(--line); }
+.stage > *{ transition:opacity calc(200ms * var(--spd)); }
+.stage.focus-hand > :not(.st-hand), .stage.focus-reveal > :not(.zone):not(.st-chips),
+.stage.focus-pick > :not(.st-pick):not(.btable), .stage.focus-buttons > :not(.st-deck),
+.stage.focus-chips > :not(.st-chips):not(.sheet), .stage.focus-rows > .st-hand{ opacity:.5; }
+.stage.focus-hand .hcard .card, .stage.focus-pick .pickcard .card{ box-shadow:0 0 0 2px rgba(247,211,53,.55), 0 4px 10px rgba(0,0,0,.3); }
+.stage.focus-reveal button.rv .card{ box-shadow:0 0 0 2px rgba(247,211,53,.7), 0 4px 10px rgba(0,0,0,.3); }
+.st-hand .hand-label, .st-label{ font-size:12px; color:var(--on-3); margin-bottom:6px; }
+.st-pick{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+.st-chips div.chip{ display:flex; align-items:baseline; gap:6px; padding:3px 9px; }
+.st-chips div.chip .chip-top{ min-height:0; }
+.st-chips div.chip .chip-state, .st-chips div.chip .chip-score .unit{ display:none; }
+.st-chips div.chip .chip-score b{ font-size:16px; }
+.st-chips .st-label{ margin-bottom:4px; }
+.pickcard{ border:0; background:none; padding:0; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--on-2); border-radius:10px; }
+.pickcard .card{ --cw:58px; transition:transform calc(160ms * var(--spd)); }
+.pickcard:hover .card{ transform:translateY(-3px); }
+.pickcard.picked .card{ box-shadow:0 0 0 3px var(--yellow), 0 6px 14px rgba(0,0,0,.35) !important; transform:translateY(-4px); }
+.st-deck{ display:flex; align-items:center; justify-content:center; gap:18px; padding:6px 0; }
+.deckstack{ position:relative; width:56px; height:77px; }
+.deckstack .cback{ --cw:52px; position:absolute; }
+.deckstack .cback:nth-child(1){ left:4px; top:4px; } .deckstack .cback:nth-child(2){ left:2px; top:2px; } .deckstack .cback:nth-child(3){ left:0; top:0; }
+.options{ display:grid; gap:8px; }
+.opt{ text-align:left; border:1.5px solid var(--paper-line); background:var(--paper); color:var(--ink); border-radius:12px; padding:10px 14px; min-height:46px; font-size:15px; line-height:1.45; color-scheme:light; }
+.opt:hover{ border-color:var(--bull); }
+.opt.right{ border-color:var(--ok-line); background:var(--ok-bg); }
+.opt.wrong{ border-color:var(--red); background:var(--bad-bg); }
+.btable{ width:100%; max-width:520px; margin-inline:auto; border-collapse:separate; border-spacing:0 6px; }
+.btable td:first-child{ width:1%; }
+.btable td{ padding:2px 6px; vertical-align:middle; }
+.btable .card{ --cw:38px; }
+.btable .rule{ font-size:14px; color:var(--on); }
+.btable .rule small{ display:block; color:var(--on-3); font-size:12px; }
+.btable .cnt{ text-align:right; white-space:nowrap; }
+.btable .cnt b{ font:22px/1 var(--font-num); }
+.btable .cnt span{ font-size:12px; color:var(--on-3); margin-left:2px; }
+.sheet{ background:var(--paper); color:var(--ink); border-radius:12px; padding:10px 12px; color-scheme:light; overflow-x:auto; }
+.sheet table{ width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums; font-size:14px; }
+.sheet th, .sheet td{ padding:5px 6px; text-align:right; border-bottom:1px solid var(--paper-line); white-space:nowrap; }
+.sheet th:first-child, .sheet td:first-child{ text-align:left; }
+.sheet th{ font-size:12px; color:var(--ink-2); font-weight:600; }
+.sheet td.tot{ font-weight:800; }
+.sheet td.over{ color:var(--red); }
+.sheet tr.win td{ background:var(--win-bg); }
+.sheet .cap{ font-size:12px; color:var(--ink-2); margin-bottom:4px; }
+.tips{ display:grid; gap:10px; }
+.tip{ display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:center; background:rgba(0,0,0,.18); border:1px solid var(--line); border-radius:12px; padding:10px 12px; }
+.tip .tno{ font:26px/1 var(--font-num); color:var(--yellow); width:26px; text-align:center; }
+.tip p{ margin:0; font-size:14px; color:var(--on-2); }
+.tip p b{ color:var(--on); }
+.finale{ display:flex; justify-content:center; padding:10px 0; }
+.realtable{ margin:0; padding:0; list-style:none; display:grid; gap:8px; counter-reset:rt; }
+.realtable li{ counter-increment:rt; position:relative; padding:9px 12px 9px 44px; border-radius:12px; background:rgba(0,0,0,.18); border:1px solid var(--line); font-size:14px; line-height:1.55; color:var(--on-2); }
+.realtable li::before{ content:counter(rt); position:absolute; left:12px; top:8px; font:800 20px/1.1 var(--font-num); font-synthesis:none; color:var(--yellow); width:22px; text-align:center; }
+.realtable li b{ color:var(--on); }
+.recap ul{ list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:6px; }
+.recap li{ font-size:13px; padding:4px 10px; border-radius:8px; background:rgba(0,0,0,.2); border:1px solid var(--line); color:var(--on); }
+.lesson-ctrl{ position:sticky; bottom:0; z-index:15; margin-top:12px; padding:10px 0 calc(10px + env(safe-area-inset-bottom)); background:linear-gradient(rgba(27,87,65,0), var(--felt) 18px); }
+.ctrl-row{ display:flex; align-items:center; gap:8px; }
+.lesson-ctrl .btn.big{ min-height:52px; font-size:17px; padding:0 22px; }
+.lesson-ctrl .skip{ margin:0 auto; border:0; background:none; color:var(--on-3); text-decoration:underline; min-height:40px; font-size:14px; padding:0 6px; }
+.lesson-ctrl .btn{ min-width:92px; }
+.shake{ animation:shake calc(380ms * var(--spd)); }
+@keyframes shake{ 0%,100%{ transform:translateX(0);} 20%{ transform:translateX(-6px);} 40%{ transform:translateX(6px);} 60%{ transform:translateX(-4px);} 80%{ transform:translateX(3px);} }
+.anim-deal .hcard{ animation:dealIn calc(420ms * var(--spd)) cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--i, 0) * 55ms * var(--spd)); }
+@keyframes dealIn{ from{ opacity:0; transform:translateY(-40px) rotate(-8deg) scale(.8);} to{ opacity:1; transform:none;} }
+.anim-flip .slot .card, .anim-reveal .rv .card{ animation:flipIn calc(460ms * var(--spd)) ease-out both; animation-delay:calc(var(--i, 0) * 90ms * var(--spd)); }
+@keyframes flipIn{ 0%{ transform:rotateY(90deg) scale(.9); filter:brightness(.5);} 100%{ transform:none; filter:none;} }
+
+/* ---------- 实战 ---------- */
+.setup{ max-width:620px; margin:0 auto; padding:18px 18px 20px; }
+.setup h2{ margin:0 0 4px; font:400 26px/1.2 var(--font-display); color:var(--ink); }
+.setup .sub{ margin:0 0 14px; color:var(--ink-2); font-size:14px; }
+.field{ padding:12px 0; border-top:1px solid var(--paper-line); }
+.field > label, .field .flabel{ display:block; font-size:13px; font-weight:700; color:var(--ink-2); margin-bottom:8px; }
+.stepper{ display:flex; align-items:center; gap:12px; }
+.stepper button{ width:44px; height:44px; border-radius:12px; border:1.5px solid var(--paper-line); background:var(--white); color:var(--ink); font-size:22px; line-height:1; }
+.stepper button:disabled{ opacity:.35; }
+.stepper output{ font:30px/1 var(--font-num); min-width:2.2em; text-align:center; color:var(--ink); }
+.stepper .unit{ font-size:15px; color:var(--ink-2); }
+.who{ margin-top:8px; font-size:13px; color:var(--ink-2); }
+.chips-pick{ display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+.chips-pick button{ min-width:52px; min-height:40px; border-radius:10px; border:1.5px solid var(--paper-line); background:var(--white); color:var(--ink); font-weight:700; font-variant-numeric:tabular-nums; }
+.chips-pick button[aria-pressed="true"]{ background:var(--ink); color:var(--white); border-color:var(--ink); }
+.note{ font-size:12px; color:var(--ink-3); margin:4px 0 0; }
+.setup .go{ margin-top:16px; display:flex; }
+/* short phones: 开始游戏 stays on screen while the options scroll ("直接点「开始游戏」就行") */
+@media (max-height:760px){ .setup .go{ position:sticky; bottom:0; z-index:2; margin:10px 0 0; padding:12px 0 calc(6px + env(safe-area-inset-bottom)); background:linear-gradient(rgba(251,248,239,0), var(--paper) 12px); } }
+.setup .go .btn{ flex:1; }
+.game-head{ display:flex; align-items:center; gap:6px; margin-bottom:10px; }
+.game-head .gh-info{ font-size:13.5px; line-height:1.35; color:var(--on-2); margin-right:auto; min-width:0; }
+.game-head .gh-info b{ color:var(--on); font-variant-numeric:tabular-nums; }
+.mini-btn{ min-height:40px; border-radius:10px; border:1.5px solid var(--line-2); background:transparent; color:var(--on-2); padding:0 10px; font-size:13px; font-weight:600; white-space:nowrap; flex:none; }
+.mini-btn[aria-pressed="true"]{ background:rgba(247,211,53,.16); border-color:var(--yellow); color:var(--yellow); }
+.quit-bar{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; background:var(--paper); color:var(--ink); border-radius:12px; padding:6px 8px 6px 14px; margin:-2px 0 10px; font-size:14px; color-scheme:light; }
+.quit-bar span{ margin-right:auto; }
+.quit-bar .mini-btn{ color:var(--ink); border-color:var(--paper-line); }
+.quit-bar .mini-btn.danger{ background:var(--red); border-color:var(--red); color:var(--white); }
+.g-grid{ display:grid; gap:12px; }
+.g-main{ display:grid; grid-template-columns:minmax(0,1fr); gap:12px; min-width:0; }
+.g-main > *, .stage > *, .learn > *, .g-grid > *{ min-width:0; }
+.coachline{ position:relative; display:flex; gap:9px; align-items:flex-start; background:var(--paper); color:var(--ink); border-radius:12px; padding:7px 12px; font-size:13.5px; line-height:1.5; color-scheme:light; }
+.coachline .coach-ava{ width:28px; height:28px; margin:0; box-shadow:none; }
+.coachline .coach-ava svg{ width:21px; height:21px; }
+.coachline .cl-text{ margin:0; flex:1; min-width:0; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3; overflow:hidden; }
+.coachline.open .cl-text{ display:block; -webkit-line-clamp:unset; overflow:visible; }
+.coachline.open{ padding-bottom:30px; }
+.coachline .cl-tip{ color:var(--ink-2); }
+.cl-more{ position:absolute; right:0; bottom:0; min-width:64px; min-height:40px; border:0; border-radius:0 0 12px 0; padding:0 12px 6px 22px; color:var(--bull); font-size:13px; font-weight:700; text-align:right;
+  display:flex; align-items:flex-end; justify-content:flex-end; background:linear-gradient(90deg, rgba(251,248,239,0), var(--paper) 22px) right bottom / 100% 26px no-repeat; }
+.coachline{ min-height:calc(4.5em + 14px); }   /* always 3 lines tall: the 列 below never move when the text changes */
+.tray{ position:sticky; bottom:0; z-index:12; margin:0 calc(-1 * var(--gut)); padding:6px var(--gut) calc(12px + env(safe-area-inset-bottom));
+  background:rgba(13,50,38,.97); border-top:1px solid var(--line-2); border-radius:16px 16px 0 0; box-shadow:0 -10px 24px rgba(0,0,0,.28); }
+.tray-head{ display:flex; align-items:center; gap:10px; min-height:44px; margin-bottom:6px; }
+.tray-head .msg{ flex:1; min-width:0; font-size:14px; line-height:1.4; color:var(--on-2); }
+.tray-head .msg b{ color:var(--yellow); }
+.tray-head .btn{ min-width:96px; flex:none; }
+.tray-head .btn[hidden]{ display:none; }
+.tray-body{ display:grid; grid-template-columns:minmax(0,1fr); align-content:start; }
+.hand-cap{ font-size:11.5px; line-height:1.35; color:var(--on-3); text-align:center; margin:-4px 0 7px; }
+@media (min-width:600px){ .tray{ margin:0; bottom:calc(8px + env(safe-area-inset-bottom)); border-radius:16px; border:1px solid var(--line-2); padding:8px 14px 12px; } }
+.reveal-box .zone-label{ justify-content:center; }
+.hand[hidden], .reveal-box[hidden]{ display:none; }
+.draftbox-label{ font-size:13px; color:var(--on-2); margin-bottom:8px; display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap; }
+.draftpool{ --cw:40px; display:grid; grid-template-columns:repeat(auto-fill, minmax(var(--cw), 1fr)); gap:8px 6px; justify-items:center; max-height:none; }
+.draftpool button{ border:0; background:none; padding:0; border-radius:6px; min-width:40px; min-height:44px; }
+.draftpool button .card{ --cw:inherit; }
+.draftpool button:disabled{ cursor:default; }
+.draftpool button:not(:disabled):hover .card{ box-shadow:0 0 0 2px var(--yellow); }
+.sheet-back{ position:fixed; inset:0; z-index:70; background:rgba(8,20,15,.62); display:flex; align-items:center; justify-content:center; padding:16px; padding-bottom:calc(16px + env(safe-area-inset-bottom)); }
+.round-sheet{ width:min(520px, 100%); max-height:calc(100vh - 32px); overflow:auto; padding:18px; }
+.round-sheet h3, .result h2{ margin:0 0 6px; font:400 26px/1.2 var(--font-display); color:var(--ink); }
+.round-sheet h3 .dn{ font-family:var(--font-num); margin:0 .1em; }   /* the display font's thin digits merge into 回 */
+.round-sheet p, .result p{ margin:0 0 10px; color:var(--ink-2); font-size:14px; }
+.rs-table{ width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums; font-size:14px; margin-bottom:14px; }
+.rs-table td, .rs-table th{ padding:6px 6px; border-bottom:1px solid var(--paper-line); text-align:right; white-space:nowrap; }
+.rs-table th{ font-size:12px; color:var(--ink-2); font-weight:600; }
+.rs-table td:first-child, .rs-table th:first-child{ text-align:left; }
+.rs-table tr.me td{ font-weight:700; }
+.rs-table .bar{ width:38%; min-width:70px; }
+.rs-table .bar div{ height:8px; border-radius:4px; background:var(--paper-2); overflow:hidden; }
+.rs-table .bar i{ display:block; height:100%; background:var(--bull); }
+.rs-table .bar i.hot{ background:var(--red); }
+.rs-table td.plus{ color:var(--red); font-weight:700; }
+.round-sheet .btn{ width:100%; }
+.result{ max-width:720px; margin:0 auto; padding:20px 18px; }
+.result .crown{ display:flex; align-items:center; gap:12px; background:var(--crown-bg); border-radius:12px; padding:10px 14px; margin:8px 0 14px; }
+.result .crown svg{ width:40px; height:40px; fill:var(--bull); flex:none; }
+.result .crown div{ font:400 24px/1.25 var(--font-display); color:var(--ink); }
+.result .crown small{ display:block; font:13px/1.4 var(--font-ui); color:var(--ink-2); }
+.tbl-outer{ position:relative; margin-bottom:14px; }
+.tbl-wrap{ overflow-x:auto; }
+.tbl-outer.more::after{ content:""; position:absolute; top:0; right:0; bottom:0; width:22px; pointer-events:none; background:linear-gradient(90deg, rgba(251,248,239,0), var(--paper)); }
+.res-table{ width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums; font-size:14px; }
+.res-table th, .res-table td{ padding:7px 8px; border-bottom:1px solid var(--paper-line); text-align:right; white-space:nowrap; background:var(--paper); }
+.res-table th{ font-size:12px; color:var(--ink-2); font-weight:600; }
+.res-table td:nth-child(2), .res-table th:nth-child(2){ text-align:left; }
+.res-table td:first-child, .res-table th:first-child{ text-align:center; width:36px; min-width:36px; max-width:36px; padding-inline:2px; }
+.res-table td:nth-child(2), .res-table th:nth-child(2){ width:52px; min-width:52px; max-width:52px; overflow:hidden; text-overflow:ellipsis; }
+.res-table td:nth-child(-n+3), .res-table th:nth-child(-n+3){ position:sticky; z-index:1; }
+.res-table td:nth-child(1), .res-table th:nth-child(1){ left:0; }
+.res-table td:nth-child(2), .res-table th:nth-child(2){ left:36px; }
+.res-table td:nth-child(3), .res-table th:nth-child(3){ left:88px; box-shadow:inset -1px 0 0 var(--paper-line); padding-right:10px; }
+.res-table th.rd{ font-weight:600; }
+.res-table tr.win td{ background:var(--win-bg); font-weight:700; }
+.res-table tr.me td:nth-child(2){ color:var(--bull); font-weight:800; }
+.res-table td.tot{ font-weight:800; font-size:15px; }
+@media (max-width:599px){ .res-table th, .res-table td{ padding:6px 6px; } .res-table td:nth-child(3), .res-table th:nth-child(3){ padding-right:8px; } }
+.result .acts{ display:flex; gap:10px; flex-wrap:wrap; }
+.result .acts .btn{ flex:1; min-width:140px; }
+
+/* ---------- 速查 ---------- */
+.ref{ display:grid; gap:12px; }
+.ref .paper{ padding:14px 16px; }
+.ref h3{ margin:0 0 6px; font:400 20px/1.25 var(--font-display); color:var(--bull-deep); letter-spacing:.02em; }
+.ref p, .ref li{ font-size:14px; line-height:1.6; color:var(--ink); }
+.ref p{ margin:0 0 6px; }
+.ref ol, .ref ul{ margin:0; padding-left:1.3em; }
+.ref .rule{ display:grid; grid-template-columns:auto 1fr; gap:4px 10px; padding:7px 0; border-top:1px dashed var(--paper-line); }
+.ref .rule:first-of-type{ border-top:0; }
+.ref .rule .rn{ font:13px/1.6 var(--font-ui); font-weight:800; color:var(--white); background:var(--bull); border-radius:6px; padding:0 6px; height:fit-content; white-space:nowrap; }
+.ref .rule.r3 .rn, .ref .rule.r4 .rn{ background:var(--red); }
+.ref .rule p{ margin:0; }
+.ref .vals{ display:grid; grid-template-columns:repeat(5, 1fr); gap:6px; text-align:center; }
+.ref .vals .card{ --cw:46px; margin:0 auto 4px; }
+.ref .vals div{ font-size:12px; color:var(--ink-2); line-height:1.35; }
+.ref .vals b{ display:block; font:18px/1.1 var(--font-num); color:var(--ink); }
+.ref .adv-t{ border-collapse:collapse; font-variant-numeric:tabular-nums; font-size:13px; margin-top:4px; }
+.ref .adv-t td, .ref .adv-t th{ border:1px solid var(--paper-line); padding:3px 8px; text-align:center; }
+.ref .foot{ font-size:12.5px; color:var(--ink-2); }
+.ref .foot li{ font-size:12.5px; color:var(--ink-2); margin-bottom:4px; }
+.ref .foot .tag{ display:inline-block; font-size:11px; font-weight:700; background:var(--paper-2); color:var(--ink-2); border-radius:5px; padding:0 5px; margin-right:4px; }
+.ref .lead{ margin:0 0 6px; color:var(--ink-2); }
+.ref .webdiff{ margin:8px 0 0; padding:6px 10px; border-radius:8px; background:var(--paper-2); font-size:13px; line-height:1.5; color:var(--ink-2); }
+.ref ol.steps li{ margin-bottom:2px; }
+.ref .end li{ margin-bottom:2px; }
+/* the rarely needed parts start closed */
+.ref details.paper{ padding:0; }
+.ref details > summary{ list-style:none; cursor:pointer; display:flex; align-items:center; gap:10px; min-height:48px; padding:8px 16px; border-radius:14px; font:400 18px/1.25 var(--font-display); color:var(--bull-deep); letter-spacing:.02em; }
+.ref details > summary::-webkit-details-marker{ display:none; }
+.ref details > summary::after{ content:""; margin-left:auto; flex:none; width:9px; height:9px; border-right:2.5px solid var(--ink-2); border-bottom:2.5px solid var(--ink-2); transform:rotate(45deg) translate(-2px, -2px); transition:transform calc(160ms * var(--spd)); }
+.ref details[open] > summary::after{ transform:rotate(-135deg) translate(-2px, -2px); }
+.ref details > summary small{ font:12.5px/1.3 var(--font-ui); color:var(--ink-3); letter-spacing:0; }
+.ref details > .dbody{ padding:0 16px 14px; }
+
+/* numeral faces: bold when the Google font is missing; never faux-bold Lilita One (single weight) */
+.c-big, .c-corner, .ri-b, .chip-score b, .row-no, .lm-btn .ln, .stepper output, .btable .cnt b, .tip .tno, .ref .vals b, .lesson-head .lno, .round-sheet h3 .dn{ font-weight:800; font-synthesis:none; }
+
+@media (max-width:899px) and (orientation:landscape) and (max-height:500px){
+  .g-main{ grid-template-columns:minmax(0,1fr) minmax(290px,42%); grid-template-areas:"rows coach" "rows tray"; grid-template-rows:auto 1fr; align-items:start; column-gap:14px; row-gap:10px; }
+  .g-main > #coachline{ grid-area:coach; }
+  .g-main > #rows, .g-main > #draftBox{ grid-area:rows; }
+  .g-main > .tray{ grid-area:tray; position:sticky; top:8px; bottom:auto; margin:0; border-radius:14px; border:1px solid var(--line-2); padding:6px 12px 10px; }
+  .coachline{ min-height:calc(4.5em + 14px); }
+  /* 教程 on a phone held sideways: the coach sits beside the stage, so the 列 get the full height */
+  .lplayer{ display:grid; grid-template-columns:minmax(0,36%) minmax(0,1fr); column-gap:12px; align-items:start; }
+  .lplayer > .lesson-head, .lplayer > .lesson-ctrl{ grid-column:1 / -1; }
+  .lplayer > .coach{ grid-column:1; grid-row:2; top:8px; padding:0; background:none; flex-direction:column; align-items:stretch; gap:6px; }
+  .lplayer > .coach > .coach-ava{ display:none; }
+  .lplayer > .coach > .bubble{ max-height:calc(55vh - 40px); border-radius:14px; }
+  .lplayer > .stage{ grid-column:2; grid-row:2; }
+  /* the 为什么 / 对 box goes under the coach (left column), so it never covers the 列 */
+  .lplayer > .lesson-ctrl{ z-index:21; }
+  .lplayer > .lesson-ctrl .fb{ position:absolute; left:0; bottom:calc(100% - 6px); width:calc(36% - 6px); margin:0; max-height:calc(45vh - 60px); }
+}
+@media (min-width:900px){
+  .learn{ grid-template-columns:250px 1fr; align-items:start; gap:22px; }
+  .lesson-map{ position:sticky; top:12px; background:rgba(0,0,0,.16); border:1px solid var(--line); border-radius:14px; padding:12px; }
+  .lesson-map .lm-head{ display:block; font-size:12px; color:var(--on-3); margin:0 4px 8px; }
+  .lesson-map ol{ flex-direction:column; gap:4px; }
+  .lesson-map li{ display:block; }
+  .lm-btn{ width:100%; height:auto; min-height:44px; border-radius:10px; border:0; background:transparent; justify-content:flex-start; gap:10px; padding:6px 10px; text-align:left; }
+  .lm-btn .ln{ width:28px; height:28px; border-radius:50%; border:2px solid var(--line-2); display:grid; place-items:center; flex:none; font-size:14px; }
+  .lm-btn .lt{ display:block; font-size:14px; color:var(--on-2); line-height:1.35; }
+  .lm-btn .tick{ position:static; margin-left:auto; flex:none; border:0; }
+  .lm-btn.cur{ background:rgba(247,211,53,.14); color:var(--on); }
+  .lm-btn.cur .ln{ background:var(--yellow); color:var(--yellow-ink); border-color:var(--yellow); }
+  .lm-btn.cur .lt{ color:var(--on); font-weight:700; }
+  .lm-btn:hover{ background:rgba(255,255,255,.06); }
+  .stage{ padding:16px 18px; }
+  .g-grid{ grid-template-columns:220px 1fr; align-items:start; gap:20px; }
+  .scoreboard{ position:sticky; top:12px; }
+  .tray{ margin:0; border-radius:14px; padding:8px 14px 12px; border:1px solid var(--line-2); }
+  .scoreboard .game-head{ flex-wrap:wrap; }
+  .scoreboard .game-head .gh-info{ flex:1 0 100%; margin-bottom:4px; }
+  .scoreboard .quit-bar span{ flex:1 0 100%; }
+  .scoreboard .sb-grid{ grid-template-columns:1fr !important; }
+  .scoreboard .sb-grid.many{ grid-template-columns:1fr 1fr !important; }
+  .sb-grid.many .chip-state .lbl, .sb-grid.many .chip-score .unit{ display:none; }
+  .chip{ padding:7px 10px 8px; }
+  .ref{ grid-template-columns:1fr 1fr; align-items:start; }
+  .ref .wide{ grid-column:1 / -1; }
+  .pickcard .card{ --cw:72px; }
+  .btable .card{ --cw:44px; }
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="bull" viewBox="0 0 100 100">
+    <path fill-rule="evenodd" d="M50 21C60 21 68 24 73 29C80 23 86 14 88 3C96 17 91 33 79 40L96 43L81 53C80 64 74 78 64 91L36 91C26 78 20 64 19 53L4 43L21 40C9 33 4 17 12 3C14 14 20 23 27 29C32 24 40 21 50 21ZM31 49L45 55L35 59ZM69 49L55 55L65 59ZM41 78A4 5 0 1 0 41.1 78ZM59 78A4 5 0 1 0 59.1 78Z"/>
+  </symbol>
+  <symbol id="bull-line" viewBox="0 0 100 100">
+    <path d="M50 21C60 21 68 24 73 29C80 23 86 14 88 3C96 17 91 33 79 40L96 43L81 53C80 64 74 78 64 91L36 91C26 78 20 64 19 53L4 43L21 40C9 33 4 17 12 3C14 14 20 23 27 29C32 24 40 21 50 21Z"/>
+  </symbol>
+  <symbol id="tick" viewBox="0 0 12 12"><path d="M2 6.5L5 9.5L10 3"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="top-in">
+    <div class="back-wrap">
+      <a class="back" id="backLink" href="index.html">← 大厅</a>
+      <div class="popover leave-pop" id="leavePop" hidden role="dialog" aria-labelledby="leaveText">
+        <p id="leaveText">这一局还没打完，回大厅就不保留了。</p>
+        <div class="leave-acts"><a class="btn primary" id="leaveYes" href="index.html">回大厅</a><button class="btn ghost" id="leaveNo">接着打</button></div>
+      </div>
+    </div>
+    <div class="brand"><svg aria-hidden="true"><use href="#bull"/></svg><h1><span class="pre">谁是</span>牛头王</h1><small>6 nimmt!</small></div>
+    <nav class="tabs" role="tablist" aria-label="页面">
+      <button role="tab" id="tabbtn-learn" data-tab="learn" aria-selected="true" aria-controls="tab-learn">教程</button>
+      <button role="tab" id="tabbtn-play" data-tab="play" aria-selected="false" aria-controls="tab-play">实战</button>
+      <button role="tab" id="tabbtn-ref" data-tab="ref" aria-selected="false" aria-controls="tab-ref">速查</button>
+    </nav>
+    <div class="set-wrap">
+      <button class="icon-btn" id="setBtn" aria-label="设置" aria-expanded="false" aria-controls="setPop">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
+      </button>
+      <div class="popover" id="setPop" hidden>
+        <h4>动画速度</h4>
+        <div class="seg" id="speedSeg" role="group" aria-label="动画速度">
+          <button data-speed="1.6" aria-pressed="false">慢</button>
+          <button data-speed="1" aria-pressed="true">正常</button>
+          <button data-speed="0.5" aria-pressed="false">快</button>
+        </div>
+        <h4>教程进度</h4>
+        <button class="linkish" id="resetProg">清除教程完成记录</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ======================= 教程 ======================= -->
+  <section id="tab-learn" role="tabpanel" aria-labelledby="tabbtn-learn">
+    <div class="learn">
+      <nav class="lesson-map" aria-label="课程">
+        <div class="lm-head">7课 · 约12分钟</div>
+        <ol id="lessonList"></ol>
+      </nav>
+      <div class="lplayer">
+        <div class="lesson-head"><span class="lno" id="lessonNo">第1课</span><h2 id="lessonTitle"></h2><span class="lstep" id="lessonStep"></span></div>
+        <div class="coach">
+          <div class="coach-ava" aria-hidden="true"><svg><use href="#bull"/></svg></div>
+          <div class="bubble" id="bubble" aria-live="polite">
+            <div id="coachCarry" class="carry" hidden></div>
+            <div id="coachSay"></div>
+          </div>
+        </div>
+        <div class="stage" id="stage"></div>
+        <div class="lesson-ctrl">
+          <div id="coachFb" class="fb" hidden aria-live="polite"></div>
+          <div class="ctrl-row">
+            <button class="btn ghost" id="prevBtn">上一步</button>
+            <button class="skip" id="skipBtn">跳过本课</button>
+            <button class="btn primary" id="nextBtn">下一步</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= 实战 ======================= -->
+  <section id="tab-play" role="tabpanel" aria-labelledby="tabbtn-play" hidden>
+    <div id="setupView" class="setup paper">
+      <h2>来一局</h2>
+      <p class="sub">你和机器人同桌。默认设置已经填好，直接点「开始游戏」就行。</p>
+      <div class="field">
+        <span class="flabel">人数（含你）</span>
+        <div class="stepper">
+          <button id="nMinus" aria-label="减少人数">−</button>
+          <output id="nOut" class="num" aria-live="polite">4</output><span class="unit">人</span>
+          <button id="nPlus" aria-label="增加人数">+</button>
+        </div>
+        <div class="who" id="whoLine"></div>
+      </div>
+      <div class="field">
+        <span class="flabel">什么时候结束</span>
+        <div class="seg" id="endSeg" role="group" aria-label="结束条件">
+          <button data-end="66" aria-pressed="true">到66牛头</button>
+          <button data-end="custom" aria-pressed="false">自定目标</button>
+          <button data-end="rounds" aria-pressed="false">固定回合</button>
+        </div>
+        <div id="endExtra"></div>
+      </div>
+      <div class="field">
+        <span class="flabel">进阶规则（2–6人）</span>
+        <button class="toggle" id="advTog" aria-pressed="false"><span class="knob"></span><span id="advText">只用1–44号牌：所有数字都是公开信息</span></button>
+        <button class="toggle" id="draftTog" aria-pressed="false"><span class="knob"></span><span>选牌：牌全部翻开，轮流拿1张，直到每人10张</span></button>
+        <p class="note" id="advNote"></p>
+      </div>
+      <div class="field">
+        <span class="flabel">教练解说</span>
+        <button class="toggle" id="coachTog" aria-pressed="true"><span class="knob"></span><span>每一轮用一两句话解释发生了什么，手牌下提示每张牌现在会去哪一列</span></button>
+      </div>
+      <div class="go"><button class="btn primary big" id="startBtn">开始游戏</button></div>
+    </div>
+
+    <div id="gameView" hidden>
+      <div class="g-grid">
+        <div class="scoreboard">
+          <div class="game-head">
+            <div class="gh-info" id="ghInfo"></div>
+            <button class="mini-btn" id="coachBtn" aria-pressed="true">解说</button>
+            <button class="mini-btn" id="quitBtn">放弃</button>
+          </div>
+          <div class="quit-bar" id="quitBar" hidden><span id="quitText">放弃这一局？进度不会保存。</span><button class="mini-btn danger" id="quitYes">放弃</button><button class="mini-btn" id="quitNo">继续玩</button></div>
+          <div class="sb-grid" id="scoreboard"></div>
+        </div>
+        <div class="g-main">
+          <div class="coachline" id="coachline" hidden>
+            <div class="coach-ava" aria-hidden="true"><svg><use href="#bull"/></svg></div>
+            <p class="cl-text" id="clText" aria-live="polite"><span class="cl-what" id="clWhat"></span><br id="clBr"><span class="cl-tip" id="clTip"></span></p>
+            <button class="cl-more" id="clMore" aria-expanded="false" hidden>更多</button>
+          </div>
+          <div class="zone" id="draftBox" hidden></div>
+          <div class="rows" id="rows"></div>
+          <div class="tray" id="tray">
+            <div class="tray-head"><div class="msg" id="actMsg" aria-live="polite"></div><button class="btn primary" id="playBtn" disabled>出牌</button></div>
+            <div class="tray-body" id="trayBody">
+              <div class="reveal-box" id="zone" hidden></div>
+              <div class="hand-cap" id="handCap" hidden>标签只按现在的牌桌算；比你小的牌会先放，结果可能不同</div>
+              <div class="hand" id="hand"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="resultView" class="result paper" hidden></div>
+  </section>
+
+  <!-- ======================= 速查 ======================= -->
+  <section id="tab-ref" role="tabpanel" aria-labelledby="tabbtn-ref" hidden>
+    <div class="ref" id="refSheet"></div>
+  </section>
+</main>
+
+<div id="overlay" hidden></div>
+
+<script src="nimmt-engine.js"></script>
+<script>
+(function () {
+'use strict';
+var E = window.NimmtEngine;
+var $ = function (s, r) { return (r || document).querySelector(s); };
+var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+function clone(o) { return o == null ? o : JSON.parse(JSON.stringify(o)); }
+function without(arr) { var rm = Array.prototype.slice.call(arguments, 1); return arr.filter(function (x) { return rm.indexOf(x) === -1; }); }
+function last(r) { return r[r.length - 1]; }
+
+/* ================= storage (wrapped: page must work with storage blocked) ================= */
+var KEY = 'nimmt.v1';
+function loadPrefs() { try { var v = JSON.parse(localStorage.getItem(KEY)); return v && typeof v === 'object' ? v : {}; } catch (e) { return {}; } }
+var prefs = Object.assign({ done: [], finished: false, games: 0, speed: 1 }, loadPrefs());
+if (!Array.isArray(prefs.done)) prefs.done = [];
+function savePrefs() { try { localStorage.setItem(KEY, JSON.stringify(prefs)); } catch (e) { /* storage blocked: fine */ } }
+
+/* ================= timing ================= */
+var T = { user: [0.5, 1, 1.6].indexOf(+prefs.speed) >= 0 ? +prefs.speed : 1, debug: null };
+var RM = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
+function factor() { return T.debug !== null ? T.debug : T.user; }
+function applySpeed() { document.documentElement.style.setProperty('--spd', String(factor())); }
+function wait(ms) { var d = ms * factor(); return d <= 0 ? Promise.resolve() : new Promise(function (r) { setTimeout(r, d); }); }
+function animMs(ms) { return RM.matches ? 0 : ms * factor(); }
+applySpeed();
+
+/* ================= double-tap guard: a second tap on the same spot within 400ms of an accepted action is ignored ===
+   (so a double tap can never skip a step, answer the next question or act on the next screen).
+   Off at GameDebug.setSpeed(0) so scripts can drive the page at full speed. */
+// The guard only applies to a tap at (about) the same spot as the last accepted one: a double tap lands where the
+// next screen's button may now be, but a quick tap on a different control (手牌 then 出牌) is a real intent.
+// Keyboard activations (no recent pointerdown) fall back to "same focused control".
+var TAP = { t: 0, x: null, y: null, el: null };
+var PTR = { x: 0, y: 0, t: 0 };
+document.addEventListener('pointerdown', function (e) { PTR.x = e.clientX; PTR.y = e.clientY; PTR.t = Date.now(); }, true);
+function tapPos() { return Date.now() - PTR.t < 1000 ? { x: PTR.x, y: PTR.y } : null; }
+function guardMs() { return T.debug === 0 ? 0 : 400; }
+function canTap() {
+  if (Date.now() - TAP.t >= guardMs()) return true;
+  var p = tapPos();
+  if (p && TAP.x !== null) return Math.abs(p.x - TAP.x) > 40 || Math.abs(p.y - TAP.y) > 40;
+  return document.activeElement !== TAP.el;
+}
+function took() {
+  if (!guardMs()) return;
+  var p = tapPos();
+  TAP.t = Date.now(); TAP.x = p ? p.x : null; TAP.y = p ? p.y : null; TAP.el = document.activeElement;
+}
+function tapOnce() { if (!canTap()) return false; took(); return true; }
+// switches (设置, 放弃, 解说, 更多, ← 大厅, setup toggles): a double tap toggles once. Per switch, so a quick tap on
+// another control right after (e.g. 设置 just after 出牌) still works; the tail of a screen change is still ignored.
+function toggleOnce(el) {
+  if (!canTap()) return false;
+  var t = Date.now();
+  if (t - (el._tapT || 0) < guardMs()) return false;
+  el._tapT = t; return true;
+}
+
+/* ================= 实战 pause: nothing in 实战 runs while you are on 教程/速查 or the browser tab is hidden =================
+   gwait() counts only time while 实战 is on screen; flying cards are fast-forwarded when 实战 goes away,
+   so the game stops at the next step and resumes from exactly there. */
+var PZ = { on: false, waiters: [], anims: [] };
+// also paused while the page asks 放弃这一局？/ 接着打还是放弃？/ 回大厅？ — the game must not move (or scroll the question away)
+function asking() { return !!G.quitAsk || !$('#leavePop').hidden; }
+function playVisible() { return currentTab === 'play' && !document.hidden && !asking(); }
+function gwait(ms) {
+  return new Promise(function (res) {
+    var w = { left: Math.max(0, ms * factor()), t0: 0, timer: null, res: res };
+    PZ.waiters.push(w);
+    if (!PZ.on) runW(w);
+  });
+}
+function runW(w) {
+  if (w.left <= 0) { doneW(w); return; }
+  w.t0 = Date.now();
+  w.timer = setTimeout(function () { w.timer = null; doneW(w); }, w.left);
+}
+function doneW(w) { var i = PZ.waiters.indexOf(w); if (i >= 0) PZ.waiters.splice(i, 1); w.res(); }
+function syncPause() {
+  var on = !playVisible();
+  if (on === PZ.on) return;
+  PZ.on = on;
+  if (on) {
+    PZ.waiters.forEach(function (w) { if (w.timer) { clearTimeout(w.timer); w.timer = null; w.left = Math.max(0, w.left - (Date.now() - w.t0)); } });
+    PZ.anims.slice().forEach(function (a) { try { a.finish(); } catch (e) { /* already gone */ } });
+  } else {
+    PZ.waiters.slice().forEach(runW);
+  }
+}
+document.addEventListener('visibilitychange', function () { syncPause(); if (!PZ.on && currentTab === 'play') refreshPlay(); });
+
+/* ================= rendering helpers ================= */
+var ICON = '<svg viewBox="0 0 100 100" aria-hidden="true"><use href="#bull"/></svg>';
+function cardHTML(n, cls) {
+  var b = E.bulls(n), heads = '';
+  for (var i = 0; i < b; i++) heads += ICON;
+  return '<div class="card b' + b + (n >= 100 ? ' n3' : '') + (cls ? ' ' + cls : '') + '" data-n="' + n + '">' +
+    '<div class="c-top"><span class="c-corner">' + n + '</span><span class="c-heads h' + b + '">' + heads + '</span></div>' +
+    '<div class="c-face"><svg class="c-bull" viewBox="0 0 100 100" aria-hidden="true"><use href="#bull"/></svg><span class="c-big">' + n + '</span></div></div>';
+}
+function backHTML() { return '<div class="cback"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#bull-line"/></svg></div>'; }
+function rowsHTML(rows, o) {
+  o = o || {};
+  return rows.map(function (r, i) {
+    var b = E.rowBulls(r), full = r.length >= 5, slots = '';
+    // bare: only the cards, no empty slots and no x/5 count (a quiz about the 5-card limit must not show it)
+    for (var k = 0; k < (o.bare ? r.length : 5); k++) slots += '<div class="slot' + (k === 4 ? ' s5' : '') + '">' + (r[k] !== undefined ? cardHTML(r[k]) : '') + '</div>';
+    var cnt = o.bare ? '' : full ? '<span class="ri-c danger">满5</span>' : '<span class="ri-c' + (r.length === 4 ? ' warn' : '') + '">' + r.length + '/5</span>';
+    var hit = '', least = o.cost && !o.noLeast && b === o.minB;       // every 列 tied for the fewest 牛头 gets the tag
+    if (o.hit) {
+      hit = '<button class="row-hit" data-row="' + i + '" aria-label="第' + (i + 1) + '列：' + r.join('、') + '，' + b + '个牛头' + (full ? '，已满' : '') + (least ? '，最少' : '') + '">' +
+        (o.cost ? '<span class="cost' + (least ? ' cheap' : '') + '">拿走' + b + '牛头' + (least ? '·最少' : '') + '</span>' : '') + '</button>';
+    }
+    return '<div class="row' + (full ? ' full' : '') + (o.target === i ? ' target' : '') + '" data-row="' + i + '" style="--i:' + i + '">' +
+      '<div class="row-no" aria-hidden="true">' + (i + 1) + '</div><div class="slots">' + slots + '</div>' +
+      '<div class="row-info"><span class="ri-b">' + b + ICON + '</span>' + cnt + '</div>' + hit + '</div>';
+  }).join('');
+}
+function minBulls(rows) { return Math.min.apply(null, rows.map(E.rowBulls)); }
+function handHTML(cards, o) {
+  o = o || {};
+  return cards.map(function (n, i) {
+    var h = o.hints && o.hints[n] ? '<span class="hint ' + o.hints[n].cls + '">' + o.hints[n].t + '</span>' : '';
+    return '<button class="hcard' + (o.sel === n ? ' sel' : '') + '" data-hand="' + n + '" style="--i:' + i + '"' + (o.disabled ? ' disabled' : '') +
+      ' aria-label="' + n + '，' + E.bulls(n) + '个牛头' + (o.hints && o.hints[n] ? '，' + o.hints[n].aria : '') + '"' + (o.sel === n ? ' aria-pressed="true"' : '') + '>' + cardHTML(n) + h + '</button>';
+  }).join('');
+}
+function revealHTML(list, hit) {
+  return list.map(function (x, i) {
+    var tag = hit ? 'button' : 'div';
+    return '<' + tag + ' class="rv' + (x.done ? ' done' : '') + (x.cur ? ' cur' : '') + (x.me ? ' me' : '') + '" data-reveal="' + x.c + '" style="--i:' + i + '"' +
+      (hit ? ' aria-label="' + esc(x.p) + '的' + x.c + '"' : '') + '>' + cardHTML(x.c) + '<span class="rv-name">' + esc(x.p) + '</span></' + tag + '>';
+  }).join('');
+}
+function chipHTML(c, i, o) {
+  o = o || {};
+  var tag = o.hit ? 'button' : 'div';
+  var pct = o.max ? Math.min(100, Math.round(c.total / o.max * 100)) : 0;
+  return '<' + tag + ' class="chip' + (c.me ? ' me' : '') + (c.round ? ' has-round' : '') + '" data-p="' + i + '" data-chip-name="' + esc(c.name) + '"' + (o.hit ? ' data-chip="' + i + '"' : '') + '>' +
+    '<div class="chip-top"><span class="chip-name">' + esc(c.name) + '</span><span class="chip-state' + (c.state ? ' ' + c.state : '') + '">' + (c.stateText || '') + '</span></div>' +
+    '<div class="chip-score"><b class="num">' + c.total + '</b><span class="unit">牛头</span>' + (c.round ? '<span class="chip-round" title="本回合">+' + c.round + '</span>' : '') + '</div>' +
+    (o.max ? '<div class="chip-bar"><i class="' + (pct >= 85 ? 'hot' : '') + '" style="width:' + pct + '%"></i></div>' : '') + '</' + tag + '>';
+}
+function sbCols(n, el) {
+  var cols = n <= 5 ? n : Math.ceil(n / 2);
+  el.style.setProperty('--sbcols', cols);
+}
+// size cards to the space available (no container queries: works in older in-app browsers too)
+function sizeCards(root) {
+  $$('.rows', root).forEach(function (el) {
+    var p = el.parentNode, cs = getComputedStyle(p);
+    var w = p.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    if (!(w > 0)) return;
+    var max = +(el.getAttribute('data-max') || 76);
+    var hcap = +(el.getAttribute('data-hcap') || 0);          // 实战: height budget so all 4 列 fit above the tray
+    // 教程: the same budget for the band between the coach and the controls (only bites on short screens, e.g. a
+    // phone held sideways, where 4 full-size 列 would never fit together)
+    if (!hcap && el.closest('#stage') && currentTab === 'learn') hcap = Math.max(30, rowsCwFor(tutRoom()));
+    if (hcap) max = Math.min(max, hcap);
+    var cw = Math.floor((w - 12 - 24 - 50 - 12 - 16) / 5);
+    el.style.setProperty('--cw', Math.max(hcap ? 30 : 34, Math.min(max, cw)) + 'px');
+  });
+  $$('.hand', root).forEach(function (el) {
+    var w = el.clientWidth; if (!w) return;
+    var n = el.children.length || 10;
+    var cols = w >= 640 ? Math.max(5, Math.min(10, n)) : 5;
+    var max = +(el.getAttribute('data-max') || 66);
+    if (el.id === 'hand') max = Math.min(max, handCap());
+    var cw = Math.floor((w - 8 * (cols - 1)) / cols), fin = Math.max(40, Math.min(max, cw));
+    el.style.setProperty('--cw', fin + 'px');
+    el.classList.toggle('tight', fin < 52);                     // narrow cards: slimmer labels so neighbours never overlap
+    el.classList.toggle('snug', fin < 62);
+    el.style.setProperty('--cols', cols);
+  });
+  $$('.reveal, .tablebacks', root).forEach(function (el) {
+    var n = el.children.length || 1, w = el.clientWidth; if (!w) return;
+    var cw = Math.floor((w - 6 * (n - 1)) / n);
+    var cap = +(el.getAttribute('data-max') || 48);
+    el.style.setProperty('--cw', Math.max(28, Math.min(cap, cw)) + 'px');
+    $$('.cback, .cempty', el).forEach(function (b) { b.style.setProperty('--cw', Math.max(28, Math.min(cap, cw)) + 'px'); });
+  });
+}
+var resizeT = null;
+window.addEventListener('resize', function () {
+  sizeCards($('#tab-' + currentTab));
+  if (currentTab === 'play') { G.trayMax = 0; sizeGame(); renderCoachline(); }
+  clearTimeout(resizeT);                                       // rotation: put the 列 back in view
+  resizeT = setTimeout(function () { if (currentTab === 'play' && G.view === 'game') ensureGameView(false); }, 200);
+});
+// the web fonts load in the background (the page paints at once with system fonts): re-measure when they arrive
+if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', function () {
+  sizeCards($('#tab-' + currentTab));
+  if (currentTab === 'play' && G.view === 'game') { sizeGame(); renderCoachline(); }
+});
+
+/* ---------- animation primitives ---------- */
+function rectOf(el) { if (!el) return null; var r = el.getBoundingClientRect(); return r.width ? r : null; }
+function fly(el, to, dur, delay, fade) {
+  var d = animMs(dur || 400);
+  var from = rectOf(el);
+  var host = el && el.closest ? el.closest('[role="tabpanel"]') : null;
+  var inPlay = !!host && host.id === 'tab-play';
+  if (!d || !from || !to || !el.animate || (inPlay && PZ.on)) return Promise.resolve();
+  var c = el.cloneNode(true);
+  c.classList.add('flyer');
+  c.style.left = from.left + 'px'; c.style.top = from.top + 'px';
+  c.style.width = from.width + 'px'; c.style.height = from.height + 'px';
+  c.style.setProperty('--cw', from.width + 'px');
+  (host || document.body).appendChild(c);        // inside its tab: hidden together with the tab
+  el.style.visibility = 'hidden';
+  var sx = to.width / from.width, sy = to.height / from.height;
+  var a = c.animate([
+    { transform: 'translate(0,0) scale(1)', opacity: 1 },
+    { transform: 'translate(' + (to.left - from.left) + 'px,' + (to.top - from.top) + 'px) scale(' + sx + ',' + sy + ')', opacity: fade ? 0.15 : 1 }
+  ], { duration: d, delay: animMs(delay || 0), easing: 'cubic-bezier(.3,.7,.2,1)', fill: 'forwards' });
+  if (inPlay) PZ.anims.push(a);
+  return new Promise(function (res) {
+    var fin = false;
+    var done = function () { if (fin) return; fin = true; var i = PZ.anims.indexOf(a); if (i >= 0) PZ.anims.splice(i, 1); c.remove(); res(); };
+    a.onfinish = done; a.oncancel = done;
+    setTimeout(done, d + animMs(delay || 0) + 400);   // safety net
+  });
+}
+function floater(el, text) {
+  if (!el) return;
+  var f = document.createElement('span');
+  f.className = 'floater'; f.textContent = text;
+  el.appendChild(f);
+  setTimeout(function () { f.remove(); }, Math.max(30, 1600 * factor()));
+}
+function shake(el) {
+  if (!el || RM.matches || !factor()) return;
+  el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake');
+  setTimeout(function () { el.classList.remove('shake'); }, 420 * factor() + 20);
+}
+// row of `row` index loses its cards to `chipEl`, then `srcEl` (the played card) starts the row.
+// The red tag on the 列 says who takes how many 牛头, so the take reads even when the chip is off-screen.
+function takeAnim(root, row, srcEl, chipEl, bulls, who) {
+  var rowEl = $('.row[data-row="' + row + '"]', root);
+  if (!rowEl) return Promise.resolve();
+  var W = root.closest && root.closest('#tab-play') ? gwait : wait;
+  rowEl.classList.add('taking');
+  var tag = document.createElement('span');
+  tag.className = 'take-tag'; tag.textContent = (who || '') + '拿走' + bulls + '牛头';
+  rowEl.appendChild(tag);
+  return W(420).then(function () {
+    var cards = $$('.slot .card', rowEl);
+    var cr = rectOf(chipEl);
+    var to = cr ? { left: cr.left + cr.width / 2 - 12, top: cr.top + cr.height / 2 - 16, width: 24, height: 33 } : null;
+    return Promise.all(cards.map(function (c, i) { return fly(c, to, 480, i * 45, true); }));
+  }).then(function () {
+    if (chipEl) floater(chipEl, '+' + bulls + '牛头');   // the chip's total goes UP by this much
+    var slot0 = $('.slot', rowEl);
+    return fly(srcEl, rectOf(slot0), 380);
+  });
+}
+function placeAnim(root, row, slotIdx, srcEl) {
+  var rowEl = $('.row[data-row="' + row + '"]', root);
+  var slot = rowEl ? $$('.slot', rowEl)[slotIdx] : null;
+  return fly(srcEl, rectOf(slot), 420);
+}
+
+/* ================= tabs + settings ================= */
+var currentTab = 'learn', TABY = {};
+function showTab(name) {
+  var prev = currentTab;
+  if (prev !== name) TABY[prev] = window.scrollY;      // each tab keeps its own scroll position
+  currentTab = name;
+  $$('.tabs [role="tab"]').forEach(function (b) { b.setAttribute('aria-selected', String(b.getAttribute('data-tab') === name)); });
+  ['learn', 'play', 'ref'].forEach(function (t) { $('#tab-' + t).hidden = t !== name; });
+  var ov = $('#overlay'); ov.hidden = name !== 'play' || !ov.innerHTML;   // the round-end sheet belongs to 实战 only
+  document.body.classList.toggle('in-game', name === 'play' && G.view === 'game');
+  closePops();
+  syncPause();                                          // 实战 pauses while another tab is shown
+  if (name === 'learn') renderStep(true);
+  if (name === 'play') { refreshPlay(); }
+  if (prev !== name) window.scrollTo(0, TABY[name] || 0);
+  requestAnimationFrame(function () { sizeCards($('#tab-' + currentTab)); if (currentTab === 'play') sizeGame(); });
+}
+$$('.tabs [role="tab"]').forEach(function (b) { b.addEventListener('click', function () { showTab(b.getAttribute('data-tab')); }); });
+$('.tabs').addEventListener('keydown', function (e) {
+  if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+  var tabs = ['learn', 'play', 'ref'], i = tabs.indexOf(currentTab);
+  i = (i + (e.key === 'ArrowRight' ? 1 : 2)) % 3;
+  showTab(tabs[i]); $('#tabbtn-' + tabs[i]).focus();
+});
+var setBtn = $('#setBtn'), setPop = $('#setPop'), leavePop = $('#leavePop');
+function closePops() { setPop.hidden = true; setBtn.setAttribute('aria-expanded', 'false'); leavePop.hidden = true; }
+setBtn.addEventListener('click', function (e) { e.stopPropagation(); if (!toggleOnce(setBtn)) return; leavePop.hidden = true; setPop.hidden = !setPop.hidden; setBtn.setAttribute('aria-expanded', String(!setPop.hidden)); });
+function closeOutside(e) {
+  var t = e.target;
+  if (!setPop.hidden && !setPop.contains(t) && !setBtn.contains(t)) { setPop.hidden = true; setBtn.setAttribute('aria-expanded', 'false'); }
+  if (!leavePop.hidden && !leavePop.contains(t) && !(t.closest && t.closest('#backLink'))) leavePop.hidden = true;
+}
+document.addEventListener('click', closeOutside);
+document.addEventListener('pointerdown', closeOutside);   // a tap on a disabled button (出牌 while waiting) fires no click
+document.addEventListener('keydown', function (e) {
+  if (e.key !== 'Escape') return;
+  if (!setPop.hidden) { setPop.hidden = true; setBtn.setAttribute('aria-expanded', 'false'); setBtn.focus(); }
+  if (!leavePop.hidden) { leavePop.hidden = true; $('#backLink').focus(); }
+});
+// ← 大厅 with a game in progress: ask inside the page first (no confirm())
+$('#backLink').addEventListener('click', function (e) {
+  if (!gameInProgress()) return;
+  e.preventDefault();
+  if (!toggleOnce(this)) return;                        // a double tap opens the question once (never open-and-close)
+  setPop.hidden = true; setBtn.setAttribute('aria-expanded', 'false');
+  leavePop.hidden = !leavePop.hidden;
+  syncPause();
+  if (!leavePop.hidden) { if (leavePop.getBoundingClientRect().top < 0) window.scrollTo({ top: 0 }); $('#leaveNo').focus({ preventScroll: true }); }
+});
+$('#leaveNo').addEventListener('click', function () { leavePop.hidden = true; $('#backLink').focus(); });
+if (window.MutationObserver) new MutationObserver(function () { syncPause(); }).observe(leavePop, { attributes: true, attributeFilter: ['hidden'] });
+function renderSpeed() { $$('#speedSeg button').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.getAttribute('data-speed') === T.user)); }); }
+$('#speedSeg').addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (!b) return;
+  T.user = +b.getAttribute('data-speed'); prefs.speed = T.user; savePrefs(); applySpeed(); renderSpeed();
+});
+$('#resetProg').addEventListener('click', function () {
+  prefs.done = []; prefs.finished = false; savePrefs(); renderLessonMap();
+  $('#resetProg').textContent = '已清除';
+  setTimeout(function () { $('#resetProg').textContent = '清除教程完成记录'; }, 1500);
+});
+renderSpeed();
+
+/* =====================================================================================
+   TUTORIAL
+   ===================================================================================== */
+var H0 = [3, 27, 36, 44, 49, 57, 70, 81, 92, 103];   // your hand in the 教学局
+var PL = ['你', '小东', '小西', '小南'];             // seat order
+function chipsZero(b) { b = b || {}; return PL.map(function (n) { return { name: n, b: b[n] || 0 }; }); }
+// quiz answers sit in a fixed, seeded order (the same on every visit, so 上一步 and screenshots stay stable);
+// data-choice / data-pick / data-chip keep the ORIGINAL index or value, so scripts find the right one by attribute
+function seededPerm(n, seed) { return E.shuffle(E.range(0, n - 1), E.makeRng(seed)); }
+
+function snap(st, extra) {
+  var s = { rows: clone(st.rows), reveal: clone(st.reveal), hand: clone(st.hand), chips: clone(st.chips), pile: !!st.pile };
+  for (var k in (extra || {})) s[k] = extra[k];
+  return s;
+}
+function Lesson(title, init) {
+  var L = { title: title, steps: [], st: clone(init) };
+  L.reset = function (st) { L.st = clone(st); return L; };
+  L.info = function (say, extra) { L.steps.push({ say: say, scene: snap(L.st, extra) }); return L; };
+  L.task = function (say, extra, task, mutate) {
+    var scene = snap(L.st, extra);
+    if (mutate) mutate(L.st);
+    task.post = snap(L.st, task.postExtra);
+    if (task.shuffle) {                                  // H3: answer positions are shuffled (seeded)
+      var n = (scene.options || scene.pick || (scene.scoreChips ? PL : [])).length;
+      scene.order = task.post.order = seededPerm(n, task.shuffle);
+    }
+    L.steps.push({ say: say, scene: scene, task: task });
+    return L;
+  };
+  // Place the lowest card of the reveal strip that is not down yet; answer computed by the engine.
+  L.place = function (say, o) {
+    o = o || {};
+    var st = L.st;
+    var idx = -1;
+    st.reveal.forEach(function (x, i) { if (!x.done && (idx === -1 || x.c < st.reveal[idx].c)) idx = i; });
+    var play = st.reveal[idx];
+    var rows = E.cloneRows(st.rows);
+    var pv = E.previewPlacement(rows, play.c);
+    var low = pv.kind === 'low';
+    var answer = low ? (o.choice !== undefined ? o.choice : E.cheapestRow(rows)) : pv.row;
+    var revealNow = st.reveal.map(function (x) { var y = clone(x); y.cur = x.c === play.c; y.me = x.p === '你'; return y; });
+    var scene = snap(st, { focus: 'rows', rowHit: true, cost: low, noLeast: !!o.noLeast });
+    scene.reveal = revealNow;
+    var task = {
+      kind: 'row', answer: answer, hold: !!o.hold, legal: !!o.legal,
+      why: o.why ? o.why(rows) : function (x) { return whyRow(rows, play.c, x); },
+      ok: o.ok || (low ? '' : okRow(rows, play.c, pv.row))
+    };
+    if (o.deferTake && pv.kind === 'full') {
+      task.anim = null;
+      st.reveal = revealNow;           // keep it current, nothing moves yet
+    } else {
+      var after = E.cloneRows(rows);
+      var ev = E.placeCard(after, play.c, low ? answer : undefined);
+      task.anim = { type: ev.kind === 'add' ? 'place' : 'take', card: play.c, row: ev.row, who: play.p, bulls: ev.bulls, slot: rows[ev.row].length };
+      st.rows = after;
+      st.reveal = st.reveal.map(function (x) { var y = clone(x); if (y.c === play.c) y.done = true; y.cur = false; y.me = y.p === '你'; return y; });
+      if (ev.bulls && st.chips) st.chips.forEach(function (c) { if (c.name === play.p) c.b += ev.bulls; });
+    }
+    task.post = snap(st);
+    L.steps.push({ say: say, scene: scene, task: task });
+    return L;
+  };
+  return L;
+}
+function applyTake(st, card, row, who) {
+  var r = E.cloneRows(st.rows);
+  var ev = E.placeCard(r, card, E.targetRow(r, card) === -1 ? row : undefined);
+  st.rows = r;
+  st.reveal = st.reveal.map(function (x) { var y = clone(x); if (y.c === card) y.done = true; y.cur = false; return y; });
+  if (st.chips) st.chips.forEach(function (c) { if (c.name === who) c.b += ev.bulls; });
+  return ev;
+}
+function whyRow(rows, card, x) {
+  var end = last(rows[x]);
+  var t = E.targetRow(rows, card);
+  if (t === -1) return '';
+  if (x === t) return '';
+  if (end > card) return '规则1「由小至大」：第' + (x + 1) + '列最后一张是' + end + '，比' + card + '大，' + card + '不能接在它后面。';
+  var te = last(rows[t]);
+  return '规则2「差异最小」：' + card + ' − ' + end + ' = ' + (card - end) + '，但' + card + ' − ' + te + ' = ' + (card - te) + '更小，所以要接在' + te + '后面（第' + (t + 1) + '列）。';
+}
+function okRow(rows, card, t) {
+  var te = last(rows[t]);
+  var lower = [];
+  rows.forEach(function (r, i) { if (last(r) < card && i !== t) lower.push(last(r)); });
+  var s = lower.length === 0
+    ? '只有' + te + '比' + card + '小：' + card + ' − ' + te + ' = ' + (card - te) + ' → 第' + (t + 1) + '列。'
+    : card + ' − ' + te + ' = ' + (card - te) + '，比' + lower.map(function (e) { return card + ' − ' + e + ' = ' + (card - e); }).join('、') + '都小 → 第' + (t + 1) + '列。';
+  if (rows[t].length === 4) s += '第' + (t + 1) + '列现在有5张，<b>满了</b>。';
+  if (rows[t].length >= 5) s += '可是第' + (t + 1) + '列已经有5张了……';
+  return s;
+}
+// 规则4 lets the player take ANY 列; these explain what another choice would cost (never as "illegal")
+function costWhy(choiceRow, who, extra) {
+  return function (rows) {
+    return function (x) {
+      var b = E.rowBulls(rows[x]), cb = E.rowBulls(rows[choiceRow]);
+      var list = rows[x].map(function (c) { return c + '=' + E.bulls(c); }).join('，');
+      return who === '你'
+        ? '可以选第' + (x + 1) + '列——规则4任选一列都行。不过它要拿走' + b + '个牛头（' + list + '），第' + (choiceRow + 1) + '列只要' + cb + '个。' + (extra || '')
+        : who + '也可以选第' + (x + 1) + '列，但那要拿走' + b + '个牛头（' + list + '）。按说明书的提示，他会拿牛头最少的那列：第' + (choiceRow + 1) + '列只要' + cb + '个。' + (extra || '');
+    };
+  };
+}
+
+var LESSONS = (function () {
+  var out = [];
+  /* ---- 1 ---- */
+  var L1 = Lesson('牛头 = 负分', {});
+  L1.task('这游戏只有一个目标：<b>拿到的牛头越少越好</b>。每张牌顶上的小牛头，每个算1点负分。<br>点一张牌，看看它有几个牛头。',
+    { pick: [7, 15, 30, 44, 55], focus: 'pick' },
+    { kind: 'pick', answer: 'any', explore: true, hold: true, ok: function (x) { return E.bullsReason(x) + '。可以再点别的牌看看，然后按「下一步」。'; } });
+  // the quiz cards are NOT the table's examples: the learner applies the rules instead of reading the answer off
+  L1.task('牛头就看这5条规则，颜色能帮你记。<br><b>考考你：</b>下面哪张牌的牛头最多？',
+    { table: true, pick: [25, 60, 66, 71, 9], focus: 'pick' },
+    { kind: 'pick', answer: 66, hold: true, shuffle: 18,
+      why: function (x) { return E.bullsReason(x) + '。再找找：有没有11的倍数？'; },
+      ok: '对！66是11的倍数 → <b>5个牛头</b>。全场最多的是55：7个牛头，只有这一张（金色）。' });
+  L1.task('再来一题：哪张只有<b>1个</b>牛头？',
+    { table: true, pick: [20, 35, 77, 47], focus: 'pick' },
+    { kind: 'pick', answer: 47, hold: true, shuffle: 2,
+      why: function (x) { return E.bullsReason(x) + '。要找不以5结尾、也不是10或11倍数的牌。'; },
+      ok: '对！47是普通牌 → 1个牛头。104张牌里有76张都是这种1牛头的牌。' });
+  L1.info('104张牌一共171个牛头。<b>手里的牌不算分</b>——只有被你「拿走」的牌才算。<br>下一课：怎么开局。', { table: true });
+  out.push(L1);
+
+  /* ---- 2 ---- */
+  var L2 = Lesson('准备：10张手牌，排四列', {});
+  L2.task('2–10人都能玩。先洗牌，每人发<b>10张</b>手牌，只有自己能看。点「发牌」。',
+    { deck: true, buttons: [{ id: 'deal', label: '发牌' }], focus: 'buttons' },
+    { kind: 'button', answer: 'deal', ok: '这是你的10张手牌。网页帮你按大小排好了；实体桌上要自己理好。', anim: { type: 'deal' } },
+    function (st) { st.hand = H0.slice(); });
+  L2.task('再从牌库顶翻开<b>4张</b>，一张开一列。这4列就是整个牌桌——说明书里写的「排四行」，就是这4列。点「翻4张」。',
+    { deck: true, buttons: [{ id: 'flip', label: '翻4张' }], focus: 'buttons' },
+    { kind: 'button', answer: 'flip', ok: '翻出12、37、43、58——和说明书图1一样。', anim: { type: 'flip' } },
+    function (st) { st.rows = [[12], [37], [43], [58]]; });
+  L2.task('<b>考考你：</b>一列最多能放几张牌？',
+    { focus: 'options', options: ['4张', '5张', '6张', '不限'], bareRows: true },
+    { kind: 'choice', answer: 1, hold: true, shuffle: 8, rerender: true,
+      why: function (x) { return ['4张还没满，还能再放：每列可以放到5张。', '', '放不下第6张！谁的牌要成为第6张，谁就把前面5张全部拿走（规则3，第4课会练）。', '有上限：5张。第6张会触发「满列」。'][x]; },
+      ok: '对！5张就满了。谁放进<b>第6张</b>，谁就把前5张全部拿走。游戏名「6 nimmt!」是德语，意思就是「第6张，拿牌！」' });
+  L2.info('准备完毕！之后每一<b>轮</b>，所有人<b>同时</b>出1张牌——没有轮流的顺序。10张手牌出完（10轮）叫一个<b>回合</b>。<br>剩下的牌这一回合用不到，放到一边。', {});
+  out.push(L2);
+
+  /* ---- 3: 图1 → 图2 ---- */
+  var L3 = Lesson('同时出牌，从小到大放', { rows: [[12], [37], [43], [58]], hand: H0.slice(), chips: chipsZero() });
+  L3.task('每一轮，所有人从手牌选1张<b>面朝下</b>放好，等大家都选好，再一起翻开。<br>这一轮跟着说明书出<b>44</b>——点你手里的44。',
+    { focus: 'hand' },
+    { kind: 'hand', answer: 44, why: function (x) { return x + '也能出，但这一步我们跟着说明书的例子出44。实战时想出哪张都行。'; },
+      ok: '大家都选好了——一起翻开！', anim: { type: 'reveal' } },
+    function (st) { st.hand = null; st.reveal = [{ p: '你', c: 44, me: true }, { p: '小东', c: 15 }, { p: '小西', c: 14 }, { p: '小南', c: 61 }]; });
+  // the strip stays in seat order (as on a real table) until the learner has found the lowest card
+  L3.task('翻开的牌摆在各人面前，不会自动排好。放牌要<b>从最小的开始</b>，一张一张来。哪张先放？点它。',
+    { focus: 'reveal', revealHit: true, seat: true },
+    { kind: 'reveal', answer: 14, why: function (x) { return x + '比14大。永远从最小的开始：14 → 15 → 44 → 61，跟谁出的没关系。'; }, ok: '对，14最小，先放。' });
+  L3.place('两条摆放规则：<br><b>规则1「由小至大」</b>每列从左到右越来越大。<br><b>规则2「差异最小」</b>放到「最后一张比它小、而且差得最少」的那一列。<br>小西的<b>14</b>放哪一列？点那一列。');
+  L3.place('下一张：小东的<b>15</b>。看每列<b>现在</b>的最后一张。');
+  L3.place('到你的<b>44</b>了。37和43都比44小——选哪个？');
+  L3.place('最后：小南的<b>61</b>。');
+  L3.info('这就是说明书图2：第1列是12·14·15，第2列是37，第3列是43·44，第4列是58·61。<br><b>放牌顺序只看数字大小</b>，跟是谁出的没关系。实体桌上<b>谁出的牌谁自己放</b>，大家一起看着。', {});
+  out.push(L3);
+
+  /* ---- 4: 图3 ---- */
+  var L4 = Lesson('规则3「满列」', { rows: [[12, 14, 15], [37], [43, 44], [58, 61]], hand: without(H0, 44), chips: chipsZero() });
+  L4.task('接着上一课。第二轮，大家又各选1张——你出<b>36</b>，点它。',
+    { focus: 'hand' },
+    { kind: 'hand', answer: 36, why: function (x) { return '跟着说明书图3，这一轮你出36（' + x + '留着以后用）。'; }, ok: '翻开！', anim: { type: 'reveal' } },
+    function (st) { st.hand = null; st.reveal = [{ p: '你', c: 36, me: true }, { p: '小东', c: 21 }, { p: '小西', c: 30 }, { p: '小南', c: 26 }]; });
+  L4.place('从最小的开始：小东的<b>21</b>放哪列？');
+  L4.place('小南的<b>26</b>呢？');
+  L4.place('小西的<b>30</b>放哪？按规则2想一想。', { deferTake: true });
+  L4.task('30会成为第1列的<b>第6张</b>。会发生什么？',
+    { focus: 'options', options: [
+      '小西拿走这5张，共6个牛头',
+      '小南拿走这5张（第5张是他放的）',
+      '小西拿走这5张，算5个牛头',
+      '30另开一个第5列'] },
+    { kind: 'choice', answer: 0, hold: true, shuffle: 5,
+      why: function (x) { return ['', '放第5张的人没事——第5张刚好放满。<b>放第6张的人</b>才拿牌。', '算的是牌上的牛头，不是张数：12(1) + 14(1) + 15(2) + 21(1) + 26(1) = 6。', '永远只有4列。第6张会把这一列「拿走重开」。'][x]; },
+      ok: '这就是规则3「满列」：12、14、15、21、26面朝下放到小西面前，这叫<b>牛头堆</b>，共6个牛头；30成为第1列新的第一张。',
+      anim: { type: 'take', card: 30, row: 0, who: '小西', bulls: 6 } },
+    function (st) { applyTake(st, 30, 0, '小西'); st.pile = true; });
+  L4.place('<b>谨记：牛头堆的牌绝不能加进手牌！</b><br>最后一张：你的<b>36</b>放哪？');
+  L4.info('说明书图3：第1列是30·36，第2列是37，第3列是43·44，第4列是58·61。小西拿了6个牛头。<br><b>放第5张没事，放第6张要拿牌。</b>', {});
+  out.push(L4);
+
+  /* ---- 5: 图4 ---- */
+  var L5 = Lesson('规则4「最小的牌」', { rows: [[30, 36], [37], [43, 44], [58, 61]], hand: without(H0, 44, 36), chips: chipsZero({ '小西': 6 }), pile: true });
+  L5.task('第三轮。你出<b>3</b>——点它。',
+    { focus: 'hand' },
+    { kind: 'hand', answer: 3, why: function (x) { return '这一步跟着说明书图4，出你最小的3（' + x + '先留着）。'; }, ok: '翻开！', anim: { type: 'reveal' } },
+    function (st) { st.hand = null; st.reveal = [{ p: '你', c: 3, me: true }, { p: '小东', c: 9 }, { p: '小西', c: 68 }, { p: '小南', c: 93 }]; });
+  // any 列 is legal here: another pick gets a neutral note (not an error) and the replay of 图4 asks for 列2
+  L5.place('你的3最小，先放。可每列的最后一张（36、37、44、61）<b>都比3大</b>，放不进任何一列。<br><b>规则4「最小的牌」</b>：你<b>任选一列</b>全部拿走，3成为那一列的第一张。每列要拿几个牛头已标在列上——选一列。',
+    { choice: 1, hold: true, legal: true, why: costWhy(1, '你', '这次照说明书图4，请点第2列。'), ok: '聪明！拿走37，只拿1个牛头。3变成第2列的第一张。' });
+  L5.info('说明书的提示：出太小的牌要拿一列时，<b>通常拿牛头最少的那列</b>。<br>什么时候选？等所有牌都翻开、轮到你这张时再选。它一定是这一轮最小的，所以第一个放。', {});
+  L5.place('接着放：小东的<b>9</b>？');
+  L5.place('小西的<b>68</b>？');
+  L5.place('小南的<b>93</b>？');
+  L5.info('说明书图4：第1列是30·36，第2列是3·9，第3列是43·44，第4列是58·61·68·93。<br>第4列已经4张：下一个放进去的人没事（第5张），再下一个就要拿牌了。', {});
+  out.push(L5);
+
+  /* ---- 6: 图5, 图6 ---- */
+  var L6 = Lesson('两个陷阱', { rows: [[16, 22], [20, 21, 32], [31, 41], [35, 36, 38, 40, 42]], chips: chipsZero(), pile: true, reveal: [{ p: '你', c: 45, me: true }] });
+  L6.place('<b>陷阱1</b>（说明书图5）。牌桌是这样，你打出<b>45</b>，别人的牌都比你大。你觉得45会放到哪一列？',
+    { deferTake: true,
+      why: function (rows) { return function (x) { return x === 2 ? '很多人都这么想：41后面看着正好。可45 − 41 = 4，而45 − 42 = 3更小！规则2只看差异最小 → 第4列。' : whyRow(rows, 45, x); }; },
+      ok: '对！42比41更接近45 → 第4列。' });
+  L6.task('可第4列已经满5张了……会怎样？',
+    { focus: 'options', options: ['你拿走这5张，共8个牛头', '45接在42后面，第4列变成6张', '45改放到第3列41后面'] },
+    { kind: 'choice', answer: 0, hold: true, shuffle: 7,
+      why: function (x) { return ['', '一列最多5张，第6张必须拿牌。', '不能自己挑列——只有规则4（比每列的最后一张都小）才能选。'][x]; },
+      ok: '35(2) + 36(1) + 38(1) + 40(3) + 42(1) = <b>8个牛头</b>。45成为第4列的第一张。',
+      anim: { type: 'take', card: 45, row: 3, who: '你', bulls: 8 } },
+    function (st) { applyTake(st, 45, 3, '你'); });
+  L6.reset({ rows: [[61], [20, 21, 32], [31, 41], [35, 36, 38, 40, 42]], chips: chipsZero(), pile: true, reveal: [{ p: '你', c: 62, me: true }, { p: '小东', c: 29 }] });
+  L6.task('<b>陷阱2</b>（说明书图6）。新的局面：第1列只有61。你打出<b>62</b>，心想「接在61后面，稳了」。可小东同时打出了<b>29</b>。<br>哪张先放？',
+    { focus: 'reveal', revealHit: true, seat: true },
+    { kind: 'reveal', answer: 29, why: function () { return '62比29大，29先放。放牌永远从最小的开始。'; }, ok: '对，29先放。' });
+  L6.place('29比每列的最后一张（61、32、41、42）都小 → 小东用规则4选一列拿走。按说明书的提示，他会拿哪一列？',
+    { choice: 0, noLeast: true, why: costWhy(0, '小东'), ok: '小东拿走61（1个牛头），29成为第1列的第一张。' });
+  L6.place('轮到你的62。注意：第1列的最后一张已经变成<b>29</b>了！62放哪？',
+    { hold: true,
+      why: function (rows) { return function (x) { return x === 0 ? '第1列现在的最后一张是29，不是61了：62 − 29 = 33，而62 − 42 = 20更小。' : whyRow(rows, 62, x); }; },
+      ok: '没错……62 − 42 = 20最小 → 第4列，可它已经满5张 → 你拿走35·36·38·40·42，共<b>8个牛头</b>！' });
+  L6.info('教训：<b>你出牌时看到的牌桌，轮到你放牌时可能已经变了。</b>比你小的牌先放——它们可能清空一列，也可能把一列填满。', {});
+  out.push(L6);
+
+  /* ---- 7 ---- */
+  var L7 = Lesson('回合结束与66牛头', {});
+  L7.info('10张手牌全部出完 = <b>一个回合</b>结束。每人数自己牛头堆里的牛头，记在纸上。<br>然后把104张牌全部收回、重新洗、再发10张，开始下一回合。', { sheet: 3 });
+  L7.task('有人累计到<b>66牛头或以上</b>，打完那一回合游戏就结束，<b>牛头最少的人赢</b>。<br>第4回合后小东累计68。谁赢了？点赢家。',
+    { sheet: 4, scoreChips: true, focus: 'chips' },
+    { kind: 'chip', answer: 0, hold: true, shuffle: 8, rerender: true, postExtra: { sheet: 4, sheetWin: true, scoreChips: true },
+      why: function (x) { var t = [43, 68, 49, 57][x]; return x === 1 ? '小东68是最多的——他是这局的「牛头王」，最惨的那个。牛头越少越好！' : PL[x] + '累计' + t + '个牛头，比你的43多。牛头越少越好！'; },
+      ok: '你只有43个牛头，最少 → 你赢！开局前也可以约好别的目标分数，或者固定打几个回合。' });
+  L7.info('三个实用小贴士：', { tips: true });
+  L7.info('<b>上真桌子</b>：网页替你做的几件事，实体桌上要自己来。', { realTable: true });
+  L7.info('2–6人还可以加<b>进阶规则</b>：只用1到「人数×10+4」号的牌（所有数字都是公开信息），还能轮流挑手牌——实战设置里可以打开。<br>你已经会玩了，去和机器人来一局吧！', { finale: true });
+  out.push(L7);
+  return out;
+})();
+
+var SHEET = { names: PL, rounds: [[8, 22, 5, 12], [14, 17, 21, 9], [9, 19, 6, 25], [12, 10, 17, 11]] };
+// showWin: shade the winner's line — only AFTER the 谁赢了？ question is answered
+function sheetHTML(k, showWin) {
+  var tot = [0, 0, 0, 0];
+  var head = '<tr><th>玩家</th>';
+  for (var r = 0; r < k; r++) head += '<th>回合' + (r + 1) + '</th>';
+  head += '<th>累计</th></tr>';
+  for (r = 0; r < k; r++) for (var p = 0; p < 4; p++) tot[p] += SHEET.rounds[r][p];
+  var min = Math.min.apply(null, tot);
+  var body = PL.map(function (n, p) {
+    var tds = ''; for (var r2 = 0; r2 < k; r2++) tds += '<td>' + SHEET.rounds[r2][p] + '</td>';
+    var over = tot[p] >= 66;
+    return '<tr' + (showWin && tot[p] === min ? ' class="win"' : '') + '><td>' + n + '</td>' + tds + '<td class="tot' + (over ? ' over' : '') + '">' + tot[p] + (over ? ' ≥ 66' : '') + '</td></tr>';
+  }).join('');
+  var cap = k === 3 ? '记分纸（第3回合后）：没人到66，继续下一回合' : '记分纸（第4回合后）：小东到68 → 游戏结束';
+  return '<div class="sheet"><div class="cap">' + cap + '</div><table><thead>' + head + '</thead><tbody>' + body + '</tbody></table></div>';
+}
+function bullTableHTML() {
+  var rows = [[7, '其余的牌', '大部分牌都是1个'], [15, '个位数是5', '5、15、25……95（55除外）'], [30, '10的倍数', '10、20……100'], [44, '11的倍数', '11、22……99（55除外）'], [55, '只有55', '既是11的倍数又以5结尾']];
+  return '<table class="btable"><tbody>' + rows.map(function (r) {
+    return '<tr><td>' + cardHTML(r[0]) + '</td><td class="rule">' + r[1] + '<small>' + r[2] + '</small></td><td class="cnt"><b>' + E.bulls(r[0]) + '</b><span>牛头</span></td></tr>';
+  }).join('') + '</tbody></table>';
+}
+var TIPS = [
+  '<b>中间的牌留着灵活用。</b>40–70这种牌能接的列多，留到后面选择更多。很小的牌另有用处，见第3条。',
+  '<b>盯紧4张、5张的列，差得越少越安全。</b>一列满5张，下一个放进去的人就要拿走它。某列最后一张是43、还没满，你出44，没人能插到你前面；差得越多，越容易被别人的牌插队填满。',
+  '<b>小牌是「逃生口」。</b>很小的牌能触发规则4，让你自己挑一列拿走——趁某一列很便宜（比如只有1个牛头）时打出去，比以后被迫拿走一大列划算。'
+];
+function tipsHTML() {
+  return '<div class="tips">' + TIPS.map(function (x, i) { return '<div class="tip"><span class="tno">' + (i + 1) + '</span><p>' + x + '</p></div>'; }).join('') + '</div>';
+}
+// 上真桌子: what the web page does for you that you do yourselves with the box
+function realTableHTML() {
+  return '<ol class="realtable">' +
+    '<li><b>发牌</b>：洗匀104张，每人10张，再翻4张开4列。手牌自己从小到大理好。</li>' +
+    '<li><b>出牌</b>：选好的牌扣在面前，等大家都扣好，一起翻开。</li>' +
+    '<li><b>放牌</b>：从最小的牌开始，<b>谁出的牌谁自己放</b>，大家一起看着。要拿牌的人把那几张面朝下收进自己的牛头堆；用规则4时自己说拿哪一列。</li>' +
+    '<li><b>记分</b>：10轮打完，各自数牛头，一个人用纸笔记下来。网页里的「列N」标签和每列的牛头合计，实体桌上要自己看、自己数。</li>' +
+    '</ol>';
+}
+
+var TUT = { li: 0, si: 0, done: false, busy: false, carry: null, picked: null, tok: 0 };
+function curStep() { return LESSONS[TUT.li].steps[TUT.si]; }
+
+function renderLessonMap() {
+  $('#lessonList').innerHTML = LESSONS.map(function (L, i) {
+    var done = prefs.done.indexOf(i) >= 0;
+    return '<li><button class="lm-btn' + (i === TUT.li ? ' cur' : '') + (done ? ' done' : '') + '" data-lesson="' + i + '" aria-label="第' + (i + 1) + '课：' + L.title + (done ? '（已完成）' : '') + '"' + (i === TUT.li ? ' aria-current="step"' : '') + '>' +
+      '<span class="ln">' + (i + 1) + '</span><span class="lt">' + L.title + '</span><span class="tick"><svg viewBox="0 0 12 12"><use href="#tick"/></svg></span></button></li>';
+  }).join('');
+}
+$('#lessonList').addEventListener('click', function (e) {
+  var b = e.target.closest('[data-lesson]'); if (!b) return;
+  openLesson(+b.getAttribute('data-lesson'), 0);
+});
+function openLesson(li, si) {
+  TUT.li = Math.max(0, Math.min(LESSONS.length - 1, li)); TUT.si = si || 0; TUT.carry = null;
+  renderLessonMap(); renderStep(false, null, true);
+}
+function setCoach(say, carry) {
+  $('#coachSay').innerHTML = say;
+  var c = $('#coachCarry');
+  if (carry) { c.innerHTML = carry; c.hidden = false; } else { c.hidden = true; c.innerHTML = ''; }
+  var fb = $('#coachFb'); fb.hidden = true; fb.className = 'fb'; fb.innerHTML = '';
+}
+function showFb(kind, html) {
+  var fb = $('#coachFb');
+  fb.className = 'fb ' + kind; fb.innerHTML = html; fb.hidden = false;
+  if (kind === 'bad') shake(fb);
+}
+// keep: returning to the tab; anim: entry animation class for the stage; fresh: a lesson was just opened
+function renderStep(keep, anim, fresh) {
+  var L = LESSONS[TUT.li], S = curStep();
+  if (keep && TUT.done && S.task && S.task.post) { renderControls(); return; }   // returning to the tab: keep the finished state
+  TUT.tok = (TUT.tok || 0) + 1;
+  TUT.done = !S.task; TUT.busy = false; TUT.picked = null;
+  $('#lessonNo').textContent = '第' + (TUT.li + 1) + '课';
+  $('#lessonTitle').textContent = L.title;
+  $('#lessonStep').textContent = (TUT.si + 1) + ' / ' + L.steps.length;
+  setCoach(S.say, TUT.carry);
+  TUT.carry = null;
+  renderScene(S.scene, S.task, anim || null);
+  renderControls();
+  if (currentTab !== 'learn' || keep) return;
+  if (fresh) {
+    // a new lesson opens at its header (第N课 + title); then the page glides to what you have to tap
+    window.scrollTo(0, 0);
+    var tok = TUT.tok;
+    if (S.task) wait(650).then(function () { if (tok === TUT.tok && !TUT.busy && !TUT.done && currentTab === 'learn') ensureTutTarget(true); });
+  } else if (S.task) ensureTutTarget(false);
+}
+function renderControls() {
+  var L = LESSONS[TUT.li], S = curStep();
+  var lastStep = TUT.si === L.steps.length - 1, lastLesson = TUT.li === LESSONS.length - 1;
+  var finale = !!(S.scene && S.scene.finale);
+  $('#prevBtn').disabled = TUT.busy || (TUT.si === 0 && TUT.li === 0);
+  var nb = $('#nextBtn');
+  nb.hidden = false;
+  nb.disabled = !TUT.done || TUT.busy;
+  nb.textContent = lastStep ? (lastLesson ? '开始实战' : '下一课 →') : '下一步';
+  nb.classList.toggle('pulse', (TUT.done && !!S.task) || finale);
+  nb.classList.toggle('big', finale);                 // the finale's big 开始实战 lives in the control bar, never under it
+  $('#skipBtn').hidden = lastLesson && lastStep;
+  $('#skipBtn').disabled = TUT.busy;                   // visibly off while an animation runs
+  $('#skipBtn').textContent = lastLesson ? '跳过教程' : '跳过本课';
+}
+/* ---- keep the thing to tap inside the free band between the sticky coach bubble and the control bar ---- */
+// The band as it is once the coach (sticky top) and the controls (sticky bottom) are stuck. Before they stick they sit
+// outside the stage anyway, so this is the band that counts after any scroll — and the scroll is computed in one go
+// (measuring the live band instead made the scroll creep a few px at a time while the coach was still unstuck).
+function coachBeside() { var c = $('.coach').getBoundingClientRect(), s = $('#stage').getBoundingClientRect(); return c.right <= s.left + 1; }
+function tutBand() {
+  return { top: coachBeside() ? 4 : $('.coach').offsetHeight + 6, bottom: innerHeight - $('.lesson-ctrl').offsetHeight - 4 };
+}
+function tutRoom() { return innerHeight - (coachBeside() ? 0 : $('.coach').offsetHeight) - $('.lesson-ctrl').offsetHeight - 12; }
+// scroll (instantly, or smoothly to the same end point) so the block returned by getBlock() sits inside getBand()
+function scrollIntoBand(getBlock, getBand, smooth) {
+  var y0 = window.scrollY;
+  for (var k = 0; k < 4; k++) {
+    var b = getBlock(), band = getBand();
+    if (!b) break;
+    var dy = 0;
+    if (b.bottom > band.bottom) dy = b.bottom - band.bottom;
+    if (b.top - dy < band.top) dy = b.top - band.top;          // never push its top out of view
+    if (Math.abs(dy) < 2) break;
+    var before = window.scrollY;
+    window.scrollTo(0, before + dy);
+    if (Math.abs(window.scrollY - before) < 1) break;          // page cannot scroll further
+  }
+  var y1 = window.scrollY;
+  if (smooth && y1 !== y0 && !RM.matches && factor() > 0) { window.scrollTo(0, y0); window.scrollTo({ top: y1, behavior: 'smooth' }); }
+  return y1;
+}
+// resolves once a smooth scroll has reached y (or snaps there after maxMs); gives up if the tab changes
+function settleScroll(y, maxMs) {
+  if (Math.abs(window.scrollY - y) < 2) return Promise.resolve();
+  var t0 = Date.now(), tab = currentTab;
+  return new Promise(function (res) {
+    (function check() {
+      if (currentTab !== tab || Math.abs(window.scrollY - y) < 2) return res();
+      if (Date.now() - t0 > maxMs) { window.scrollTo(0, y); return res(); }
+      setTimeout(check, 40);
+    })();
+  });
+}
+function ensureTutTarget(smooth) {
+  var S = curStep(), t = S.task, st = $('#stage');
+  if (!t || currentTab !== 'learn') return;
+  var sel = { row: '.rows', choice: '.options', reveal: '.zone', hand: '.st-hand', pick: '.st-pick', chip: '.st-chips', button: '.st-deck' }[t.kind];
+  var main = sel && $(sel, st);
+  if (!main) return;
+  var ctx = t.kind === 'row' ? $('.zone', st) : null;      // the strip with the card being placed, when it fits too
+  if (ctx && main.getBoundingClientRect().bottom - ctx.getBoundingClientRect().top > tutRoom()) ctx = null;
+  scrollIntoBand(function () {
+    var m = main.getBoundingClientRect();
+    return { top: ctx ? Math.min(m.top, ctx.getBoundingClientRect().top) : m.top, bottom: m.bottom + (main.classList.contains('ask') ? 10 : 0) };
+  }, tutBand, smooth);
+}
+// before a 规则3/规则4 take: bring the 列 (and the 牛头堆 chips, if both fit) into view so the take is seen
+function scrollForTake(rowIdx) {
+  var st = $('#stage'), rowEl = $('.row[data-row="' + rowIdx + '"]', st), chips = $('.st-chips', st);
+  if (!rowEl) return Promise.resolve();
+  var span = function () {                                  // the 列 being taken + the 牛头堆 it flies into
+    var r = rowEl.getBoundingClientRect(), c = chips ? chips.getBoundingClientRect() : r;
+    return { top: Math.min(r.top, c.top), bottom: Math.max(r.bottom, c.bottom) };
+  };
+  var both = span(), useChips = chips && both.bottom - both.top <= tutRoom();
+  var y = scrollIntoBand(function () { return useChips ? span() : rowEl.getBoundingClientRect(); }, tutBand, true);
+  return settleScroll(y, 700);
+}
+function renderScene(sc, task, anim) {
+  var stage = $('#stage');
+  var h = '';
+  var focus = sc.focus || '';
+  var chips = '';
+  if (sc.chips || sc.scoreChips) {
+    var cs = sc.scoreChips ? PL.map(function (n, i) { return { name: n, total: [43, 68, 49, 57][i], me: i === 0 }; })
+      : sc.chips.map(function (c) { return { name: c.name, total: c.b, me: c.name === '你' }; });
+    var cOrd = sc.scoreChips && sc.order ? sc.order : cs.map(function (c, i) { return i; });   // the 谁赢了？ quiz is shuffled
+    // 牛头堆 is named once it has been explained (lesson 4); before that the chips just count what was taken
+    chips = '<div class="st-chips"><div class="st-label">' + (sc.scoreChips ? '累计牛头（第4回合后）' : sc.pile ? '牛头堆' : '拿到的牛头') + '</div><div class="sb-grid" style="--sbcols:4">' +
+      cOrd.map(function (i) { return chipHTML(cs[i], i, { hit: !!(task && task.kind === 'chip'), max: sc.scoreChips ? 66 : 0 }); }).join('') + '</div></div>';
+  }
+  // the 牛头堆 sit right under the 列 (in front of the players, like on a real table): a take flies down into them,
+  // so the 列 and the pile fit on one screen together and the 列 start right under the coach
+  if (chips && !sc.rows) h += chips;
+  // the cards to tap come first; the 牛头 rule table sits under them (finding: quiz cards were below the fold)
+  if (sc.pick) h += '<div class="st-pick">' + (sc.order ? sc.order.map(function (i) { return sc.pick[i]; }) : sc.pick).map(function (n) { return '<button class="pickcard" data-pick="' + n + '" aria-label="' + n + '">' + cardHTML(n) + '</button>'; }).join('') + '</div>';
+  if (sc.table) h += bullTableHTML();
+  if (sc.deck) h += '<div class="st-deck"><div class="deckstack" aria-hidden="true">' + backHTML() + backHTML() + backHTML() + '</div>' +
+    (sc.buttons || []).map(function (b) { return '<button class="btn primary" data-btn="' + b.id + '">' + b.label + '</button>'; }).join('') + '</div>';
+  // seat: the cards lie in front of each player as they were flipped; otherwise sorted, the order they are placed in
+  if (sc.reveal) h += '<div class="zone"><div class="zone-label"><span>' + (sc.seat ? '本轮翻开的牌（按座位）' : '本轮翻开的牌（从小到大放）') + '</span></div><div class="reveal" data-max="52">' +
+    revealHTML(sc.seat ? sc.reveal : sc.reveal.slice().sort(function (a, b) { return a.c - b.c; }), !!sc.revealHit) + '</div></div>';
+  if (sc.rows) h += '<div class="rows' + (sc.rowHit ? ' ask' : '') + '" data-max="64">' + rowsHTML(sc.rows, { hit: !!sc.rowHit, cost: !!sc.cost, minB: sc.cost ? minBulls(sc.rows) : -1, bare: !!sc.bareRows, noLeast: !!sc.noLeast }) + '</div>';
+  if (sc.hand) h += '<div class="st-hand"><div class="hand-label">你的手牌</div><div class="hand" data-max="52">' + handHTML(sc.hand, { disabled: !(task && task.kind === 'hand') }) + '</div></div>';
+  if (chips && sc.rows) h += chips;
+  if (sc.options) h += '<div class="options">' + (sc.order || sc.options.map(function (o, i) { return i; })).map(function (i) { return '<button class="opt" data-choice="' + i + '">' + sc.options[i] + '</button>'; }).join('') + '</div>';
+  if (sc.sheet) h += sheetHTML(sc.sheet, !!sc.sheetWin);
+  if (sc.tips) h += tipsHTML();
+  if (sc.realTable) h += realTableHTML();
+  if (sc.finale) h += '<div class="recap"><div class="st-label">你学会了</div><ul>' +
+    ['同时出牌，从小到大放', '规则1「由小至大」', '规则2「差异最小」', '规则3「满列」：放第6张的人拿走5张', '规则4「最小的牌」：任选一列拿走', '有人到66牛头 → 打完这一回合，最少的人赢'].map(function (t) { return '<li>' + t + '</li>'; }).join('') +
+    '</ul></div>';
+  stage.className = 'stage' + (focus ? ' focus-' + focus : '') + (anim ? ' anim-' + anim : '');
+  stage.innerHTML = h;
+  sizeCards(stage);
+}
+$('#stage').addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (!b) return;
+  if (b.hasAttribute('data-pick')) return tutTap('pick', +b.getAttribute('data-pick'), b);
+  if (b.hasAttribute('data-hand')) return tutTap('hand', +b.getAttribute('data-hand'), b);
+  if (b.hasAttribute('data-reveal')) return tutTap('reveal', +b.getAttribute('data-reveal'), b);
+  if (b.classList.contains('row-hit')) return tutTap('row', +b.getAttribute('data-row'), b.parentNode);
+  if (b.hasAttribute('data-choice')) return tutTap('choice', +b.getAttribute('data-choice'), b);
+  if (b.hasAttribute('data-chip')) return tutTap('chip', +b.getAttribute('data-chip'), b);
+  if (b.hasAttribute('data-btn')) return tutTap('button', b.getAttribute('data-btn'), b);
+});
+function tutTap(kind, value, el) {
+  var S = curStep(), task = S.task;
+  if (!task || TUT.busy || !canTap()) return;     // a double tap never answers the next question
+  if (TUT.done) {
+    if (task.explore && kind === task.kind) { markPick(value); showFb('ok', typeof task.ok === 'function' ? task.ok(value) : task.ok); }
+    return;
+  }
+  if (kind !== task.kind) return;
+  var right = task.answer === 'any' || task.answer === value;
+  if (!right) {
+    var why = task.why ? task.why(value) : '';
+    if (kind === 'choice') { el.classList.add('wrong'); }
+    if (task.legal) showFb('note', why);            // allowed by the rules, just not the booklet's replay: no error look
+    else { showFb('bad', why || '再想想。'); shake(el); }
+    ensureTutTarget(true);                          // the explanation grew the control bar: keep the target in view
+    return;
+  }
+  took();
+  if (kind === 'choice') el.classList.add('right');
+  if (kind === 'pick') markPick(value);
+  TUT.busy = true;
+  var fb = $('#coachFb'); fb.hidden = true; fb.className = 'fb'; fb.innerHTML = '';
+  renderControls();                                 // 上一步/跳过/下一步 visibly off during the animation
+  var okText = typeof task.ok === 'function' ? task.ok(value) : task.ok;
+  var tok = TUT.tok;
+  var pre = task.anim && task.anim.type === 'take' && currentTab === 'learn' ? scrollForTake(task.anim.row) : Promise.resolve();
+  pre.then(function () { return tok === TUT.tok ? runTutAnim(task.anim) : null; }).then(function () {
+    if (tok !== TUT.tok) return;            // the learner navigated away mid-animation
+    var a = task.anim && /^(deal|flip|reveal)$/.test(task.anim.type) ? task.anim.type : null;
+    var post = task.post;
+    var lastStep = TUT.si === LESSONS[TUT.li].steps.length - 1;
+    if (task.hold || lastStep || task.explore) {
+      // keep the question on screen; show the post state + feedback, wait for 下一步
+      var y = window.scrollY;
+      var sc = Object.assign({}, post, { focus: '' });
+      if (kind !== 'choice' && kind !== 'pick' && kind !== 'chip') renderScene(sc, null, a);
+      else if (kind === 'chip') {
+        $$('#stage [data-chip]').forEach(function (c) { c.disabled = true; });
+        var sh = $('#stage .sheet');                  // the score sheet now shades the winner's line
+        if (task.rerender && sh && sc.sheet) sh.outerHTML = sheetHTML(sc.sheet, !!sc.sheetWin);
+      }
+      // the answer may change the picture (a take, the 5 slots of a 列, the winner's line): show it, keep the answers
+      if (kind === 'choice' && ((task.anim && task.anim.type === 'take') || task.rerender)) renderSceneKeepOptions(sc);
+      if (Math.abs(window.scrollY - y) > 1) window.scrollTo(0, y);   // re-rendering must not move the page
+      TUT.done = true; TUT.busy = false;
+      showFb('ok', okText || '对！');
+      renderControls();
+      $('#nextBtn').focus({ preventScroll: true });
+    } else {
+      TUT.done = true; TUT.busy = false;
+      TUT.carry = okText;
+      TUT.si += 1;
+      renderStep(false, a);
+    }
+  });
+}
+function renderSceneKeepOptions(sc) {
+  var opts = $('#stage .options'); var html = opts ? opts.outerHTML : '';
+  renderScene(Object.assign({}, sc, { options: null }), null, null);
+  if (html) { $('#stage').insertAdjacentHTML('beforeend', html); $$('#stage .opt').forEach(function (o) { o.disabled = true; }); }
+}
+function markPick(v) { $$('#stage .pickcard').forEach(function (p) { p.classList.toggle('picked', +p.getAttribute('data-pick') === v); }); }
+function runTutAnim(a) {
+  if (!a) return Promise.resolve();
+  var stage = $('#stage');
+  if (a.type === 'place') {
+    return placeAnim(stage, a.row, a.slot, $('[data-reveal="' + a.card + '"] .card', stage));
+  }
+  if (a.type === 'take') {
+    var chip = $('.chip[data-chip-name="' + a.who + '"]', stage);
+    return takeAnim(stage, a.row, $('[data-reveal="' + a.card + '"] .card', stage), chip, a.bulls, a.who);
+  }
+  return Promise.resolve();
+}
+$('#nextBtn').addEventListener('click', function () {
+  if (!TUT.done || TUT.busy || !tapOnce()) return;     // double tap: the 2nd tap must not skip the next step
+  var L = LESSONS[TUT.li];
+  if (TUT.si < L.steps.length - 1) { TUT.si++; renderStep(); return; }
+  completeLesson(TUT.li);
+  if (TUT.li < LESSONS.length - 1) openLesson(TUT.li + 1, 0);   // opens at the new lesson's header
+  else finishTutorial();
+});
+$('#prevBtn').addEventListener('click', function () {
+  if (TUT.busy || !tapOnce()) return;
+  TUT.carry = null;
+  if (TUT.si > 0) { TUT.si--; renderStep(); if (!curStep().task) window.scrollTo({ top: 0 }); }
+  else if (TUT.li > 0) { openLesson(TUT.li - 1, LESSONS[TUT.li - 1].steps.length - 1); }
+});
+$('#skipBtn').addEventListener('click', function () {
+  if (TUT.busy || !tapOnce()) return;
+  if (TUT.li < LESSONS.length - 1) openLesson(TUT.li + 1, 0);
+  else finishTutorial(true);
+});
+function completeLesson(i) { if (prefs.done.indexOf(i) === -1) prefs.done.push(i); savePrefs(); renderLessonMap(); }
+function finishTutorial(skipped) {
+  if (!skipped) { completeLesson(LESSONS.length - 1); prefs.finished = true; savePrefs(); }   // skipping ticks nothing
+  showTab('play');
+  if (gameInProgress()) { askAboutRunningGame(); return; }   // never silently drop a game in progress
+  showView('setup');
+  window.scrollTo({ top: 0 });
+  setTimeout(function () { $('#startBtn').focus({ preventScroll: true }); }, 50);
+}
+
+/* =====================================================================================
+   实战
+   ===================================================================================== */
+var SET = { n: 4, end: '66', custom: 40, rounds: 3, adv: false, draft: false,
+  coach: prefs.coach !== undefined ? !!prefs.coach : !(prefs.games > 0) };
+var G = { state: null, token: 0, sel: null, selAt: 0, waiting: null, resolver: null, coach: true, ready: {}, last: null,
+  what: '', tip: '', lastOpts: null, view: 'setup', hl: -1, quitAsk: false, between: false, clOpen: false };
+
+function gameInProgress() { return !!(G.state && G.view === 'game' && G.state.phase !== 'gameOver'); }
+function showView(v) {
+  G.view = v;
+  $('#setupView').hidden = v !== 'setup';
+  $('#gameView').hidden = v !== 'game';
+  $('#resultView').hidden = v !== 'result';
+  document.body.classList.toggle('in-game', v === 'game' && currentTab === 'play');
+  if (v === 'setup') renderSetup();
+  if (v === 'game') requestAnimationFrame(function () { sizeGame(); });
+}
+// coming back to 实战: redraw, unless a take was paused half-way (then the page is still exactly as it was left)
+function refreshPlay() { if (G.view === 'game') { if (G.anim) sizeGame(); else renderGame(); } }
+
+function renderSetup() {
+  $('#nOut').textContent = SET.n;
+  $('#nMinus').disabled = SET.n <= 2; $('#nPlus').disabled = SET.n >= 10;
+  $('#whoLine').textContent = '你、' + E.BOT_NAMES.slice(0, SET.n - 1).join('、');
+  $$('#endSeg button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-end') === SET.end)); });
+  var ex = '';
+  if (SET.end === 'custom') ex = '<div class="chips-pick" role="group" aria-label="目标牛头">' + [30, 40, 50, 80, 100].map(function (v) { return '<button data-target="' + v + '" aria-pressed="' + (SET.custom === v) + '">' + v + '</button>'; }).join('') + '</div><p class="note">有人累计到这个数（或以上），打完那一回合就结束。</p>';
+  if (SET.end === 'rounds') ex = '<div class="chips-pick" role="group" aria-label="回合数">' + [1, 2, 3, 4, 5].map(function (v) { return '<button data-rounds="' + v + '" aria-pressed="' + (SET.rounds === v) + '">' + v + '回合</button>'; }).join('') + '</div><p class="note">打满这么多回合就结束，不管牛头多少。</p>';
+  if (SET.end === '66') ex = '<p class="note">说明书的标准玩法：有人累计66牛头或以上，打完那一回合就结束。</p>';
+  $('#endExtra').innerHTML = ex;
+  var advOk = E.advancedAllowed(SET.n);
+  if (!advOk) { SET.adv = false; SET.draft = false; }
+  $('#advTog').disabled = !advOk;
+  $('#advTog').setAttribute('aria-pressed', String(SET.adv));
+  $('#advText').textContent = advOk ? '只用1–' + (SET.n * 10 + 4) + '号牌：所有数字都是公开信息' : '只用1到「人数×10+4」号牌：所有数字都是公开信息';
+  $('#draftTog').disabled = !advOk || !SET.adv;
+  $('#draftTog').setAttribute('aria-pressed', String(SET.adv && SET.draft));
+  $('#advNote').textContent = advOk ? (SET.adv ? '牌数 = 人数×10+4，全部发完。说明书的进阶规则是这两条一起用；网页版让「选牌」可以单独开关。' : '喜欢策略的玩家推荐打开。') : '进阶规则只适合2–6人。';
+  $('#coachTog').setAttribute('aria-pressed', String(SET.coach));
+}
+// setup controls ignore the tail of a double tap that just opened this panel (放弃 / 改设置 / 跳过教程);
+// on/off switches take one tap per double tap (toggleOnce; the stepper stays quick: + + + is a real intent)
+$('#nMinus').addEventListener('click', function () { if (canTap() && SET.n > 2) { SET.n--; renderSetup(); } });
+$('#nPlus').addEventListener('click', function () { if (canTap() && SET.n < 10) { SET.n++; renderSetup(); } });
+$('#endSeg').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b || !canTap()) return; SET.end = b.getAttribute('data-end'); renderSetup(); });
+$('#endExtra').addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (!b || !canTap()) return;
+  if (b.hasAttribute('data-target')) SET.custom = +b.getAttribute('data-target');
+  if (b.hasAttribute('data-rounds')) SET.rounds = +b.getAttribute('data-rounds');
+  renderSetup();
+});
+$('#advTog').addEventListener('click', function () { if (!toggleOnce(this)) return; SET.adv = !SET.adv; if (!SET.adv) SET.draft = false; renderSetup(); });
+$('#draftTog').addEventListener('click', function () { if (!toggleOnce(this)) return; SET.draft = !SET.draft; renderSetup(); });
+$('#coachTog').addEventListener('click', function () { if (!toggleOnce(this)) return; SET.coach = !SET.coach; prefs.coach = SET.coach; savePrefs(); renderSetup(); });
+$('#startBtn').addEventListener('click', function () { if (tapOnce()) startGame(optsFromSet()); });
+
+function optsFromSet() {
+  return { numPlayers: SET.n, endMode: SET.end === 'rounds' ? 'rounds' : 'target',
+    target: SET.end === 'custom' ? SET.custom : 66, rounds: SET.rounds,
+    advanced: SET.adv, draft: SET.adv && SET.draft, coach: SET.coach };
+}
+function startGame(o) {
+  G.token++;
+  var tk = G.token;
+  var opts = Object.assign({}, o);
+  if (opts.seed === undefined) opts.seed = Math.floor(Math.random() * 4294967296);
+  G.lastOpts = Object.assign({}, o); delete G.lastOpts.seed;
+  G.state = E.createGame(opts);
+  G.coach = o.coach !== undefined ? !!o.coach : true;
+  G.sel = null; G.waiting = null; G.resolver = null; G.ready = {}; G.what = ''; G.tip = ''; G.hl = -1; G.quitAsk = false;
+  G.firstTip = true; G.showReveal = false; G.notes = []; G.evs = []; G.plan = null; G.between = false; G.clOpen = false; G.trayMax = 0; G.anim = false;
+  closeOverlay();
+  $$('#tab-play .flyer').forEach(function (f) { f.remove(); });   // nothing of a previous game may still be flying
+  $('#trayBody').style.minHeight = '';
+  showView('game');
+  renderGame();
+  window.scrollTo({ top: 0 });
+  loop(tk);
+}
+function waitUser(kind) {
+  G.waiting = kind;
+  return new Promise(function (res) { G.resolver = function (v) { G.waiting = null; G.resolver = null; res(v); }; });
+}
+function alive(tk) { return tk === G.token; }
+
+// The game loop. Every pause in it is a gwait(): it only counts time while 实战 is on screen.
+async function loop(tk) {
+  var s = G.state;
+  while (alive(tk)) {
+    if (s.phase === 'draft') {
+      var p = E.draftCurrent(s);
+      renderGame();
+      if (s.players[p].isBot) {
+        await gwait(320);
+        if (!alive(tk)) return;
+        E.draftPick(s, p, E.botDraftPick(s, p));
+      } else {
+        var pDraft = waitUser('draft');
+        renderGame();
+        var pick = await pDraft;
+        if (!alive(tk)) return;
+        E.draftPick(s, p, pick);
+      }
+      continue;
+    }
+    if (s.phase === 'choose') {
+      G.ready = {}; G.sel = null; G.hl = -1; G.showReveal = false; G.between = false; G.clOpen = false;
+      E.chooseBots(s);                                   // bots decide now (simultaneous); we just show them "thinking"
+      var botsDone = Promise.all(s.players.map(function (pl, i) {
+        if (!pl.isBot) return Promise.resolve();
+        return gwait(350 + Math.random() * 1500).then(function () { if (alive(tk)) { G.ready[i] = true; renderChips(); renderActions(); } });
+      }));
+      G.tip = coachTip();
+      var pCard = waitUser('card');
+      $('#trayBody').style.minHeight = '';
+      renderGame();
+      ensureGameView(true);
+      var card = await pCard;
+      if (!alive(tk)) return;
+      G.plan = { card: card, rows: E.cloneRows(s.rows), pv: E.previewPlacement(s.rows, card) };   // what the labels showed
+      E.chooseCard(s, 0, card);
+      G.ready[0] = true;
+      renderGame();
+      await botsDone;
+      if (!alive(tk)) return;
+      // the tray keeps its height while the revealed cards replace the hand, so nothing on the page jumps
+      var tb = $('#trayBody'), th = tb.offsetHeight;
+      E.reveal(s);
+      G.showReveal = true;
+      if (th) tb.style.minHeight = th + 'px';
+      G.notes = []; G.evs = [];
+      G.what = ''; G.tip = '';
+      renderGame('reveal');
+      ensureGameView(true);
+      await gwait(900);
+      continue;
+    }
+    if (s.phase === 'resolve') {
+      var nx = E.peekNext(s);
+      G.hl = nx.kind === 'low' ? -1 : nx.row;
+      renderZone(); renderRowsGame();
+      var choice;
+      if (nx.needsChoice) {
+        var pRow = waitUser('row');
+        renderZone(); renderRowsGame(true); renderActions();
+        ensureGameView(true);                            // every 列 (and its 牛头 tag) visible above the tray
+        choice = await pRow;
+        if (!alive(tk)) return;
+      } else {
+        await gwait(420);
+        if (!alive(tk)) return;
+      }
+      var lenBefore = s.rows.map(function (r) { return r.length; });
+      G.preRows = E.cloneRows(s.rows);
+      var ev = E.resolveNext(s, choice);
+      G.anim = true;                                     // the table on screen is mid-animation: don't redraw it
+      await animateEvent(ev, lenBefore);
+      if (!alive(tk)) return;                            // (an abandoned game must not touch the next game's flags)
+      G.anim = false;
+      narrate(ev);
+      G.hl = -1;
+      if (s.phase !== 'resolve') G.between = true;       // last card of the 轮 is down
+      renderGame();
+      await gwait(ev.kind === 'add' ? 160 : 600);
+      if (!alive(tk)) return;
+      if (s.phase !== 'resolve') {
+        G.what = summarizeTrick();
+        renderCoachline();
+        await gwait(500);
+      }
+      continue;
+    }
+    if (s.phase === 'roundEnd') {
+      G.between = false;
+      renderGame();
+      var pNext = waitUser('nextRound');
+      showRoundSheet();
+      await pNext;
+      if (!alive(tk)) return;
+      closeOverlay();
+      E.nextRound(s);
+      G.trayMax = 0;
+      G.what = '第' + s.round + '回合：' + E.deckSizeFor(s.config) + '张牌全部重洗，' + (s.config.draft ? '重新轮流选牌，' : '每人重新发10张，') + '排新的四列。';
+      continue;
+    }
+    if (s.phase === 'gameOver') {
+      prefs.games = (prefs.games || 0) + 1; savePrefs();
+      G.between = false;
+      renderGame();
+      await gwait(500);
+      if (!alive(tk)) return;
+      showResult();
+      return;
+    }
+    return;
+  }
+}
+
+function animateEvent(ev, lenBefore) {
+  var root = $('#gameView');
+  var src = $('#zone [data-reveal="' + ev.card + '"] .card');
+  if (ev.kind === 'add') return placeAnim(root, ev.row, lenBefore[ev.row], src);
+  var chip = $('#scoreboard [data-p="' + ev.player + '"]');
+  return takeAnim(root, ev.row, src, chip, ev.bulls, pname(ev.player));
+}
+
+function pname(i) { var p = G.state.players[i]; return p.isBot ? p.name : '你'; }
+// One line per event, in the order the cards were placed. For your own card the coach also says WHY it ended up
+// somewhere other than its label promised (the labels read the table as it was when you chose).
+function narrate(ev) {
+  var s = G.state, me = !s.players[ev.player].isBot, who = pname(ev.player), t = '';
+  (G.evs = G.evs || []).push(ev);
+  if (ev.kind === 'full') t = who + '的' + ev.card + '是第' + (ev.row + 1) + '列的第6张（规则3「满列」）→拿走' + ev.taken.join('·') + '，共' + ev.bulls + '牛头。';
+  else if (ev.kind === 'low') {
+    t = who + '的' + ev.card + '比每列的最后一张都小（规则4）→拿走第' + (ev.row + 1) + '列，' + ev.bulls + '牛头。';
+    if (me && G.preRows) {
+      if (minBulls(G.preRows) < ev.bulls) t += '（牛头最少的是' + cheapestText(G.preRows) + '。）';   // ties: every cheapest 列
+    }
+  } else if (me) {
+    t = '你的' + ev.card + '接在第' + (ev.row + 1) + '列的' + ev.end + '后面（差' + (ev.card - ev.end) + '，最小）。';
+  }
+  if (!t) return;
+  var why = me ? surpriseWhy(ev) : '';
+  var five = me && ev.kind === 'add' && s.rows[ev.row].length === 5 ? '这列满5张了，下一张落进来的人要拿牌。' : '';
+  G.notes.push({ t: t, why: why, five: five, me: me, take: ev.kind !== 'add', row: ev.row, card: ev.card, who: who, bulls: ev.bulls,
+    end: ev.end, pos: me && ev.kind === 'add' ? s.rows[ev.row].length : 0 });
+  G.what = t + why + five; renderCoachline();
+}
+function cardsBy(list) { return list.map(function (e) { return e.card + '（' + pname(e.player) + '）'; }).join('、'); }
+// Your label said one thing, the table did another: name the lower cards that changed it (lesson 6, 陷阱2, for real).
+function surpriseWhy(ev) {
+  var pl = G.plan; if (!pl || pl.card !== ev.card) return '';
+  var pv = pl.pv, c = ev.card;
+  var before = (G.evs || []).filter(function (e) { return e.card < c; });       // placed before yours this 轮
+  if (pv.kind === 'low') {
+    var x = before.filter(function (e) { return e.kind === 'low'; })[0];
+    if (ev.kind === 'low' || !x) return '';
+    return '标签原本是「规则4」，可' + pname(x.player) + '的' + x.card + '比你还小，先用规则4拿走了第' + (x.row + 1) + '列' +
+      (ev.kind === 'full' ? '；后面比你小的牌又把一列填满了。' : '，你的' + c + '就有地方接了，不用拿牌。');
+  }
+  var r0 = pv.row, onR0 = before.filter(function (e) { return e.row === r0; });
+  if (ev.row === r0) {
+    if (ev.kind === 'full' && pv.kind !== 'full' && onR0.length) {
+      return '你出' + c + '时，第' + (r0 + 1) + '列只有' + pl.rows[r0].length + '张（最后一张是' + last(pl.rows[r0]) + '）；比你小的' + cardsBy(onR0) +
+        '先放了进去，把它填满，你就成了第6张。差得越多，越容易被插队（第6课的陷阱2）。';
+    }
+    if (pv.kind === 'full' && ev.kind !== 'full') {
+      var tk = onR0.filter(function (e) { return e.kind !== 'add'; })[0];
+      if (tk) return pname(tk.player) + '的' + tk.card + '比你小，' + (tk.kind === 'low' ? '先用规则4拿走了第' + (r0 + 1) + '列' : '先成了第6张，拿走了那5张') + '，你的' + c + '就不是第6张了——躲过一劫。';
+    }
+    return '';
+  }
+  // another 列: the 列 it was heading for was emptied by a 规则4 take, so that 列's last card dropped
+  var r4 = onR0.filter(function (e) { return e.kind === 'low'; })[0];
+  return '标签说去第' + (r0 + 1) + '列，可' + (r4 ? pname(r4.player) + '的' + r4.card + '用规则4先拿走了第' + (r0 + 1) + '列' : '比你小的牌先放，牌桌变了') +
+    '，你的' + c + '只能改去第' + (ev.row + 1) + '列' + (ev.kind === 'full' ? '，还成了那一列的第6张。' : '。');
+}
+// After the 轮: the events in the order they happened. When your card went in safely and a later card of the same 轮
+// was the 6th in that 列, that is told as one sentence; "这列满5张了" only stays if the 列 is still full at the end.
+function summarizeTrick() {
+  var n = G.notes || [], s = G.state, items = [];
+  n.forEach(function (x, i) {
+    if (x.merged) return;
+    if (x.me && !x.take) {
+      var y = n.slice(i + 1).filter(function (z) { return z.take && z.row === x.row; })[0];
+      if (y) {
+        y.merged = true;
+        items.push({ me: true, t: '你的' + x.card + '接在第' + (x.row + 1) + '列的' + x.end + '后面' + (x.pos === 5 ? '，刚好是第5张，没事' : '') +
+          (x.why ? '。' + x.why : '；') + '接着' + y.who + '的' + y.card + '成了第6张，把这一列（包括你的' + x.card + '）拿走，共' + y.bulls + '牛头。' });
+        return;
+      }
+      var still = s.rows[x.row].length === 5 && last(s.rows[x.row]) === x.card;
+      items.push({ me: true, t: x.t + x.why + (still ? x.five : '') });
+      return;
+    }
+    items.push({ me: x.me, t: x.t + (x.why || '') });
+  });
+  // short: your own lines always, other players' takes in play order, 3 lines at most
+  var room = 3 - items.filter(function (x) { return x.me; }).length, others = 0;
+  var keep = items.filter(function (x) { if (x.me) return true; if (room > 0) { room--; return true; } others++; return false; });
+  var txt = keep.map(function (x) { return x.t; }).join('');
+  if (others) txt += '另外还有' + others + '次拿牌，看记分栏。';
+  if (!n.some(function (x) { return x.take; })) txt = '这一轮没人拿牌。' + txt;
+  return txt;
+}
+function cheapestText(rows) {
+  var mb = minBulls(rows), idx = [];
+  rows.forEach(function (r, i) { if (E.rowBulls(r) === mb) idx.push(i + 1); });
+  return '第' + idx.join('、') + '列，' + (idx.length > 1 ? '各' : '') + mb + '牛头';
+}
+function coachTip() {
+  var s = G.state; if (!s) return '';
+  var tips = [];
+  var hand = s.players[0].hand;
+  if (G.firstTip) {
+    // first turn of the game: explain the labels under the hand (the caption above the hand repeats the caveat every turn)
+    G.firstTip = false;
+    return '手牌下的标签：按现在的牌桌，这张牌会去哪一列。<b>红色</b>「拿N」= 成为第6张，拿走N牛头；<b>棕色</b>「第5」= 刚好放满，暂时没事；<b>黄色</b>「规则4」= 比每列的最后一张都小。';
+  }
+  var full = [];
+  s.rows.forEach(function (r, i) { if (r.length >= 5) full.push(i); });
+  if (full.length) tips.push('第' + full.map(function (i) { return i + 1; }).join('、') + '列已满5张（' + full.map(function (i) { return E.rowBulls(s.rows[i]); }).join('、') + '牛头）：谁的牌落进去，谁就拿走' + (full.length > 1 ? '那一列的' : '这') + '5张。');
+  if (!tips.length) s.rows.forEach(function (r, i) { if (r.length === 4 && tips.length < 1) tips.push('第' + (i + 1) + '列已有4张：再来1张就满，第6张要拿牌。'); });
+  var minEnd = Math.min.apply(null, s.rows.map(last));
+  var lows = hand.filter(function (c) { return c < minEnd; });
+  if (lows.length) tips.push('你的' + lows[0] + '比每列的最后一张都小：如果没人出更小的牌，打出它就要选一列拿走（现在最少：' + cheapestText(s.rows) + '）。');
+  return tips.slice(0, G.what ? 1 : 2).join('');
+}
+// labels under the hand cards: one format — 列N / 列N·第5 / 列N·拿B🐂 / 规则4 (worked out from the table as it is now).
+// The bull icon always follows 拿B, so it reads as B 牛头, never B cards.
+var DOT = '<i class="dot" aria-hidden="true"></i>';   // a narrow separator (CJK fonts draw · full-width)
+function handHints() {
+  var s = G.state, hints = {};
+  s.players[0].hand.forEach(function (c) {
+    var pv = E.previewPlacement(s.rows, c);
+    if (pv.kind === 'low') hints[c] = { t: '规则4', cls: 'low', aria: '比每列的最后一张都小，要选一列拿走' };
+    else if (pv.kind === 'full') hints[c] = { t: '<span class="rw">列' + (pv.row + 1) + '</span>' + DOT + '拿' + pv.bulls + ICON, cls: 'danger', aria: '会成为第' + (pv.row + 1) + '列的第6张，拿走' + pv.bulls + '个牛头' };
+    else if (s.rows[pv.row].length === 4) hints[c] = { t: '列' + (pv.row + 1) + DOT + '第5', cls: 'five', aria: '去第' + (pv.row + 1) + '列，第5张，刚好放满' };
+    else hints[c] = { t: '列' + (pv.row + 1), cls: '', aria: '去第' + (pv.row + 1) + '列' };
+  });
+  return hints;
+}
+
+function renderGame(anim) {
+  if (!G.state) return;
+  renderHead(); renderChips(); renderCoachline(); renderZone(anim); renderRowsGame(G.waiting === 'row', true); renderHand(true); renderActions();
+  sizeGame();
+}
+var QUITQ = {
+  quit: ['放弃这一局？进度不会保存。', '放弃', '继续玩'],
+  resume: ['你还有一局没打完：接着打，还是放弃它、重新设置？', '放弃这局', '接着打']
+};
+function renderHead() {
+  var s = G.state, c = s.config;
+  var info = '第<b>' + s.round + '</b>' + (c.endMode === 'rounds' ? '/' + c.rounds : '') + '回合';
+  if (s.phase === 'choose' || s.phase === 'resolve') info += ' · 第<b>' + Math.min(10, s.turn) + '</b>/10轮';
+  if (s.phase === 'draft') info += ' · 选牌';
+  info += '<br>' + (c.endMode === 'rounds' ? '打满' + c.rounds + '回合结束' : '有人到' + c.target + '牛头结束') + (c.advanced ? ' · 进阶规则' : '');
+  $('#ghInfo').innerHTML = info;
+  $('#coachBtn').setAttribute('aria-pressed', String(G.coach));
+  $('#coachBtn').textContent = '解说' + (G.coach ? '：开' : '：关');
+  var q = G.quitAsk ? QUITQ[G.quitAsk] || QUITQ.quit : null;
+  $('#quitBar').hidden = !q;
+  if (q) { $('#quitText').textContent = q[0]; $('#quitYes').textContent = q[1]; $('#quitNo').textContent = q[2]; }
+  $('#quitBtn').setAttribute('aria-expanded', String(G.quitAsk === 'quit'));
+  syncPause();
+}
+function askAboutRunningGame() {
+  G.quitAsk = 'resume'; renderHead();
+  window.scrollTo({ top: 0 });
+  setTimeout(function () { $('#quitNo').focus({ preventScroll: true }); }, 50);
+}
+function abandonGame() {
+  G.quitAsk = false; G.token++; G.state = null; G.waiting = null; G.resolver = null; G.anim = false;
+  syncPause();                                          // the old loop's timers run out and it stops (token)
+  closeOverlay(); $('#quitBar').hidden = true; $('#trayBody').style.minHeight = '';
+  $$('#tab-play .flyer').forEach(function (f) { f.remove(); });
+  showView('setup');
+  window.scrollTo({ top: 0 });
+}
+// a double tap on 放弃 / 解说 / 更多 toggles once (the 2nd tap must not undo the 1st)
+$('#quitBtn').addEventListener('click', function () { if (!toggleOnce(this)) return; G.quitAsk = G.quitAsk ? false : 'quit'; renderHead(); if (G.quitAsk) $('#quitNo').focus({ preventScroll: true }); });
+$('#quitNo').addEventListener('click', function () { if (!canTap()) return; G.quitAsk = false; renderHead(); $('#quitBtn').focus({ preventScroll: true }); });
+$('#quitYes').addEventListener('click', function () { if (!tapOnce()) return; abandonGame(); });
+$('#coachBtn').addEventListener('click', function () {
+  if (!toggleOnce(this)) return;
+  G.coach = !G.coach; prefs.coach = G.coach; SET.coach = G.coach; savePrefs();
+  if (G.coach && G.state && G.state.phase === 'choose') G.tip = coachTip();
+  renderGame();
+});
+function renderChips() {
+  var s = G.state; if (!s) return;
+  var el = $('#scoreboard');
+  sbCols(s.players.length, el);
+  // narrow chips hide the 思考/已出 words (the ✓ / … stay), so names are never cut
+  el.classList.toggle('narrow', window.innerWidth < 900 && (s.players.length >= 5 || window.innerWidth < 380));
+  el.classList.toggle('many', s.players.length > 6);
+  var max = s.config.endMode === 'target' ? s.config.target : Math.max(66, Math.max.apply(null, s.players.map(function (p) { return p.total + p.roundBulls; })));
+  el.innerHTML = s.players.map(function (p, i) {
+    var st = '', stt = '';
+    if (s.phase === 'choose' && !G.between) {
+      if (G.ready[i]) { st = 'ready'; stt = '✓<span class="lbl">已出</span>'; }
+      else if (p.isBot) { st = 'think'; stt = '<span class="lbl">思考</span>'; }
+      else { stt = '<span class="lbl">待出</span>'; }
+    } else if (s.phase === 'draft' && E.draftCurrent(s) === i) { st = p.isBot ? 'think' : ''; stt = p.isBot ? '<span class="lbl">挑牌</span>' : '轮到你'; }
+    var running = s.phase === 'roundEnd' || s.phase === 'gameOver' ? p.total : p.total + p.roundBulls;
+    return chipHTML({ name: p.isBot ? p.name : '你', total: running, round: s.phase === 'roundEnd' || s.phase === 'gameOver' ? p.history[p.history.length - 1] : p.roundBulls, me: !p.isBot, state: st, stateText: stt }, i, { max: max });
+  }).join('');
+}
+function renderCoachline() {
+  var on = G.coach && G.state, cl = $('#coachline');
+  cl.hidden = !on;
+  if (!on) return;
+  var ph = G.state.phase;
+  var tip = ph === 'choose' && !G.between ? G.tip : '';
+  var dflt = ph === 'choose' && !G.between ? '选一张牌，点「出牌」。所有人同时出，翻开后从小到大放。'
+    : ph === 'resolve' ? '翻开了：从最小的牌开始，一张张放进列。'
+    : ph === 'draft' ? '进阶选牌：所有牌都翻开，大家轮流拿1张。很小的牌是规则4的「逃生口」；连着的数字（比如20、21）能让你自己接自己。' : '';
+  var what = G.what || '';
+  tip = tip || (what ? '' : dflt);
+  $('#clWhat').innerHTML = what;
+  $('#clTip').innerHTML = tip;
+  $('#clBr').hidden = !(what && tip);
+  cl.classList.toggle('open', !!G.clOpen);
+  // fixed height (3 lines) so the 列 below never jump; longer text gets 更多
+  var t = $('#clText'), over = t.scrollHeight > t.clientHeight + 2;
+  var more = $('#clMore');
+  more.hidden = !(over || G.clOpen);
+  more.textContent = G.clOpen ? '收起' : '更多';
+  more.setAttribute('aria-expanded', String(!!G.clOpen));
+}
+$('#clMore').addEventListener('click', function () { if (!toggleOnce(this)) return; G.clOpen = !G.clOpen; renderCoachline(); });
+function renderZone(anim) {
+  var s = G.state, z = $('#zone'), d = $('#draftBox');
+  if (!s) return;
+  if (s.phase === 'draft') {
+    var cur = E.draftCurrent(s), mine = !s.players[cur].isBot;
+    d.hidden = false;
+    d.innerHTML = '<div class="draftbox-label"><span>选牌：' + (mine ? '<b style="color:var(--yellow)">轮到你挑1张</b>' : esc(s.players[cur].name) + '在挑') + '</span><span>剩' + s.draft.pool.length + '张 · 最后4张开四列</span></div>' +
+      '<div class="draftpool">' + s.draft.pool.map(function (c) { return '<button data-draft="' + c + '"' + (mine ? '' : ' disabled') + ' aria-label="选' + c + '">' + cardHTML(c) + '</button>'; }).join('') + '</div>';
+  } else { d.hidden = true; d.innerHTML = ''; }
+  var showRev = !!(G.showReveal && s.revealed.length && s.phase !== 'draft');
+  z.hidden = !showRev;
+  $('#hand').hidden = showRev;
+  if (!showRev) { z.innerHTML = ''; return; }
+  var pendingCards = s.pending.map(function (x) { return x.card; });
+  var curCard = pendingCards.length ? pendingCards[0] : null;
+  var list = s.revealed.map(function (x) { return { p: pname(x.player), c: x.card, done: pendingCards.indexOf(x.card) === -1, cur: x.card === curCard, me: !s.players[x.player].isBot }; });
+  z.innerHTML = '<div class="zone-label"><span>' + (s.phase === 'resolve' ? '翻开的牌：从小到大一张张放' : '这一轮翻开的牌') + '</span></div><div class="reveal" data-max="48">' + revealHTML(list, false) + '</div>';
+  z.className = 'reveal-box' + (anim === 'reveal' ? ' anim-reveal' : '');
+  sizeCards(z);
+}
+function renderRowsGame(ask, noSize) {
+  var s = G.state, el = $('#rows');
+  if (!s) return;
+  if (s.phase === 'draft') { el.hidden = true; el.innerHTML = ''; return; }
+  el.hidden = false;
+  el.className = 'rows' + (ask ? ' ask' : '');
+  el.setAttribute('data-max', window.innerWidth < 600 ? '52' : '64');
+  el.innerHTML = rowsHTML(s.rows, { hit: !!ask, cost: !!ask, minB: ask ? minBulls(s.rows) : -1, target: G.hl });
+  if (!noSize) sizeGame();
+}
+$('#rows').addEventListener('click', function (e) {
+  var b = e.target.closest('.row-hit'); if (!b || G.waiting !== 'row' || !tapOnce()) return;
+  var r = +b.getAttribute('data-row');
+  G.resolver(r);
+  renderRowsGame(false); renderActions(); renderZone();
+});
+function renderHand(noSize) {
+  var s = G.state, el = $('#hand'), cap = $('#handCap');
+  if (!s) return;
+  var hintsOn = G.coach && s.phase === 'choose' && !G.between;
+  cap.hidden = el.hidden || !hintsOn || !s.players[0].hand.length;   // the caveat stays put for the whole choose phase
+  if (el.hidden) return;
+  var hand = s.players[0].hand;
+  var choosing = G.waiting === 'card';
+  var hints = hintsOn && !G.ready[0] ? handHints() : null;
+  var chosen = s.players[0].chosen;
+  el.setAttribute('data-max', window.innerWidth < 600 ? '54' : '64');
+  el.innerHTML = hand.length ? handHTML(hand, { sel: choosing ? G.sel : chosen, hints: hints, disabled: !choosing }) : '';
+  if (!noSize) sizeGame();
+}
+$('#hand').addEventListener('click', function (e) {
+  var b = e.target.closest('[data-hand]'); if (!b || G.waiting !== 'card' || !canTap()) return;
+  var n = +b.getAttribute('data-hand');
+  if (G.sel === n) { if (Date.now() - G.selAt >= guardMs()) confirmPlay(); return; }   // a double tap selects, it does not play
+  G.sel = n; G.selAt = Date.now(); renderHand(); renderActions();
+});
+$('#playBtn').addEventListener('click', function () { if (canTap()) confirmPlay(); });
+function confirmPlay() { if (G.waiting === 'card' && G.sel !== null) { took(); var c = G.sel; G.sel = null; G.resolver(c); } }
+$('#draftBox').addEventListener('click', function (e) {
+  var b = e.target.closest('[data-draft]'); if (!b || G.waiting !== 'draft' || !tapOnce()) return;
+  G.resolver(+b.getAttribute('data-draft'));
+});
+function renderActions() {
+  var s = G.state, msg = '', btn = $('#playBtn');
+  if (!s) return;
+  btn.hidden = false;
+  var n = s.players[0].hand.length;
+  if (G.waiting === 'card') {
+    btn.disabled = G.sel === null;
+    btn.textContent = G.sel === null ? '出牌' : '出' + G.sel;
+    msg = G.sel === null ? '<b>选一张牌</b>（手牌' + n + '张）' : '再点一次' + G.sel + '，或按「出' + G.sel + '」';
+  } else if (G.waiting === 'row') {
+    btn.hidden = true;
+    var c = s.pending.length ? s.pending[0].card : '';
+    msg = '<b>规则4</b>：你的' + c + '比每列的最后一张都小，要拿走一整列。点一列——黄色标签的牛头最少。';
+  } else if (G.waiting === 'draft') {
+    btn.hidden = true; msg = '<b>轮到你选牌</b>：在上面挑1张（已有' + n + '/10）';
+  } else if (G.between) {
+    btn.disabled = true; btn.textContent = '出牌'; msg = '这一轮放完了';
+  } else if (s.phase === 'choose') {
+    btn.disabled = true; btn.textContent = '已出牌';
+    var wt = s.players.map(function (p, i) { return !G.ready[i] && p.isBot ? p.name : null; }).filter(Boolean);
+    msg = wt.length ? '等' + wt.slice(0, 3).join('、') + (wt.length > 3 ? '等' + wt.length + '人' : '') + '出牌……' : '大家都出好了——翻开！';
+  } else if (s.phase === 'resolve') {
+    btn.disabled = true; btn.textContent = '放牌中'; msg = '从最小的开始，一张张放进列';
+  } else if (s.phase === 'draft') {
+    btn.hidden = true; msg = esc(s.players[E.draftCurrent(s)].name) + '在选牌……（你已有' + n + '/10）';
+  } else { btn.disabled = true; btn.textContent = '出牌'; msg = s.phase === 'gameOver' ? '游戏结束' : '回合结束'; }
+  $('#actMsg').innerHTML = msg;
+}
+
+/* ---------- layout: the 4 列 always fit above the hand tray ---------- */
+var LANDQ = window.matchMedia ? window.matchMedia('(max-width:899px) and (orientation:landscape) and (max-height:500px)') : { matches: false };
+function layoutMode() { return window.innerWidth >= 900 ? 'side' : LANDQ.matches ? 'land' : 'stack'; }
+function trayGap() { return layoutMode() === 'land' ? 0 : window.innerWidth >= 600 ? 8 : 0; }
+// hand cards shrink on short phones so the tray leaves room for the 列
+function handCap() {
+  var m = layoutMode(), h = window.innerHeight;
+  if (m === 'side') return 999;
+  if (m === 'land') return Math.max(40, Math.floor((h - 212) / 2.76));
+  return Math.max(40, Math.floor((h - 470) / 4.2));
+}
+function rowsCwFor(H) { return Math.floor(((H - 3 * 14 - 10) / 4 - 14) / 1.38); }   // 4 列 incl. 规则4 gaps + 牛头 tags
+function fitRows() {
+  var rows = $('#rows'), mode = layoutMode(), coach = $('#coachline');
+  var coachH = coach.hidden ? 0 : coach.offsetHeight + 12, H, cap;
+  // size for the tallest tray of this 回合 (a hand of 10), so the 列 keep one size while the hand shrinks
+  var trayH = Math.max($('#tray').offsetHeight, G.trayMax || 0);
+  if (mode !== 'land') G.trayMax = trayH;
+  if (mode === 'land') {
+    H = window.innerHeight - 16;
+    var colW = $('.g-main').clientWidth - $('#tray').offsetWidth - 14;   // 列 share the width with the hand column
+    cap = Math.min(rowsCwFor(H), Math.floor((colW - 114) / 5));
+  } else {
+    H = window.innerHeight - trayH - trayGap() - 12 - coachH;
+    if (mode === 'stack') { var chipsH = $('#scoreboard').offsetHeight + 12; if (rowsCwFor(H - chipsH) >= 40) H -= chipsH; }
+    cap = rowsCwFor(H);
+  }
+  rows.setAttribute('data-hcap', Math.max(30, cap));
+}
+function sizeGame() {
+  if (!G.state || $('#gameView').hidden || currentTab !== 'play') return;
+  sizeCards($('.g-main'));          // width first: a too-wide 列 would make a phone zoom out and misreport its height
+  sizeCards($('#tray'));            // hand / revealed cards: they set the tray height
+  fitRows();
+  sizeCards($('.g-main'));
+}
+// scroll so the 列 (plus the coach line and the scoreboard, when they fit too) sit between the top and the tray
+function ensureGameView(smooth) {
+  if (currentTab !== 'play' || document.hidden || asking()) return;   // never scroll a question off the screen
+  var rows = $('#rows'), mode = layoutMode(), tray = $('#tray');
+  if ($('#gameView').hidden || rows.hidden || !rows.offsetHeight) return;
+  var extra = rows.classList.contains('ask') ? 10 : 0;
+  var tops = mode === 'land' ? [$('.g-main')] : mode === 'stack' ? [$('#scoreboard'), $('#coachline'), rows] : [$('#coachline'), rows];
+  tops = tops.filter(function (e) { return e && !e.hidden && e.offsetHeight; });
+  var room = (mode === 'land' ? window.innerHeight : window.innerHeight - tray.offsetHeight - trayGap()) - 12;
+  var rb = rows.getBoundingClientRect().bottom + extra, topEl = rows;
+  for (var i = 0; i < tops.length; i++) { if (rb - tops[i].getBoundingClientRect().top <= room) { topEl = tops[i]; break; } }
+  scrollIntoBand(function () { return { top: topEl.getBoundingClientRect().top, bottom: rows.getBoundingClientRect().bottom + extra }; },
+    function () { return { top: 4, bottom: mode === 'land' ? window.innerHeight - 4 : tray.getBoundingClientRect().top - 6 }; }, smooth);
+}
+
+/* ---------- round end / result ---------- */
+function closeOverlay() { var o = $('#overlay'); o.hidden = true; o.innerHTML = ''; }
+function showRoundSheet() {
+  var s = G.state, c = s.config;
+  var rows = s.players.map(function (p, i) { return { i: i, name: p.isBot ? p.name : '你', r: p.history[p.history.length - 1], t: p.total, me: !p.isBot }; })
+    .sort(function (a, b) { return a.t - b.t; });
+  var maxT = Math.max.apply(null, rows.map(function (x) { return x.t; }));
+  var scale = c.endMode === 'target' ? c.target : Math.max(66, maxT);     // same scale as the scoreboard bars
+  var worst = rows.slice().sort(function (a, b) { return b.r - a.r; })[0];
+  var line = worst.r > 0 ? '这一回合拿得最多：' + worst.name + '+' + worst.r + '。' : '';
+  var next = c.endMode === 'target' ? '还没人到' + c.target + '：' + E.deckSizeFor(c) + '张牌全部重洗，开始第' + (s.round + 1) + '回合。' : '共' + c.rounds + '回合，接着打第' + (s.round + 1) + '回合。';
+  var o = $('#overlay');
+  o.innerHTML = '<div class="sheet-back"><div class="round-sheet paper" role="dialog" aria-modal="true" aria-labelledby="rsTitle">' +
+    '<h3 id="rsTitle">第<span class="dn">' + s.round + '</span>回合结束</h3><p>' + line + next + '</p>' +
+    '<table class="rs-table"><thead><tr><th>玩家</th><th>本回合</th><th>累计</th><th class="bar"><span class="sr">进度</span></th></tr></thead><tbody>' +
+    rows.map(function (x) { var pct = Math.min(100, Math.round(x.t / scale * 100)); return '<tr' + (x.me ? ' class="me"' : '') + '><td>' + esc(x.name) + '</td><td class="' + (x.r ? 'plus' : '') + '">+' + x.r + '</td><td>' + x.t + '</td><td class="bar"><div><i class="' + (pct >= 85 ? 'hot' : '') + '" style="width:' + pct + '%"></i></div></td></tr>'; }).join('') +
+    '</tbody></table><button class="btn primary big" id="roundNext">开始第' + (s.round + 1) + '回合</button></div></div>';
+  o.hidden = currentTab !== 'play';                  // never over 教程/速查 (showTab brings it back on 实战)
+  $('#roundNext').addEventListener('click', function () { if (G.waiting === 'nextRound' && tapOnce()) G.resolver(); });
+  setTimeout(function () { var b = $('#roundNext'); if (b && currentTab === 'play') b.focus({ preventScroll: true }); }, 30);
+}
+function showResult() {
+  var s = G.state, c = s.config;
+  var res = E.results(s);
+  var nm = function (i) { return s.players[i].isBot ? s.players[i].name : '你'; };
+  var winners = s.winners.map(nm);
+  var youWin = s.winners.indexOf(0) >= 0;
+  var head = youWin ? (winners.length > 1 ? '你和' + winners.filter(function (n) { return n !== '你'; }).join('、') + '并列第一！' : '你赢了！')
+    : (winners.length > 1 ? winners.join('、') + '并列第一' : winners[0] + '赢了');
+  var reason = s.endReason.type === 'target'
+    ? s.endReason.who.map(nm).join('、') + '累计到' + s.endReason.who.map(function (i) { return s.players[i].total; }).join('、') + '牛头（≥' + c.target + '），游戏在第' + s.round + '回合后结束。'
+    : '打满' + c.rounds + '回合，游戏结束。';
+  // 合计 comes right after the name and the first three columns stay put: the total is never cut off on a phone
+  var th = '<tr><th>名次</th><th>玩家</th><th>合计</th>';
+  for (var r = 0; r < s.round; r++) th += '<th class="rd">回合' + (r + 1) + '</th>';
+  th += '</tr>';
+  var body = res.map(function (x) {
+    var tds = x.history.map(function (h) { return '<td>' + h + '</td>'; }).join('');
+    return '<tr class="' + (x.rank === 1 ? 'win ' : '') + (x.isBot ? '' : 'me') + '"><td>' + x.rank + '</td><td>' + esc(x.isBot ? x.name : '你') + '</td><td class="tot">' + x.total + '</td>' + tds + '</tr>';
+  }).join('');
+  var me = res.filter(function (x) { return !x.isBot; })[0];
+  var sub = youWin ? '牛头最少就是赢家。' : '你排第' + me.rank + '，' + me.total + '个牛头。牛头最少的人赢。';
+  $('#resultView').innerHTML = '<h2>游戏结束</h2><p>' + reason + '</p>' +
+    '<div class="crown"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#bull"/></svg><div>' + esc(head) + '<small>' + sub + '</small></div></div>' +
+    '<div class="tbl-outer"><div class="tbl-wrap"><table class="res-table"><thead>' + th + '</thead><tbody>' + body + '</tbody></table></div></div>' +
+    '<div class="acts"><button class="btn primary big" id="againBtn">再来一局</button><button class="btn ghost big" id="setupBtn">改设置</button></div>';
+  showView('result');
+  if (currentTab === 'play') window.scrollTo({ top: 0 });   // never yank another tab's scroll position
+  // more 回合 columns than fit: a fade on the right says the table scrolls sideways
+  var tw = $('#resultView .tbl-wrap'), more = function () { tw.parentNode.classList.toggle('more', tw.scrollLeft + tw.clientWidth < tw.scrollWidth - 2); };
+  tw.addEventListener('scroll', more); more();
+  $('#againBtn').addEventListener('click', function () { if (!tapOnce()) return; var o = Object.assign({}, G.lastOpts, { coach: G.coach }); startGame(o); });
+  $('#setupBtn').addEventListener('click', function () { if (!tapOnce()) return; showView('setup'); window.scrollTo({ top: 0 }); });
+  if (currentTab === 'play') $('#againBtn').focus({ preventScroll: true });
+}
+
+/* =====================================================================================
+   速查
+   ===================================================================================== */
+function renderRef() {
+  var vals = [7, 15, 30, 44, 55].map(function (n) {
+    var lab = { 7: '其余', 15: '个位是5', 30: '10的倍数', 44: '11的倍数', 55: '只有55' }[n];
+    var cnt = { 7: '76张', 15: '9张', 30: '10张', 44: '8张', 55: '1张' }[n];
+    return '<div>' + cardHTML(n) + '<b>' + E.bulls(n) + '牛头</b>' + lab + '<br>' + cnt + '</div>';
+  }).join('');
+  var det = function (title, sub, body, cls) {
+    return '<details class="paper' + (cls ? ' ' + cls : '') + '"><summary>' + title + (sub ? '<small>' + sub + '</small>' : '') + '</summary><div class="dbody">' + body + '</div></details>';
+  };
+  // phone order (H7): 开局步骤 → the rules looked up during play → 牛头 values → the rarely needed parts, closed
+  $('#refSheet').innerHTML =
+    '<div class="paper"><h3>开局步骤</h3><p class="lead">目标：<b>牛头越少越好</b>。2–10人，约45分钟。</p><ol class="steps">' +
+      '<li>洗匀104张，每人发<b>10张</b>，手牌自己按大小理好。</li>' +
+      '<li>再翻<b>4张</b>各开一列（说明书的「排四行」就是这4列），每列最多<b>5张</b>。</li>' +
+      '<li>每轮各选1张<b>扣在面前</b>，都扣好后<b>一起翻开</b>。</li>' +
+      '<li>从<b>最小的牌</b>开始，<b>谁的牌谁自己放</b>（规则见下）。</li>' +
+      '<li>10轮 = 1回合。回合结束各自数牛头，<b>一人用纸笔记分</b>。</li></ol>' +
+      '<p class="webdiff">网页替你理牌、放牌、数牛头；实体桌上自己来。</p></div>' +
+    '<div class="paper"><h3>四条规则</h3>' +
+      '<div class="rule"><span class="rn">规则1</span><p><b>「由小至大」</b>每列从左到右越来越大。</p></div>' +
+      '<div class="rule"><span class="rn">规则2</span><p><b>「差异最小」</b>放到「最后一张比它小、差得最少」的那一列。例：37和43都比44小，44去43后面。</p></div>' +
+      '<div class="rule r3"><span class="rn">规则3</span><p><b>「满列」</b>你的牌要成为某列的<b>第6张</b> → 拿走那5张，你的牌当这一列的第一张。</p></div>' +
+      '<div class="rule r4"><span class="rn">规则4</span><p><b>「最小的牌」</b>你的牌比每列的最后一张都小 → <b>任选一列</b>全部拿走，你的牌当这一列的第一张。提示：通常拿牛头最少的那列。</p></div>' +
+    '</div>' +
+    '<div class="paper"><h3>拿牌 · 回合结束 · 游戏结束</h3><ul class="end">' +
+      '<li>拿走的牌面朝下放在面前（<b>牛头堆</b>），不进手牌。</li>' +
+      '<li>10张手牌出完 = 回合结束：数牛头、记分，104张重洗重发，重开4列。</li>' +
+      '<li>有人累计<b>66或以上</b> → 打完那一回合就结束，<b>牛头最少的人赢</b>（也可以开局前约好别的目标或回合数）。</li></ul></div>' +
+    '<div class="paper"><h3>牛头对照（104张，共171个牛头）</h3><div class="vals">' + vals + '</div></div>' +
+    det('小贴士', '', '<ul>' +
+      '<li>说明书：出太小的牌要拿一列时，通常拿牛头最少的那列。</li>' +
+      '<li>中间的牌留着灵活用：40–70这种牌能接的列多。</li>' +
+      '<li>差得越少越安全：某列最后一张是43、还没满，你出44，没有牌能插到你前面。</li>' +
+      '<li>盯紧4张、5张的列：第6张要拿牌。</li>' +
+      '<li>小牌是「逃生口」：趁某列便宜时主动拿掉它。</li>' +
+      '<li>你看到的牌桌，轮到你放时可能已经变了——比你小的牌先放。</li></ul>') +
+    det('进阶规则', '2–6人，可选', '<p><b>1. 数字全公开：</b>只用1到「人数×10+4」号的牌，其余移出。</p>' +
+      '<table class="adv-t"><tr><th>人数</th><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr><tr><th>用牌</th><td>1–24</td><td>1–34</td><td>1–44</td><td>1–54</td><td>1–64</td></tr></table>' +
+      '<p style="margin-top:8px"><b>2. 自己选手牌：</b>这些牌正面朝上围成一圈，大家轮流拿1张，直到每人10张；剩下4张开四列。其余规则不变。</p>') +
+    det('说明书没写清楚的地方', '', '<ul>' +
+      '<li><span class="tag">规则4何时选</span>说明书没写清楚，这里按官方规则：所有牌翻开之后、轮到你这张牌放置时才选列（它一定是这一轮最小的，所以第一个放）。</li>' +
+      '<li><span class="tag">66</span>「66个牛头以上」包括正好66（官方规则：66或更多）。</li>' +
+      '<li><span class="tag">平手</span>说明书没写最后牛头一样多怎么办，网页版算并列获胜。</li>' +
+      '<li><span class="tag">进阶规则</span>说明书的进阶规则是两条一起用；网页版把「自己选手牌」（选牌）做成可以单独打开的选项。</li>' +
+      '<li><span class="tag">选牌顺序</span>进阶规则没写谁先拿，网页版每回合轮换第一个选牌的人。</li>' +
+      '<li><span class="tag">机器人</span>网页里机器人按规则4拿列时选牛头最少的（一样多就选张数少的）。</li></ul>', 'foot');
+}
+// a double tap on a 速查 heading opens it once (never open-and-close)
+$('#refSheet').addEventListener('click', function (e) {
+  var sm = e.target.closest && e.target.closest('summary');
+  if (sm && !toggleOnce(sm)) e.preventDefault();
+});
+
+/* =====================================================================================
+   debug hook (for automated play-through; normal users never see it)
+   ===================================================================================== */
+window.GameDebug = {
+  setSpeed: function (f) { T.debug = (f === null || f === undefined) ? null : +f; applySpeed(); },
+  getState: function () { return G.state ? clone(G.state) : null; },
+  lesson: function (i) { showTab('learn'); openLesson((i || 1) - 1, 0); return { lesson: TUT.li + 1, steps: LESSONS[TUT.li].steps.length }; },
+  lessons: function () { return LESSONS.map(function (L, i) { return { n: i + 1, title: L.title, steps: L.steps.length }; }); },
+  tut: function () {
+    var S = curStep(), t = S.task;
+    return { lesson: TUT.li + 1, step: TUT.si + 1, steps: LESSONS[TUT.li].steps.length, lessons: LESSONS.length,
+      kind: t ? t.kind : null, answer: t ? t.answer : null, done: TUT.done, busy: TUT.busy,
+      legal: !!(t && t.legal), order: S.scene.order || null };
+  },
+  tab: function (n) { showTab(n); },
+  newGame: function (o) { showTab('play'); startGame(Object.assign({ numPlayers: 4, endMode: 'target', target: 66, coach: true }, o || {})); },
+  ui: function () { return { view: G.view, waiting: G.waiting, phase: G.state ? G.state.phase : null, round: G.state ? G.state.round : 0, turn: G.state ? G.state.turn : 0 }; },
+  prefs: function () { return clone(prefs); },
+  paused: function () { return PZ.on; },
+  layout: function () { return { mode: layoutMode(), trayMax: G.trayMax, tray: $('#tray').offsetHeight, hcap: +$('#rows').getAttribute('data-hcap'), handCap: handCap() }; }
+};
+
+/* ================= boot ================= */
+renderRef();
+renderLessonMap();
+var firstUndone = 0;
+while (prefs.done.indexOf(firstUndone) >= 0 && firstUndone < LESSONS.length - 1) firstUndone++;
+TUT.li = prefs.finished ? 0 : firstUndone;
+renderStep(false, null, true);
+renderLessonMap();
+if (prefs.finished) { showTab('play'); showView('setup'); } else { showTab('learn'); }
+})();
+</script>
+</body>
+</html>

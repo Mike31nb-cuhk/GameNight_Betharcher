@@ -1,0 +1,3273 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sushi Go! 新手课</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<script>/* 字体后台加载：连不上 Google Fonts 时页面照样立刻显示（用系统字体） */(function(){var l=document.createElement("link");l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=ZCOOL+KuaiLe&display=swap";document.head.appendChild(l);})();</script>
+<style>
+:root{
+  color-scheme: light;
+  --wood:#F0D8B2; --wood-2:#E8C998; --wood-edge:#B98A55; --counter:#F8EBD3; --counter-2:#F3DFBE;
+  --soy:#3B2416; --soy-2:#6A4A35; --soy-3:#8C6A52;
+  --nori:#1C2420; --nori-2:#2C3732; --on-nori:#F7EEDF; --on-nori-2:#B9B2A4;
+  --salmon:#EE6E48; --salmon-d:#C24F2C; --salmon-l:#FFD9C9;
+  --wasabi:#86B83A; --wasabi-d:#557F1C; --wasabi-l:#E4F1C9;
+  --tamago:#F5C443; --tamago-d:#B98512; --tamago-l:#FDF0C4;
+  --rice:#FFFCF5; --paper:#FFF8EA; --line:#D9BC91;
+  --belt:#87929A; --belt-d:#5E6870; --belt-l:#C3CBD0; --plate:#FFFFFF;
+  --warn:#B4441E; --ok:#3F7A16;
+  --c-tempura:#C9B6EA; --c-sashimi:#BBD34C; --c-dumpling:#8FB5F1; --c-maki:#E2474E;
+  --c-nigiri:#EDBC4E; --c-pudding:#F6B5C7; --c-wasabi:#F3E36B; --c-chop:#9DD9D3;
+  --card-back:#7E1E2B; --card-back-2:#9B2C3A;
+  --focus:#1E6FD9;
+  --font-body:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC","Noto Sans SC",sans-serif;
+  --font-display:"ZCOOL KuaiLe","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+  --font-num:"Fredoka","ZCOOL KuaiLe","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+  --top-h:52px;
+  --sat:env(safe-area-inset-top,0px); --sab:env(safe-area-inset-bottom,0px);
+  --sal:env(safe-area-inset-left,0px); --sar:env(safe-area-inset-right,0px);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;background:var(--wood)}
+body{
+  margin:0; min-height:100vh; color:var(--soy); font-family:var(--font-body); font-size:15px; line-height:1.5;
+  background-color:var(--wood);
+  background-image:
+    repeating-linear-gradient(92deg, rgba(150,95,40,.055) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(88deg, rgba(255,255,255,.10) 0 2px, transparent 2px 31px),
+    linear-gradient(180deg, rgba(255,255,255,.12), rgba(0,0,0,0));
+  -webkit-tap-highlight-color:transparent;
+}
+button{font:inherit;color:inherit;cursor:pointer}
+button:disabled{cursor:default}
+:focus{outline:none}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+[hidden]{display:none !important}
+b,strong{font-weight:700}
+.num{font-family:var(--font-num);font-variant-numeric:tabular-nums}
+
+/* ---------- top bar ---------- */
+.topbar{
+  /* 顶栏永远在最上层（弹窗从顶栏下面开始），这样回合计分弹窗打开时也能切到「速查」再回来 */
+  position:sticky; top:0; z-index:95; background:var(--nori); color:var(--on-nori);
+  padding:var(--sat) calc(10px + var(--sar)) 0 calc(10px + var(--sal));
+  box-shadow:0 3px 0 var(--wood-edge), 0 6px 14px rgba(40,20,5,.18);
+}
+.topbar-in{max-width:1180px;margin:0 auto;height:var(--top-h);display:flex;align-items:center;gap:6px}
+.back-link{
+  display:inline-flex;align-items:center;min-height:40px;padding:0 8px 0 4px;color:var(--on-nori-2);text-decoration:none;
+  font-size:14px;white-space:nowrap;border-radius:8px
+}
+.back-link:hover{color:var(--on-nori)}
+.brand{display:flex;align-items:baseline;gap:6px;min-width:0;margin-right:auto}
+.brand .logo{font-family:"Fredoka",var(--font-display);font-weight:700;font-size:20px;letter-spacing:.2px;white-space:nowrap;color:#fff}
+.brand .logo i{font-style:normal;color:var(--salmon)}
+.brand .sub{font-family:var(--font-display);font-size:14px;color:var(--on-nori-2);white-space:nowrap}
+.tabs{display:flex;align-items:stretch;height:100%}
+.tab{
+  background:none;border:0;color:var(--on-nori-2);min-width:46px;padding:0 8px;font-size:15px;position:relative;
+  font-family:var(--font-display);letter-spacing:1px
+}
+.tab[aria-selected="true"]{color:#fff}
+.tab[aria-selected="true"]::after{content:"";position:absolute;left:8px;right:8px;bottom:6px;height:4px;border-radius:2px;background:var(--salmon)}
+.tab.has-dot::before{content:"";position:absolute;top:9px;right:3px;width:8px;height:8px;border-radius:50%;background:var(--salmon);box-shadow:0 0 0 2px var(--nori)}
+.gear{
+  width:40px;height:40px;border-radius:10px;border:0;background:transparent;color:var(--on-nori-2);display:grid;place-items:center
+}
+.gear:hover,.gear[aria-expanded="true"]{background:var(--nori-2);color:#fff}
+.settings{
+  position:absolute; right:calc(10px + var(--sar)); top:calc(var(--top-h) + var(--sat) + 8px); z-index:60;
+  background:var(--paper); color:var(--soy); border-radius:12px; padding:14px; width:250px;
+  box-shadow:0 10px 30px rgba(40,20,5,.28), 0 0 0 2px var(--wood-edge);
+}
+.settings h3{margin:0 0 8px;font-size:14px;font-weight:700}
+.seg{display:flex;border:2px solid var(--soy-2);border-radius:10px;overflow:hidden}
+.seg button{flex:1;min-height:40px;border:0;background:transparent;font-size:14px}
+.seg button + button{border-left:2px solid var(--soy-2)}
+.seg button[aria-pressed="true"]{background:var(--soy);color:var(--paper)}
+.settings p{margin:10px 0 0;font-size:12px;color:var(--soy-3)}
+
+/* ---------- layout ---------- */
+main{max-width:1180px;margin:0 auto;padding:14px calc(16px + var(--sar)) calc(28px + var(--sab)) calc(16px + var(--sal))}
+.panel[hidden]{display:none}
+h1,h2,h3{font-family:var(--font-display);font-weight:400;letter-spacing:.5px}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 16px;border-radius:10px;
+  border:2px solid var(--soy);background:var(--paper);color:var(--soy);font-weight:700;font-size:15px;
+  box-shadow:0 3px 0 var(--soy);transition:transform .08s, box-shadow .08s;white-space:nowrap
+}
+.btn:active:not(:disabled){transform:translateY(2px);box-shadow:0 1px 0 var(--soy)}
+.btn.primary{background:var(--salmon);border-color:var(--salmon-d);color:#fff;box-shadow:0 3px 0 var(--salmon-d)}
+.btn.green{background:var(--wasabi-d);border-color:#3F6413;color:#fff;box-shadow:0 3px 0 #3F6413}
+.btn.dark{background:var(--nori);border-color:var(--nori);color:#fff;box-shadow:0 3px 0 #000}
+.btn:disabled{opacity:.45;box-shadow:none;transform:none}
+.btn.big{min-height:54px;font-size:18px;padding:0 26px;border-radius:12px}
+.btn.small{min-height:40px;font-size:14px;padding:0 12px}
+.linkbtn{background:none;border:0;color:var(--soy-2);text-decoration:underline;min-height:40px;padding:0 6px;font-size:14px}
+
+/* ---------- cards ---------- */
+.card{
+  --cw:64px; position:relative; width:var(--cw); height:calc(var(--cw) * 1.4); border-radius:calc(var(--cw) * .12);
+  background:var(--cc); border:2px solid rgba(59,36,22,.55); padding:0; overflow:hidden; flex:none;
+  box-shadow:0 2px 0 rgba(59,36,22,.35), 0 4px 8px rgba(59,36,22,.12); color:var(--soy);
+  transition:transform .15s ease, box-shadow .15s ease; display:block; text-align:left
+}
+.card::before{ /* conveyor strip like the physical cards */
+  content:""; position:absolute; left:0; right:0; top:58%; height:16%; background:rgba(110,120,128,.28);
+  border-top:2px solid rgba(255,255,255,.55); border-bottom:2px solid rgba(80,88,95,.25)
+}
+.card .art{position:absolute;left:8%;top:14%;width:84%;height:62%}
+.card .cv{
+  position:absolute;left:5%;top:3%;font-family:var(--font-num);font-weight:700;font-size:calc(var(--cw) * .16);line-height:1.15;
+  color:var(--soy);background:rgba(255,255,255,.72);border-radius:5px;padding:0 3px;max-width:90%;white-space:nowrap
+}
+.card .cn{
+  position:absolute;left:0;right:0;bottom:0;padding:2px 2px 3px;text-align:center;font-weight:700;
+  font-size:calc(var(--cw) * .165);line-height:1.15;background:rgba(255,252,245,.9);white-space:nowrap;overflow:hidden
+}
+.card .cv.sm{font-size:calc(var(--cw) * .122);letter-spacing:-.3px;padding:0 2px}
+.card .mk{display:inline-flex;gap:2px;vertical-align:middle;padding:1px 0}
+.card .mk i{width:calc(var(--cw) * .13);height:calc(var(--cw) * .13);border-radius:50%;background:var(--nori);box-shadow:inset 0 0 0 calc(var(--cw) * .03) #fff}
+.card.back{background:var(--card-back);background-image:radial-gradient(circle at 50% 50%, var(--card-back-2) 0 28%, transparent 29%),repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0 4px, transparent 4px 9px)}
+.card.back::before{display:none}
+.card.back::after{content:"SUSHI GO!";position:absolute;left:0;right:0;top:42%;text-align:center;font-family:"Fredoka",sans-serif;font-weight:700;color:#FFD9C9;font-size:calc(var(--cw) * .15);letter-spacing:.5px}
+button.card:not(:disabled):hover{transform:translateY(-3px)}
+.card.sel{transform:translateY(-10px);box-shadow:0 0 0 3px var(--paper),0 0 0 6px var(--salmon),0 10px 16px rgba(59,36,22,.25)}
+button.card.sel:hover{transform:translateY(-10px)}
+.card .order{
+  position:absolute;right:4px;top:4px;width:22px;height:22px;border-radius:50%;background:var(--salmon);color:#fff;
+  font-family:var(--font-num);font-weight:700;font-size:14px;display:grid;place-items:center;box-shadow:0 0 0 2px #fff
+}
+.card .tag{
+  position:absolute;left:3px;right:3px;top:38%;text-align:center;background:var(--nori);color:#fff;border-radius:6px;font-size:11px;
+  padding:1px 2px;font-weight:700
+}
+.mini{
+  --mw:24px; position:relative; display:inline-block; width:var(--mw); height:calc(var(--mw) * 1.38); border-radius:4px;
+  background:var(--cc); border:1.5px solid rgba(59,36,22,.5); overflow:hidden; flex:none; vertical-align:middle
+}
+.mini svg{position:absolute;left:4%;top:8%;width:92%;height:84%}
+.mini .mkd{position:absolute;left:1px;top:1px;display:flex;gap:1px}
+.mini .mkd i{width:4px;height:4px;border-radius:50%;background:var(--nori);box-shadow:0 0 0 1px #fff}
+.chip small{font-size:9px;font-family:var(--font-num);margin-left:1px}
+.mini.back{background:var(--card-back);background-image:repeating-linear-gradient(45deg, rgba(255,255,255,.08) 0 3px, transparent 3px 6px)}
+.mini .x3{
+  position:absolute;right:-1px;bottom:-1px;background:var(--wasabi-d);color:#fff;font-size:9px;font-weight:700;line-height:1;
+  padding:2px 2px 1px;border-radius:3px 0 0 0;font-family:var(--font-num)
+}
+
+/* ---------- table ---------- */
+.table{display:flex;flex-direction:column;gap:10px;position:relative}
+.tv-left,.tv-right{display:flex;flex-direction:column;gap:10px;min-width:0}
+.region-dim [data-region]{transition:opacity .25s, filter .25s}
+.region-dim [data-region]:not(.focus){opacity:.38;filter:saturate(.6)}
+/* 教程里这一步用不上操作条（只写着「读完点上面的「下一步」」）：它变淡以后是半透明的，别再吸在屏幕底边、
+   叠在教练正在说的「你的桌面」/手牌上面——留在原来的位置（手牌下面） */
+.region-dim .actionbar[data-region]:not(.focus){position:relative}
+.spot{animation:spot 1.4s ease-in-out infinite;position:relative;z-index:2}
+@keyframes spot{0%,100%{box-shadow:0 0 0 3px rgba(238,110,72,.0), 0 0 0 0 rgba(238,110,72,.0)}50%{box-shadow:0 0 0 3px var(--salmon), 0 0 0 9px rgba(238,110,72,.25)}}
+.shake{animation:shake .4s}
+@keyframes shake{0%,100%{translate:0}20%{translate:-6px}40%{translate:6px}60%{translate:-4px}80%{translate:3px}}
+
+.opps{display:grid;grid-template-columns:repeat(var(--no,2),minmax(0,1fr));gap:6px;padding:0 14px}
+.opp{
+  background:var(--counter);border:2px solid var(--line);border-radius:10px;padding:5px 6px 6px;text-align:left;min-height:62px;
+  display:flex;flex-direction:column;gap:3px;position:relative;min-width:0
+}
+.opp:hover{border-color:var(--soy-3)}
+.opp-top{display:flex;align-items:center;gap:3px;min-width:0;flex-wrap:wrap;row-gap:0}
+.opp-top b{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pdot{width:9px;height:9px;border-radius:50%;background:var(--pc);flex:none}
+.opp-score{margin-left:auto;font-family:var(--font-num);font-weight:600;font-size:14px;white-space:nowrap;padding-left:2px}
+.opp-pick{display:flex;align-items:center;gap:2px;flex:none;height:24px;--pw:17px}
+.opp-pick .mini{--mw:var(--pw)}
+/* 「思考中」的点点和背面小牌一样宽：机器人选好的那一刻这一行宽度不变，不会忽然换行、对手框高度不跳。
+   点点用 CSS 画（不用「·」字符：中文字体里它是全角的，三个点会撑到40多px宽、或者被裁得只剩一个点）；
+   减少动画时停在三个点 */
+.opp-pick .thinking{display:block;flex:none;width:var(--pw);height:6px;overflow:hidden}
+.opp-pick .thinking::after{content:"";display:block;width:13.8px;height:6px;
+  background:radial-gradient(circle at 2.3px 3px,var(--soy-2) 1.5px,transparent 1.9px) 0 0/4.6px 6px repeat-x;
+  animation:dotsw 1.2s steps(4,end) infinite}
+@keyframes dotsw{from{width:0}to{width:18.4px}}
+.chips{display:flex;flex-wrap:wrap;gap:3px}
+.chip{
+  display:inline-flex;align-items:center;gap:1px;height:18px;padding:0 4px;border-radius:5px;background:var(--cc);
+  font-size:11px;font-weight:700;line-height:1;border:1px solid rgba(59,36,22,.35);white-space:nowrap
+}
+.chip b{font-family:var(--font-num);font-weight:600;font-size:12px}
+.chip.open{outline:2px dashed var(--wasabi-d);outline-offset:-1px}
+.thinking::after{content:"";display:inline-block;width:18px;text-align:left;animation:dots 1.2s steps(4) infinite}
+@keyframes dots{0%{content:""}25%{content:"·"}50%{content:"··"}75%{content:"···"}}
+
+.belt{position:relative;height:166px;margin:0 -4px}
+.belt-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.b-edge{fill:none;stroke:var(--belt-d);stroke-width:30}
+.b-band{fill:none;stroke:var(--belt);stroke-width:24}
+.b-dash{fill:none;stroke:var(--belt-l);stroke-width:18;stroke-dasharray:3 15;opacity:.8}
+.island{
+  position:absolute;left:30px;right:30px;top:30px;bottom:30px;border-radius:16px;
+  background:var(--counter-2);
+  background-image:repeating-linear-gradient(90deg, rgba(150,95,40,.07) 0 1px, transparent 1px 8px);
+  box-shadow:inset 0 2px 6px rgba(80,50,20,.18);
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:10px 8px 0;
+}
+.isl-msg{text-align:center;font-size:13px;line-height:1.35;color:var(--soy);max-width:100%;min-height:36px;padding-top:4px}
+.isl-msg b{color:var(--salmon-d)}
+.isl-msg .dir{display:inline-flex;align-items:center;gap:3px;color:var(--soy-2);font-size:12px}
+.my-slot{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);display:flex;gap:4px;align-items:flex-end;min-height:20px}
+.my-slot .card{--cw:38px;box-shadow:0 2px 0 rgba(59,36,22,.35)}
+.my-slot .card .cn{font-size:8px}
+.plate{
+  position:absolute;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;
+  background:radial-gradient(circle at 50% 50%, var(--plate) 0 54%, var(--prim, #D6564B) 55% 70%, var(--plate) 71% 100%);
+  box-shadow:0 2px 0 rgba(0,0,0,.25), 0 0 0 1.5px rgba(0,0,0,.12);will-change:transform;z-index:3
+}
+.plate .stk{position:absolute;left:50%;top:50%;width:16px;height:22px;margin:-12px 0 0 -8px}
+.plate .stk i{position:absolute;inset:0;border-radius:3px;background:var(--card-back);border:1px solid rgba(255,255,255,.65)}
+.plate .stk i:nth-child(2){transform:translate(2px,-2px) rotate(6deg)}
+.plate .stk i:nth-child(3){transform:translate(-2px,-3px) rotate(-7deg)}
+.plate .pc{
+  position:absolute;right:-8px;top:-7px;min-width:20px;height:20px;padding:0 4px;border-radius:10px;background:var(--nori);color:#fff;
+  font-family:var(--font-num);font-size:12px;font-weight:600;display:grid;place-items:center;box-shadow:0 0 0 2px var(--plate)
+}
+.plate.empty .stk{opacity:0}
+.plate.empty .pc{display:none}
+.plate.me{box-shadow:0 2px 0 rgba(0,0,0,.25), 0 0 0 3px var(--salmon)}
+
+.mine{background:rgba(255,250,240,.55);border:2px solid var(--line);border-radius:12px;padding:8px 10px 10px}
+.mine-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;font-size:13px;color:var(--soy-2);margin-bottom:6px}
+.mine-head .mt{font-family:var(--font-display);font-size:16px;color:var(--soy)}
+.mine-head .est b{font-family:var(--font-num);font-size:18px;color:var(--salmon-d)}
+.groups{display:flex;flex-wrap:wrap;gap:8px 10px;min-height:40px}
+.groups .empty-note{font-size:13px;color:var(--soy-3);align-self:center}
+.grp{
+  display:flex;flex-direction:column;gap:2px;min-width:0;background:none;border:0;padding:4px;border-radius:8px;text-align:left;
+  position:relative
+}
+button.grp:hover{background:rgba(255,255,255,.5)}
+.g-cards{display:flex;align-items:flex-end;min-height:36px;padding-left:2px}
+.g-cards > *{margin-left:-9px}
+.g-cards > *:first-child{margin-left:0}
+.g-cards .pair{display:inline-flex;position:relative;margin-right:6px}
+.g-cards .pair .mini + .mini{margin-left:-14px;margin-top:-8px;transform:translateY(-6px) rotate(6deg)}
+.g-cards .wopen{outline:2px dashed var(--wasabi-d);outline-offset:1px}
+.g-txt{font-size:12px;line-height:1.25;white-space:nowrap}
+.g-txt b{font-size:13px}
+.g-pts{font-size:12px;line-height:1.25;white-space:nowrap;color:var(--soy-2)}
+.g-pts .p{font-family:var(--font-num);font-weight:600;color:var(--soy);font-size:13px}
+.g-pts .w{color:var(--warn);font-weight:700}
+.g-pts .k{color:var(--ok);font-weight:700}
+.grp.pop{animation:pop .5s}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
+
+.handbox{position:relative}
+.hand-head{display:flex;align-items:baseline;gap:8px;font-size:13px;color:var(--soy-2);margin:0 2px 6px}
+.hand-head .ht{font-family:var(--font-display);font-size:16px;color:var(--soy)}
+.hand-head .from{color:var(--salmon-d);font-weight:700}
+.hand{display:flex;flex-wrap:wrap;gap:8px;min-height:92px;padding-top:10px}
+.hand .card{--cw:64px}
+/* 手牌上的分值/名字是新手做决定时看的：手机上也不小于 ~11px */
+.hand .card .cn{font-size:max(11px, calc(var(--cw) * .165))}
+.hand .card .cv{font-size:max(10.5px, calc(var(--cw) * .16))}
+.hand .card .cv.sm{font-size:max(10px, calc(var(--cw) * .122))}
+.card .cv .short{display:none}
+.hand .none{font-size:13px;color:var(--soy-3);align-self:center}
+
+.actionbar{
+  position:sticky;bottom:0;z-index:20;margin:0 -16px;padding:10px 16px calc(10px + var(--sab));
+  background:var(--wood-2);border-top:2px solid var(--wood-edge);box-shadow:0 -4px 12px rgba(80,50,20,.12);
+  display:flex;align-items:center;gap:8px;min-height:64px
+}
+.ab-text{flex:1;min-width:0;font-size:13px;line-height:1.35;color:var(--soy)}
+.ab-text b{color:var(--salmon-d)}
+.ab-btns{display:flex;gap:8px;flex:none}
+.ab-text .warn{color:var(--warn);font-weight:700}
+
+.shout{
+  position:fixed;z-index:80;pointer-events:none;background:#fff;color:var(--salmon-d);border:3px solid var(--salmon-d);border-radius:14px;
+  font-family:"Fredoka",var(--font-display);font-weight:700;font-size:22px;padding:4px 12px;white-space:nowrap;
+  box-shadow:0 4px 0 var(--salmon-d)
+}
+.shout::after{content:"";position:absolute;left:50%;bottom:-11px;margin-left:-8px;border:8px solid transparent;border-top-color:var(--salmon-d);border-bottom:0}
+.ghost{position:fixed;z-index:70;pointer-events:none;margin:0;transform-origin:50% 50%}
+.ghost .card{box-shadow:0 8px 18px rgba(0,0,0,.25)}
+.float-pts{position:fixed;z-index:75;pointer-events:none;font-family:var(--font-num);font-weight:700;font-size:20px;color:var(--wasabi-d);text-shadow:0 1px 0 #fff,0 0 6px #fff}
+/* 飞行中的牌 / 气泡只属于产生它的标签页：切走以后绝不画在别的页面上 */
+body:not([data-tab="play"]) [data-owner="play"], body:not([data-tab="learn"]) [data-owner="learn"]{display:none !important}
+
+/* ---------- coach ---------- */
+.coach{display:flex;gap:10px;align-items:flex-start}
+.coach-av{width:52px;height:52px;flex:none;margin-top:2px}
+.coach-av svg{width:100%;height:100%}
+.bubble{
+  flex:1;min-width:0;background:var(--rice);border:2px solid var(--soy);border-radius:14px;padding:10px 12px;position:relative;
+  box-shadow:0 3px 0 var(--soy)
+}
+.bubble::before{content:"";position:absolute;left:-10px;top:16px;border:9px solid transparent;border-right-color:var(--soy);border-left:0}
+.bubble::after{content:"";position:absolute;left:-7px;top:17px;border:8px solid transparent;border-right-color:var(--rice);border-left:0}
+.bubble .who{font-family:var(--font-display);font-size:13px;color:var(--salmon-d);margin-bottom:2px}
+.say{margin:0;font-size:15px;line-height:1.55}
+.say b{color:var(--salmon-d)}
+.note{margin:8px 0 0;padding:8px 10px;border-radius:10px;font-size:14px;line-height:1.5;background:var(--tamago-l);border-left:4px solid var(--tamago-d)}
+.note.bad{background:#FFE6DC;border-left-color:var(--warn)}
+.note.good{background:var(--wasabi-l);border-left-color:var(--ok)}
+.foot{margin:8px 0 0;font-size:12px;color:var(--soy-3);line-height:1.45}
+.foot::before{content:"注：";font-weight:700;color:var(--soy-2)}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.opts > div{flex:1 0 100%}
+.opts .btn{flex:1 1 auto;justify-content:center;white-space:normal;text-align:center;min-height:44px;padding:6px 14px;line-height:1.3;font-weight:600}
+.opts .btn.right{background:var(--wasabi-l);border-color:var(--ok);box-shadow:0 3px 0 var(--ok)}
+.opts .btn.right:disabled{opacity:1;color:var(--ok)}
+.opts .btn.wrong{background:#FFE6DC;border-color:var(--warn);box-shadow:0 3px 0 var(--warn)}
+.cta{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+
+/* ---------- learn ---------- */
+.learn{display:grid;grid-template-columns:1fr;gap:12px}
+.lmap{overflow-x:auto;margin:0 -16px;padding:2px 16px 4px;scrollbar-width:none}
+.lmap::-webkit-scrollbar{display:none}
+.lmap ol{list-style:none;margin:0;padding:0;display:flex;gap:6px}
+.lmap button{
+  display:flex;align-items:center;gap:6px;min-height:40px;padding:0 10px 0 4px;border-radius:20px;border:2px solid var(--line);
+  background:var(--counter);white-space:nowrap;font-size:13px
+}
+.lmap .ln{
+  width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--paper);border:2px solid var(--soy-3);
+  font-family:var(--font-num);font-weight:700;font-size:14px;flex:none
+}
+.lmap .lt .full{display:none}
+.lmap button[aria-current="step"]{border-color:var(--soy);background:var(--rice);box-shadow:0 2px 0 var(--soy)}
+.lmap button[aria-current="step"] .ln{background:var(--soy);color:#fff;border-color:var(--soy)}
+.lmap button.done .ln{background:var(--wasabi);border-color:var(--wasabi-d);color:#fff}
+.lmap .tick{color:var(--ok);font-weight:700;font-size:13px}
+.lplayer{display:flex;flex-direction:column;gap:12px;min-width:0}
+.lsticky{display:flex;flex-direction:column;gap:12px}
+.lhead{display:flex;align-items:center;gap:6px}
+.lhead h2{margin:0;font-size:20px;line-height:1.2;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lhead h2 .lnum{font-family:var(--font-num);font-weight:700;color:var(--salmon-d);margin-right:6px}
+.lhead .lstep{font-family:var(--font-num);font-size:13px;color:var(--soy-3);white-space:nowrap}
+.iconbtn{
+  width:40px;height:40px;border-radius:10px;border:2px solid var(--line);background:var(--counter);display:grid;place-items:center;flex:none;font-size:18px;line-height:1
+}
+.iconbtn:disabled{opacity:.35}
+.stage{position:relative;min-width:0}
+.edu-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1px;color:#fff;background:var(--soy-2);border-radius:5px;padding:1px 6px;margin-right:6px;vertical-align:2px}
+
+/* menu (lesson 1) */
+.menu{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;justify-items:center}
+.menu .mitem{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:4px;border-radius:10px;position:relative}
+.menu .mitem .card{--cw:70px;pointer-events:none}
+.menu .mitem .lbl{font-size:12px;font-weight:700}
+.menu .mitem.seen::after{content:"✓";position:absolute;right:2px;top:0;width:22px;height:22px;border-radius:50%;background:var(--wasabi);color:#fff;font-size:13px;display:grid;place-items:center;font-weight:700}
+.menu .mitem[aria-pressed="true"] .card{box-shadow:0 0 0 3px var(--paper),0 0 0 6px var(--salmon)}
+.mdetail{margin-bottom:12px;background:var(--rice);border:2px solid var(--line);border-radius:12px;padding:12px;display:flex;gap:12px;align-items:flex-start;min-height:120px}
+.mdetail .card{--cw:76px}
+.mdetail h3{margin:0 0 4px;font-size:18px}
+.mdetail p{margin:0;font-size:14px}
+.mdetail .ex{margin-top:6px;font-size:13px;color:var(--soy-2)}
+.mdetail .en{margin-top:4px;font-size:12px;color:var(--soy-3)}
+.mdetail .en b{font-family:"Fredoka",var(--font-body);font-weight:600;letter-spacing:.3px;color:var(--soy-2)}
+.seen-count{font-size:13px;color:var(--soy-2);margin-top:8px;text-align:center}
+
+/* widgets */
+.wbox{background:var(--rice);border:2px solid var(--line);border-radius:12px;padding:12px}
+.wbox h3{margin:0 0 8px;font-size:16px}
+.bars{display:flex;flex-direction:column;gap:8px}
+.bar{display:grid;grid-template-columns:44px 1fr 64px;align-items:center;gap:8px;font-size:14px}
+.bar .bn{font-weight:700}
+.bar .bt{height:22px;border-radius:6px;background:var(--counter-2);position:relative;overflow:hidden}
+.bar .bt i{position:absolute;left:0;top:0;bottom:0;background:var(--c-maki);border-radius:6px}
+.bar .bt i.pud{background:var(--c-pudding)}
+.bar .bt i.pud + span{color:var(--soy);text-shadow:none} /* 浅粉色/空的布丁条上白字看不清 */
+.bar .bt span{position:absolute;left:8px;top:0;line-height:22px;font-family:var(--font-num);font-weight:600;color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.4)}
+.bar .bp{font-family:var(--font-num);font-weight:700;text-align:right}
+.bar .bp.neg{color:var(--warn)}
+.bar .bp.pos{color:var(--ok)}
+.tally{display:flex;flex-direction:column;gap:6px}
+.trow{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;padding:6px 8px;border-radius:10px;border:2px solid transparent;
+  background:rgba(255,255,255,.55);text-align:left;width:100%
+}
+.trow .tl{display:flex;align-items:center;gap:8px;min-width:0}
+.trow .tc{display:flex;flex:none}
+.trow .tc .mini{--mw:20px;margin-left:-7px}
+.trow .tc .mini:first-child{margin-left:0}
+.trow .tn{font-weight:700;font-size:14px;white-space:nowrap}
+.trow .tx{font-size:12px;color:var(--soy-2);line-height:1.35}
+.trow .tv{font-family:var(--font-num);font-weight:700;font-size:20px;min-width:44px;text-align:right}
+.trow .tv.q{color:var(--soy-3)}
+.trow.cur{border-color:var(--salmon);background:#fff}
+.trow.done .tv{color:var(--ok)}
+.tsum{display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;padding:8px 10px;border-top:2px dashed var(--line);font-size:15px}
+.tsum b{font-family:var(--font-num);font-size:26px;color:var(--salmon-d)}
+.mini-table{display:flex;flex-wrap:wrap;gap:4px;align-items:flex-end}
+.mini-table .mini{--mw:30px}
+.wlist{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:7px;font-size:14px;line-height:1.5}
+.wlist li::marker{font-family:var(--font-num);font-weight:700;color:var(--salmon-d)}
+.wnote{margin:10px 0 0;font-size:13px;color:var(--soy-2)}
+#l-foot .foot{margin:0}
+.pudarea{display:flex;align-items:center;gap:8px;margin-top:8px;padding:8px;border-radius:10px;border:2px dashed var(--c-pudding);font-size:13px}
+
+/* ---------- play ---------- */
+.setup{max-width:560px;margin:8px auto 0;background:var(--rice);border:2px solid var(--soy);border-radius:16px;padding:18px;box-shadow:0 4px 0 var(--soy)}
+.setup h2{margin:0 0 4px;font-size:24px}
+.setup .lead{margin:0 0 14px;color:var(--soy-2);font-size:14px}
+.field{margin:14px 0}
+.field > .lab{display:block;font-weight:700;margin-bottom:6px}
+.field .hint{font-size:12px;color:var(--soy-3);margin-top:4px}
+.toggle{display:flex;align-items:center;gap:10px;min-height:44px;width:100%;background:none;border:0;padding:0;text-align:left}
+.toggle .sw{width:46px;height:28px;border-radius:14px;background:var(--line);position:relative;flex:none;transition:background .2s}
+.toggle .sw::after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:left .2s}
+.toggle[aria-checked="true"] .sw{background:var(--wasabi)}
+.toggle[aria-checked="true"] .sw::after{left:21px}
+.toggle .tt{display:flex;flex-direction:column;line-height:1.3}
+.toggle .tt small{color:var(--soy-3);font-size:12px}
+.who-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;font-size:13px}
+.who-list span{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:12px;background:var(--counter)}
+.game-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.game-top .gt-status{font-family:var(--font-display);font-size:17px;margin-right:auto;white-space:nowrap}
+.game-top .gt-status .num{font-size:18px}
+.chipbtn{min-height:40px;padding:0 12px;border-radius:20px;border:2px solid var(--line);background:var(--counter);font-size:13px;white-space:nowrap}
+.chipbtn[aria-pressed="true"]{border-color:var(--wasabi-d);background:var(--wasabi-l)}
+.coach.mini-coach .coach-av{width:40px;height:40px}
+.coach.mini-coach .say{font-size:14px}
+.coach.mini-coach .bubble{padding:8px 10px}
+.coach.mini-coach .bubble::before{top:12px}
+.coach.mini-coach .bubble::after{top:13px}
+.confirm-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#FFE6DC;border:2px solid var(--warn);border-radius:10px;padding:6px 10px;margin-bottom:8px;font-size:14px}
+
+/* ---------- modal ---------- */
+.modal{
+  position:fixed;left:0;right:0;bottom:0;top:calc(var(--top-h) + var(--sat));z-index:90;background:rgba(28,36,32,.55);
+  display:flex;align-items:flex-end;justify-content:center;padding:0
+}
+.modal-card{
+  background:var(--paper);width:100%;max-width:640px;max-height:calc(100% - 10px);overflow:auto;border-radius:18px 18px 0 0;
+  padding:18px 16px calc(18px + var(--sab));box-shadow:0 -6px 24px rgba(0,0,0,.25)
+}
+.modal-card h2{margin:0 0 4px;font-size:24px}
+.modal-card .sub{margin:0 0 10px;color:var(--soy-2);font-size:14px}
+.modal-card .acts{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
+.score-table{width:100%;border-collapse:collapse;font-size:14px}
+.score-table th,.score-table td{padding:6px 3px;text-align:center;border-bottom:1px solid var(--line)}
+.score-table th{font-size:11px;font-weight:700;color:var(--soy-2);line-height:1.2}
+.score-table th .mini{--mw:16px;display:block;margin:0 auto 2px}
+.score-table td.nm{text-align:left;font-weight:700;white-space:nowrap}
+.score-table td .num{font-weight:600}
+.score-table td.tot{font-family:var(--font-num);font-weight:700;font-size:16px}
+.score-table td small{display:block;font-size:10px;color:var(--soy-3);line-height:1.1}
+.score-table tr.me td{background:var(--salmon-l)}
+.score-table tr.win td.nm::after{content:"冠军";margin-left:4px;font-size:11px;color:var(--tamago-d)}
+.explain{margin:10px 0 0;padding:0;list-style:none;font-size:13px;color:var(--soy-2)}
+.explain li{padding:3px 0}
+.explain li b{color:var(--soy)}
+.winner{display:flex;gap:12px;align-items:center;margin:4px 0 12px}
+.winner svg{width:64px;height:64px;flex:none}
+.winner .wt{font-family:var(--font-display);font-size:20px;line-height:1.3}
+.detail-groups .groups{gap:10px 14px}
+
+/* ---------- reference ---------- */
+.ref{display:grid;grid-template-columns:1fr;gap:12px}
+.ref .rbox{break-inside:avoid}
+.rbox{background:var(--rice);border:2px solid var(--line);border-radius:12px;padding:12px 14px}
+.rbox h3{margin:0 0 6px;font-size:18px}
+.rbox p,.rbox li{font-size:14px;margin:4px 0}
+.rbox ol,.rbox ul{margin:4px 0;padding-left:20px}
+.rbox .rlist{list-style:none;margin:0;padding:0}
+.rlist li{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:center;padding:6px 0;border-bottom:1px dashed var(--line);margin:0}
+.rlist li:last-child{border-bottom:0}
+.rlist .mini{--mw:32px}
+.rlist .rn{font-weight:700}
+.rlist .rr{font-size:13px;color:var(--soy-2)}
+.hs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center;margin:6px 0}
+.hs div{background:var(--counter);border-radius:8px;padding:4px 0;font-size:12px}
+.hs b{display:block;font-family:var(--font-num);font-size:20px}
+.fn{font-size:12px;color:var(--soy-3)}
+.rbox ol.steps{padding-left:22px}
+.rbox ol.steps li{margin:3px 0}
+.rbox ol.steps li::marker{font-family:var(--font-num);font-weight:700;color:var(--salmon-d)}
+.rbox .rnote{font-size:13px;color:var(--soy-2);margin:8px 0 0}
+.rbox sup{font-size:10px;color:var(--salmon-d);font-weight:700}
+.sgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 10px}
+.sc{display:flex;gap:7px;align-items:center;font-size:13px;line-height:1.3;padding:5px 0;border-bottom:1px dashed var(--line);min-width:0}
+.sc .mini{--mw:24px}
+.sc b{display:block;font-size:14px}
+.nw{white-space:nowrap}
+.rlist .ren{font-family:"Fredoka",var(--font-body);font-weight:500;font-size:11.5px;color:var(--soy-3);margin-left:6px;letter-spacing:.3px}
+details.rbox{padding:0}
+details.rbox > summary{list-style:none;cursor:pointer;min-height:44px;display:flex;align-items:center;gap:8px;padding:6px 14px;font-family:var(--font-display);font-size:17px;border-radius:10px}
+details.rbox > summary::-webkit-details-marker{display:none}
+details.rbox > summary::after{content:"";margin-left:auto;width:8px;height:8px;border-right:2.5px solid var(--soy-2);border-bottom:2.5px solid var(--soy-2);transform:translateY(-2px) rotate(45deg);flex:none}
+details.rbox[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
+details.rbox > .dbody{padding:0 14px 10px}
+.fn b{color:var(--soy-2)}
+
+@media (max-width: 719px){
+  .opps[data-k="4"] .pdot{display:none}
+  .opps[data-k="4"]{padding:0 8px;gap:5px}
+  .opps[data-k="4"] .opp{padding:4px 5px 5px}
+  .opps[data-k="4"] .opp-pick{--pw:14px}
+  .tv-right .handbox{order:1}
+  .tv-right .actionbar{order:2}
+  .tv-right .mine{order:3}
+  /* 教程里教练同时说到上面（对手/传送带）和「你的桌面」、这一步又用不上手牌：桌面挪到手牌上面，一屏都看得见 */
+  .table.mine-up .tv-right .mine{order:0}
+  .gsticky{position:sticky;top:calc(var(--top-h) + var(--sat));z-index:15;margin:-14px -16px 0;padding:10px 16px 8px;background:var(--wood);box-shadow:0 6px 8px -6px rgba(80,50,20,.25)}
+  .gsticky .game-top{margin-bottom:6px}
+  .gsticky .chipbtn{min-height:40px;padding:0 10px}
+  #g-coachbox .say{font-size:13.5px;line-height:1.45}
+  .belt{height:142px}
+  .my-slot{left:auto;right:8px;transform:none;bottom:5px}
+  .isl-msg{max-width:calc(100% - 64px);font-size:12.5px}
+  .table,.tv-left,.tv-right{gap:8px}
+  .game-top{margin-bottom:6px}
+  .hand{padding-top:8px}
+  /* 手机：一排正好5张（360–430px 宽都一样），10张手牌只占2排 */
+  .hand .card{--cw:clamp(52px, calc((100vw - 64px - var(--sal) - var(--sar)) / 5), 64px)}
+  .hand .card .cv .long{display:none}
+  .hand .card .cv .short{display:inline}
+  .hand .card .cv.sm{font-size:max(10.5px, calc(var(--cw) * .16));letter-spacing:0;padding:0 3px}
+  .plate{width:40px;height:40px;margin:-20px 0 0 -20px}
+  .island{padding-top:6px}
+  .isl-msg{padding-top:0;min-height:0}
+  .my-slot .card{--cw:34px}
+  .my-slot .card .cn{font-size:7px}
+  .lsticky{position:sticky;top:calc(var(--top-h) + var(--sat));z-index:15;margin:-8px -16px 0;padding:8px 16px 8px;background:var(--wood);box-shadow:0 6px 8px -6px rgba(80,50,20,.25);display:flex;flex-direction:column;gap:8px}
+  .lhead h2{font-size:18px}
+  .lhead .iconbtn{width:40px;height:40px}
+  #l-coach .who{display:none}
+  .coach-av{width:42px;height:42px}
+  .say{font-size:14.5px;line-height:1.5}
+  .bubble{padding:8px 11px}
+  .cta .btn{min-height:42px}
+}
+@media (min-width: 720px){
+  .card{--cw:76px}
+  .hand .card{--cw:84px}
+  .hand{gap:10px;min-height:128px}
+  .belt{height:200px}
+  .plate{width:52px;height:52px;margin:-26px 0 0 -26px}
+  .my-slot .card{--cw:46px}
+  .isl-msg{font-size:15px}
+  .opp{min-height:72px}
+  .opp-top b{font-size:15px}
+  .chip{height:20px;font-size:12px}
+  .mini{--mw:28px}
+  .modal{align-items:center;padding:20px}
+  .modal-card{border-radius:18px;padding:22px;max-height:100%}
+  .ref{display:block;columns:2;column-gap:12px}
+  .ref .rbox{margin:0 0 12px}
+  .menu .mitem .card{--cw:84px}
+  .actionbar{margin:0;border-radius:14px;padding:10px 14px calc(10px + var(--sab))}
+}
+@media (min-width: 980px){
+  .learn{grid-template-columns:236px minmax(0,1fr);align-items:start}
+  .lmap{margin:0;padding:0;overflow:visible;position:sticky;top:calc(var(--top-h) + var(--sat) + 14px)}
+  .lmap ol{flex-direction:column}
+  .lmap button{width:100%;border-radius:12px;padding:4px 10px 4px 6px;white-space:normal;text-align:left}
+  .lmap .lt .short{display:none}
+  .lmap .lt .full{display:inline}
+  .lmap .tick{margin-left:auto}
+  .ref{columns:3}
+}
+@media (min-width: 980px){
+  .widget .wbox{max-width:760px}
+  .trow .tc .mini{--mw:26px}
+  .menuwrap{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:16px;align-items:start}
+  .menuwrap .mdetail{margin:0;order:2;min-height:180px}
+  .menuwrap .menucol{order:1}
+  .menu .mitem .card{--cw:80px}
+}
+@media (min-width: 1100px){
+  .table{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);gap:14px 18px;align-items:start}
+  .belt{height:236px}
+  .hand .card{--cw:78px}
+  .hand{min-height:118px}
+  .actionbar{position:static;margin:0}
+  .mine{min-height:120px}
+}
+@media (max-width: 374px){
+  .lhead h2{font-size:16px}
+  .brand .sub{display:none}
+  .tab{min-width:42px;padding:0 6px;font-size:14px}
+  .opps{padding:0 10px}
+}
+@media (max-width: 389px){
+  /* 5人局的窄屏：一行放不下「名字+选牌状态+两位数总分」→ 固定两行（名字·总分 / 选牌状态）。
+     思考中、已选好、分数变成两位数，对手框都一样高，手牌不会在你要点的时候往下跳 */
+  .opps[data-k="4"] .opp-top{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:20px 20px;column-gap:2px;align-items:center}
+  .opps[data-k="4"] .opp-top b{grid-column:1;grid-row:1}
+  .opps[data-k="4"] .opp-score{grid-column:2;grid-row:1;padding-left:0}
+  .opps[data-k="4"] .opp-pick{grid-column:1 / -1;grid-row:2;height:20px}
+}
+@media (max-width: 719px) and (max-height: 700px){
+  /* 矮屏手机（浏览器地址栏+底栏占掉一块）：传送带压扁一点，对手和手牌更容易同屏 */
+  .belt{height:114px}
+}
+@media (max-width: 420px){
+  .brand .sub{display:none}
+  .hide-s{display:none}
+  .game-top .gt-status{font-size:15px}
+  /* 用筷子时说明文字较长：放到按钮上面一整行，别挤成4个字一行 */
+  .actionbar.chop{flex-wrap:wrap;row-gap:6px}
+  .actionbar.chop .ab-text{flex:1 0 100%}
+  .actionbar.chop .ab-btns{margin-left:auto}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition:none !important}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs id="art-defs"></defs></svg>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="back-link" id="back-link" href="index.html" aria-label="返回大厅">← 大厅</a>
+    <div class="brand"><span class="logo">Sushi Go<i>!</i></span><span class="sub">新手课</span></div>
+    <nav class="tabs" role="tablist" aria-label="页面">
+      <button class="tab" role="tab" id="tab-learn" aria-controls="learn" aria-selected="true" data-tab="learn">教程</button>
+      <button class="tab" role="tab" id="tab-play" aria-controls="play" aria-selected="false" data-tab="play">实战</button>
+      <button class="tab" role="tab" id="tab-ref" aria-controls="ref" aria-selected="false" data-tab="ref">速查</button>
+    </nav>
+    <button class="gear" id="gear" aria-label="设置" aria-expanded="false" aria-controls="settings">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+    </button>
+  </div>
+  <div class="settings" id="settings" hidden role="dialog" aria-label="设置">
+    <h3>动画速度</h3>
+    <div class="seg" id="speed-seg">
+      <button data-speed="slow" aria-pressed="false">慢</button>
+      <button data-speed="normal" aria-pressed="true">正常</button>
+      <button data-speed="fast" aria-pressed="false">快</button>
+    </div>
+    <p>传送带转动、翻牌和机器人思考的快慢。</p>
+  </div>
+</header>
+
+<main>
+  <!-- ======================= 教程 ======================= -->
+  <section class="panel" id="learn" role="tabpanel" aria-labelledby="tab-learn">
+    <div class="learn">
+      <nav class="lmap" aria-label="课程表"><ol id="lmap"></ol></nav>
+      <div class="lplayer">
+        <div class="lsticky">
+        <div class="lhead">
+          <h2 id="l-title"></h2>
+          <span class="lstep" id="l-step"></span>
+          <button class="iconbtn" data-act="prev" id="l-prev" aria-label="上一步">‹</button>
+          <button class="iconbtn" data-act="next" id="l-next" aria-label="下一步">›</button>
+          <button class="btn small" data-act="skip" id="l-skip">跳过</button>
+        </div>
+        <div class="coach" id="l-coach">
+          <div class="coach-av" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#a-coach"/></svg></div>
+          <div class="bubble">
+            <div class="who">布丁老师</div>
+            <p class="say" id="l-say"></p>
+            <div id="l-note"></div>
+            <div class="opts" id="l-opts"></div>
+            <div class="cta" id="l-cta"></div>
+          </div>
+        </div>
+        </div>
+        <div class="stage" id="l-stage"></div>
+        <div id="l-foot"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= 实战 ======================= -->
+  <section class="panel" id="play" role="tabpanel" aria-labelledby="tab-play" hidden>
+    <div class="setup" id="setup">
+      <h2>开一局</h2>
+      <p class="lead">你和机器人对战，规则跟实体卡完全一样：3个回合，最后算布丁。</p>
+      <div class="field">
+        <span class="lab">人数（含你）</span>
+        <div class="seg" id="np-seg">
+          <button data-n="2" aria-pressed="false">2人</button>
+          <button data-n="3" aria-pressed="false">3人</button>
+          <button data-n="4" aria-pressed="true">4人</button>
+          <button data-n="5" aria-pressed="false">5人</button>
+        </div>
+        <div class="who-list" id="who-list"></div>
+        <div class="hint" id="np-hint"></div>
+      </div>
+      <div class="field">
+        <button class="toggle" role="switch" aria-checked="true" id="opt-coach">
+          <span class="sw"></span><span class="tt"><b>教练解说</b><small>每轮用一两句话解释刚才发生了什么、为什么</small></span>
+        </button>
+        <button class="toggle" role="switch" aria-checked="false" id="opt-alt">
+          <span class="sw"></span><span class="tt"><b>两边传递（变体）</b><small>第1、3回合向左传，第2回合向右传</small></span>
+        </button>
+      </div>
+      <button class="btn primary big" id="start-btn" style="width:100%">开始游戏</button>
+    </div>
+
+    <div class="game" id="game" hidden>
+      <div class="gsticky">
+      <div class="game-top">
+        <div class="gt-status" id="g-status"></div>
+        <button class="chipbtn" id="g-coach" aria-pressed="true"><span class="hide-s">教练</span>解说：开</button>
+        <button class="chipbtn" id="g-quit" aria-label="重开一局（回到设置）">重开<span class="hide-s">一局</span></button>
+      </div>
+      <div class="confirm-row" id="g-confirm" hidden>
+        <span>放弃这一局，回到设置？</span>
+        <button class="btn small" id="g-quit-yes">放弃</button>
+        <button class="btn small" id="g-quit-no">继续玩</button>
+      </div>
+      <div class="coach mini-coach" id="g-coachbox">
+        <div class="coach-av" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#a-coach"/></svg></div>
+        <div class="bubble"><p class="say" id="g-say" aria-live="polite"></p></div>
+      </div>
+      </div>
+      <div class="stage" id="g-stage" style="margin-top:10px"></div>
+    </div>
+  </section>
+
+  <!-- ======================= 速查 ======================= -->
+  <section class="panel" id="ref" role="tabpanel" aria-labelledby="tab-ref" hidden>
+    <div class="ref" id="ref-body"></div>
+  </section>
+</main>
+
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-card" id="modal-card"></div>
+</div>
+
+<script src="sushi-engine.js"></script>
+<script>
+'use strict';
+(function () {
+const E = window.SushiEngine;
+
+// =====================================================================================================
+// 小工具
+// =====================================================================================================
+const $ = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function h(html) { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; }
+// localStorage 外面再包一层内存：存储被禁用时，这一次打开页面里的进度（课程打勾等）照样记得
+const store = {
+  mem: {},
+  get(k, d) {
+    try { const v = localStorage.getItem('sushigo.' + k); if (v != null) return JSON.parse(v); } catch (e) { /* 存储被禁用 */ }
+    return k in this.mem ? JSON.parse(this.mem[k]) : d;
+  },
+  set(k, v) {
+    this.mem[k] = JSON.stringify(v);
+    try { localStorage.setItem('sushigo.' + k, JSON.stringify(v)); } catch (e) { /* 存储被禁用也能玩 */ }
+  },
+};
+
+// 防连点：画面刚切换（下一步、新的一轮、弹窗开/关……）后 ~400ms 内，真实的点按不作用在新画面上。
+// 只拦 isTrusted 的事件：脚本里的 el.click() 不受影响（QA 用 GameDebug.setSpeed(0) 秒过整局）。
+// 范围：'play' / 'learn' / 'modal' = 只管那一块里的按钮（实战换轮不会挡住你在教程里的点按）。
+// armAct(act) = 只挡同一个按钮的第二下（「用筷子」原地变成「不用筷子」）：紧接着点手牌照常有效，一下都不吞。
+const TapGuard = {
+  until: { play: 0, learn: 0, ref: 0, modal: 0 },
+  acts: {},
+  arm(scope, ms) { this.until[scope] = Math.max(this.until[scope] || 0, performance.now() + (ms == null ? 400 : ms)); },
+  armAct(act, ms) { this.acts[act] = performance.now() + (ms == null ? 400 : ms); },
+  blocks(el) {
+    const now = performance.now();
+    if (el.dataset && el.dataset.act && now < (this.acts[el.dataset.act] || 0)) return true;
+    const p = el.closest('.panel, #modal');
+    return !!p && now < (this.until[p.id] || 0);
+  },
+};
+document.addEventListener('click', (e) => {
+  if (!e.isTrusted) return;
+  const b = e.target && e.target.closest ? e.target.closest('button, a[href], [data-act], [data-wact], [data-mact]') : null;
+  if (!b || b.closest('.topbar')) return; // 顶栏（标签页、设置）连点两次也只是同一个动作
+  if (!TapGuard.blocks(b)) return;
+  e.preventDefault(); e.stopImmediatePropagation();
+}, true);
+
+let currentTab = 'learn';
+// 实战暂停：在「教程/速查」标签页、浏览器标签页被切到后台、或实战里的询问弹窗打开时，
+// 机器人、计时、动画流程都停在下一个检查点，回来以后接着走。
+const Pause = {
+  waiters: [], hold: false,
+  on() { return currentTab !== 'play' || document.hidden || this.hold; },
+  gate() { return this.on() ? new Promise((r) => this.waiters.push(r)) : Promise.resolve(); },
+  check() { if (this.on()) return; const w = this.waiters.splice(0); w.forEach((r) => r()); },
+};
+document.addEventListener('visibilitychange', () => Pause.check());
+
+// 速度：用户设置× 调试倍率（GameDebug.setSpeed(0) = 全部瞬间完成）
+const SPEEDS = { slow: 1.6, normal: 1, fast: 0.5 };
+let userSpeed = store.get('speed', 'normal');
+if (!SPEEDS[userSpeed]) userSpeed = 'normal';
+let debugSpeed = 1;
+const reduceMotion = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+const kf = () => (SPEEDS[userSpeed] || 1) * debugSpeed;
+const D = (ms) => (reduceMotion ? 0 : ms * kf());
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+function wait(ms) { const d = ms * kf(); return d <= 0 ? Promise.resolve() : sleep(d); }
+// 实战用：等完以后，如果此刻暂停着（切到别的标签页），就停在这里直到回来
+async function gwait(ms) { await wait(ms); await Pause.gate(); }
+function anim(el, frames, ms, opts) {
+  const d = D(ms);
+  if (!el || d <= 0 || !el.animate) return Promise.resolve();
+  try {
+    const a = el.animate(frames, Object.assign({ duration: d, easing: 'cubic-bezier(.3,.7,.2,1)' }, opts || {}));
+    return Promise.race([a.finished.catch(() => {}), sleep(d + 250)]);
+  } catch (e) { return Promise.resolve(); }
+}
+function rafLoop(ms, fn) {
+  const d = D(ms);
+  if (d <= 0) { fn(1); return Promise.resolve(); }
+  return new Promise((res) => {
+    const t0 = performance.now(); let done = false;
+    const finish = () => { if (!done) { done = true; fn(1); res(); } };
+    const step = (now) => {
+      if (done) return;
+      const t = Math.min(1, (now - t0) / d);
+      fn(t);
+      if (t < 1) requestAnimationFrame(step); else finish();
+    };
+    requestAnimationFrame(step);
+    setTimeout(finish, d + 400); // 后台标签页里 rAF 可能不跑
+  });
+}
+const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+
+// =====================================================================================================
+// 卡面（内联 SVG，卡哇伊食物：圆形、两个点点眼、小微笑、腮红——跟实体卡一个味道）
+// =====================================================================================================
+function face(x, y, s, o) {
+  o = o || {};
+  const eye = o.light ? '#FFFFFF' : '#2A1A12';
+  const mouth = o.light ? '#FF7B7B' : '#2A1A12';
+  let eyes;
+  if (o.wink) {
+    eyes = `<path d="M-10 0 l3 -2.6 l3 2.6" stroke="${eye}" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>` +
+      `<circle cx="7" cy="0" r="2.7" fill="${eye}"/><circle cx="7.9" cy="-.9" r=".9" fill="#fff"/>`;
+  } else {
+    eyes = `<circle cx="-7" cy="0" r="2.7" fill="${eye}"/><circle cx="7" cy="0" r="2.7" fill="${eye}"/>` +
+      (o.light ? '' : `<circle cx="-6.1" cy="-.9" r=".9" fill="#fff"/><circle cx="7.9" cy="-.9" r=".9" fill="#fff"/>`);
+  }
+  return `<g transform="translate(${x} ${y}) scale(${s || 1})">${eyes}` +
+    `<path d="M-3.2 4 Q0 7.6 3.2 4" stroke="${mouth}" stroke-width="1.8" fill="none" stroke-linecap="round"/>` +
+    `<ellipse cx="-12.5" cy="4.6" rx="3.5" ry="2.1" fill="#FF8A9A" opacity=".8"/><ellipse cx="12.5" cy="4.6" rx="3.5" ry="2.1" fill="#FF8A9A" opacity=".8"/></g>`;
+}
+const RICE = `<ellipse cx="50" cy="68" rx="34" ry="17" fill="#FFFDF7" stroke="#DCD3C2" stroke-width="2"/><path d="M28 74 q4 3 8 1 M58 78 q4 2 8 -1" stroke="#E7E0D2" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+const PLATE = `<ellipse cx="50" cy="84" rx="40" ry="9.5" fill="#D8453B"/><ellipse cx="50" cy="82" rx="31" ry="6.5" fill="#F6F1E8"/>`;
+const ART = {
+  tempura:
+    `<polygon points="16,80 50,62 86,78 52,96" fill="#FFFBF2" stroke="#E6D8BE" stroke-width="1.5"/>` +
+    `<g transform="rotate(-24 50 60)">` +
+    `<path d="M76 54 l12 -12 l1 11 l11 1 l-12 9 z" fill="#F2683C" stroke="#C94A22" stroke-width="1.5" stroke-linejoin="round"/>` +
+    `<rect x="12" y="46" width="66" height="30" rx="15" fill="#F5B942" stroke="#D38A22" stroke-width="2"/>` +
+    `<g fill="#F9CD63"><circle cx="20" cy="48" r="5"/><circle cx="31" cy="45" r="5.5"/><circle cx="43" cy="44" r="5.5"/><circle cx="55" cy="44" r="5.5"/><circle cx="67" cy="46" r="5"/>` +
+    `<circle cx="22" cy="74" r="4"/><circle cx="36" cy="76" r="4.5"/><circle cx="52" cy="76" r="4.5"/><circle cx="66" cy="74" r="4"/></g>` +
+    face(44, 60, 1) + `</g>`,
+  sashimi:
+    `<ellipse cx="76" cy="40" rx="13" ry="22" fill="#4F9A3A" transform="rotate(32 76 40)"/>` +
+    `<path d="M70 26 l12 26" stroke="#3B7A2A" stroke-width="2"/>` +
+    `<rect x="10" y="74" width="80" height="11" rx="3" fill="#9A6A45"/>` +
+    `<rect x="28" y="54" width="54" height="23" rx="6" fill="#F39A4A"/>` +
+    `<path d="M36 56 l7 19 M50 56 l7 19 M64 56 l7 19" stroke="#FFD7AE" stroke-width="3" stroke-linecap="round"/>` +
+    `<rect x="16" y="32" width="58" height="34" rx="9" fill="#E8463F"/>` +
+    `<rect x="21" y="36" width="22" height="5" rx="2.5" fill="#FF8C7E" opacity=".75"/>` + face(45, 51, 1),
+  dumpling:
+    PLATE +
+    `<path d="M12 78 C 14 38, 86 38, 88 78 Z" fill="#FBE6D8" stroke="#E2B49D" stroke-width="2"/>` +
+    `<path d="M26 54 q4 -7 8 0 M38 48 q4 -7 8 0 M50 47 q4 -7 8 0 M62 50 q4 -7 8 0" stroke="#E2B49D" stroke-width="2" fill="none" stroke-linecap="round"/>` +
+    face(50, 64, 1),
+  maki:
+    `<ellipse cx="50" cy="82" rx="26" ry="7" fill="#1F2622"/>` +
+    `<rect x="24" y="34" width="52" height="48" fill="#1F2622"/>` +
+    `<ellipse cx="50" cy="34" rx="26" ry="9" fill="#FFFDF7" stroke="#1F2622" stroke-width="3.5"/>` +
+    `<circle cx="50" cy="34" r="5" fill="#F26B3A"/><circle cx="42" cy="34" r="2.6" fill="#7CC45A"/><circle cx="58" cy="35" r="2.6" fill="#F6C443"/>` +
+    `<rect x="28" y="46" width="6" height="28" rx="3" fill="#3A4540" opacity=".7"/>` +
+    face(50, 60, 1, { light: true }),
+  salmon:
+    RICE +
+    `<path d="M13 60 C 24 32, 76 28, 89 52 C 91 58, 85 61, 81 57 C 67 43, 33 45, 20 66 C 16 68, 11 64, 13 60 Z" fill="#F47A4E"/>` +
+    `<path d="M30 45 l6 12 M44 40 l5 13 M58 39 l3 13 M72 43 l1 12" stroke="#FFD9C2" stroke-width="3.2" stroke-linecap="round"/>` +
+    face(52, 70, 0.95),
+  squid:
+    RICE +
+    `<path d="M14 60 C 24 36, 76 32, 88 54 C 90 60, 84 62, 80 58 C 66 46, 34 48, 21 66 C 17 68, 12 64, 14 60 Z" fill="#F7EEDD" stroke="#DCCBB0" stroke-width="2"/>` +
+    `<path d="M30 52 l10 -8 M42 48 l10 -7 M54 47 l10 -6 M66 49 l9 -5 M34 46 l8 6 M47 43 l8 7 M60 43 l8 7" stroke="#E6D4B6" stroke-width="2" stroke-linecap="round"/>` +
+    `<path d="M80 57 q6 4 4 10 M84 55 q7 2 7 8" stroke="#F2C9C0" stroke-width="2.5" fill="none" stroke-linecap="round"/>` +
+    face(50, 71, 0.95),
+  egg:
+    RICE +
+    `<rect x="16" y="40" width="68" height="22" rx="7" fill="#FFD54A" stroke="#E2A92A" stroke-width="2"/>` +
+    `<rect x="22" y="44" width="22" height="4" rx="2" fill="#FFE68A"/>` +
+    `<rect x="27" y="37" width="11" height="44" rx="2" fill="#1F2622"/>` +
+    face(60, 71, 0.95),
+  pudding:
+    PLATE +
+    `<path d="M24 80 L32 44 Q50 37 68 44 L76 80 Q50 87 24 80 Z" fill="#FFD25E" stroke="#E2A22A" stroke-width="2"/>` +
+    `<path d="M30.5 49 Q50 39 69.5 49 L70.5 54 Q66.5 60 62.5 54 Q58.5 62 54.5 54 Q50 60 46 54 Q42 62 38 54 Q34 60 30 54 Z" fill="#7B3F1D"/>` +
+    `<path d="M50 20 C 41 20, 41 33, 50 40 C 59 33, 59 20, 50 20 Z" fill="#E8363B"/>` +
+    `<g fill="#FFE7A0"><circle cx="46" cy="27" r="1"/><circle cx="53" cy="29" r="1"/><circle cx="49" cy="33" r="1"/></g>` +
+    `<path d="M43 22 L50 16 L57 22 L50 25 Z" fill="#4F9A3A"/>` +
+    face(50, 67, 1, { wink: true }),
+  wasabi:
+    PLATE +
+    `<path d="M20 80 C 22 56, 36 32, 52 28 C 66 33, 78 56, 80 80 Q50 87 20 80 Z" fill="#9CCB4A" stroke="#6EA22E" stroke-width="2"/>` +
+    `<path d="M52 28 q7 -6 2 -12" stroke="#6EA22E" stroke-width="3.5" fill="none" stroke-linecap="round"/>` +
+    `<path d="M34 50 q4 -8 10 -12" stroke="#C3E58A" stroke-width="3" fill="none" stroke-linecap="round"/>` +
+    face(50, 63, 1),
+  chopsticks:
+    `<line x1="40" y1="58" x2="28" y2="10" stroke="#7A4A2A" stroke-width="5" stroke-linecap="round"/>` +
+    `<line x1="54" y1="58" x2="68" y2="8" stroke="#7A4A2A" stroke-width="5" stroke-linecap="round"/>` +
+    `<line x1="29" y1="14" x2="31" y2="22" stroke="#E8C68C" stroke-width="5"/><line x1="67" y1="12" x2="65" y2="20" stroke="#E8C68C" stroke-width="5"/>` +
+    `<path d="M26 44 L74 44 L70 86 Q50 92 30 86 Z" fill="#E2683C" stroke="#B9481F" stroke-width="2"/>` +
+    `<rect x="23" y="39" width="54" height="9" rx="3.5" fill="#F08A5A" stroke="#B9481F" stroke-width="2"/>` +
+    face(50, 66, 1),
+  coach:
+    `<ellipse cx="50" cy="88" rx="44" ry="9" fill="#D8453B"/><ellipse cx="50" cy="86" rx="35" ry="6" fill="#F6F1E8"/>` +
+    `<path d="M18 85 L28 38 Q50 29 72 38 L82 85 Q50 93 18 85 Z" fill="#FFD25E" stroke="#C98A1A" stroke-width="2.5"/>` +
+    `<path d="M27 44 Q50 32 73 44 L74 50 Q69.5 57 65 50 Q60 60 55 50 Q50 58 45 50 Q40 60 35 50 Q30.5 57 26 50 Z" fill="#7B3F1D"/>` +
+    `<path d="M50 10 C 40 10, 40 25, 50 33 C 60 25, 60 10, 50 10 Z" fill="#E8363B"/>` +
+    `<path d="M42 12 L50 5 L58 12 L50 15 Z" fill="#4F9A3A"/>` +
+    `<circle cx="40" cy="66" r="8" fill="none" stroke="#3B2416" stroke-width="2"/><circle cx="60" cy="66" r="8" fill="none" stroke="#3B2416" stroke-width="2"/><path d="M48 66 h4" stroke="#3B2416" stroke-width="2"/>` +
+    face(50, 66, 1.15, { wink: true }),
+};
+$('#art-defs').innerHTML = Object.keys(ART).map((k) => `<symbol id="a-${k}" viewBox="0 0 100 100">${ART[k]}</symbol>`).join('');
+
+const META = {
+  tempura: { c: '--c-tempura', hint: '2张=5', ch: '天' },
+  sashimi: { c: '--c-sashimi', hint: '3张=10', ch: '刺' },
+  dumpling: { c: '--c-dumpling', hint: '1 3 6 10 15', short: '1→15', ch: '饺' },
+  maki1: { c: '--c-maki', ch: '卷' }, maki2: { c: '--c-maki', ch: '卷' }, maki3: { c: '--c-maki', ch: '卷' },
+  salmon: { c: '--c-nigiri', hint: '2', ch: '握' },
+  squid: { c: '--c-nigiri', hint: '3', ch: '握' },
+  egg: { c: '--c-nigiri', hint: '1', ch: '握' },
+  pudding: { c: '--c-pudding', hint: '终局±6', ch: '布' },
+  wasabi: { c: '--c-wasabi', hint: '手握×3', ch: '芥' },
+  chopsticks: { c: '--c-chop', hint: '换2张', ch: '筷' },
+};
+const PCOL = ['#EE6E48', '#3F74C8', '#3B9257', '#8F57BE', '#C9831A'];
+const signed = (n) => (n > 0 ? '+' + n : n < 0 ? '−' + Math.abs(n) : '0');
+const artOf = (t) => (t.indexOf('maki') === 0 ? 'maki' : t);
+// 寿司卷 按说明书的说法写「寿司卷（2个标记）」——「×N」在页面上只表示 芥末 的 ×3
+const nameOf = (t) => E.TYPES[t].name + (E.isMaki(t) ? `（${E.makiIcons(t)}个标记）` : '');
+function label(t) {
+  const T = E.TYPES[t];
+  if (E.isMaki(t)) return `寿司卷（${T.icons}个标记）`;
+  if (E.isNigiri(t)) return `${T.name}（${T.value}分）`;
+  return T.name;
+}
+function cardInner(t) {
+  const m = META[t];
+  // 煎饺的「1 3 6 10 15」在手机手牌上太长：手机手牌显示短版「1→15」（菜单、速查、加分提示里有完整的）
+  const hint = E.isMaki(t) ? `<span class="mk">${'<i></i>'.repeat(E.makiIcons(t))}</span>`
+    : (m.short ? `<span class="long">${esc(m.hint)}</span><span class="short">${esc(m.short)}</span>` : esc(m.hint));
+  return `<span class="cv${t === 'dumpling' ? ' sm' : ''}">${hint}</span><svg class="art" viewBox="0 0 100 100" aria-hidden="true"><use href="#a-${artOf(t)}"/></svg><span class="cn">${E.TYPES[t].name}</span>`;
+}
+function cardBtn(c, cls, extra, attrs) {
+  return `<button class="card ${cls || ''}" data-act="card" data-id="${c.id}" data-t="${c.t}" style="--cc:var(${META[c.t].c})" aria-label="${esc(label(c.t))}" ${attrs || ''}>${cardInner(c.t)}${extra || ''}</button>`;
+}
+function cardDiv(t, cls, extra) {
+  if (t === 'back') return `<div class="card back ${cls || ''}" aria-label="背面朝上的牌"></div>`;
+  return `<div class="card ${cls || ''}" data-t="${t}" style="--cc:var(${META[t].c})" role="img" aria-label="${esc(label(t))}">${cardInner(t)}${extra || ''}</div>`;
+}
+function mini(t, extra, cls) {
+  if (t === 'back') return `<span class="mini back ${cls || ''}"></span>`;
+  const dots = E.isMaki(t) ? `<span class="mkd">${'<i></i>'.repeat(E.makiIcons(t))}</span>` : '';
+  return `<span class="mini ${cls || ''}" style="--cc:var(${META[t].c})" title="${esc(label(t))}"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#a-${artOf(t)}"/></svg>${dots}${extra || ''}</span>`;
+}
+
+// =====================================================================================================
+// 桌面分组+实时得分预览
+// =====================================================================================================
+// 这一回合的牌都打出来了（最后一轮翻开以后 / 回合计分时）：桌上的分已经定了，不再说「暂列」「下一张+N」「还差…」
+function roundOver(st) {
+  return st.phase === 'roundEnd' || st.phase === 'gameOver' || st.players.every((x) => x.hand.length === 0);
+}
+function groupsOf(st, p) {
+  const pl = st.players[p];
+  const s = E.summarize(pl.table);
+  const pv = E.roundPreview(st)[p];
+  const over = roundOver(st);
+  const G = [];
+  const makis = pl.table.filter((c) => E.isMaki(c.t));
+  if (makis.length) {
+    const icons = st.players.map((x) => E.summarize(x.table).makiIcons);
+    const more = icons.filter((v, i) => i !== p && v > s.makiIcons).length;
+    const same = icons.filter((v, i) => i !== p && v === s.makiIcons).length;
+    G.push({ g: 'maki', cards: makis.map((c) => mini(c.t)), title: '寿司卷', st: `${s.makiIcons}个标记`, pts: pv.maki,
+      note: over ? `${same ? '并列' : ''}第${more + 1}` : `暂列第${more + 1}${same ? '（并列）' : ''}`, cls: more === 0 ? 'k' : '' });
+  }
+  if (s.tempura) G.push({ g: 'tempura', cards: rep('tempura', s.tempura), title: '天妇罗', st: `${s.tempura % 2 ? s.tempura + '/' + (s.tempura + 1) : s.tempura + '张'}`, pts: pv.tempura,
+    note: s.tempura % 2 ? (over ? '1张没配对' : '还差1张成对') : `${s.tempura / 2}对`, cls: s.tempura % 2 ? 'w' : 'k' });
+  if (s.sashimi) {
+    const m = s.sashimi % 3;
+    G.push({ g: 'sashimi', cards: rep('sashimi', s.sashimi), title: '刺身', st: m ? `${m}/3` : `${s.sashimi}张`, pts: pv.sashimi,
+      note: m ? (over ? `${m}张没凑齐` : `还差${3 - m}张`) : `${s.sashimi / 3}套`, cls: m ? 'w' : 'k' });
+  }
+  if (s.dumpling) {
+    const d = s.dumpling, DP = E.DUMPLING_PTS;
+    G.push({ g: 'dumpling', cards: rep('dumpling', d), title: '煎饺', st: `${d}张`, pts: pv.dumpling,
+      note: d >= 5 ? '已封顶' : (over ? '' : `下一张+${DP[d + 1] - DP[d]}`), cls: '' });
+  }
+  const nigiriCards = [];
+  let nCount = 0;
+  pl.table.forEach((c) => {
+    if (c.t === 'wasabi') {
+      const n = c.n != null ? pl.table.find((x) => x.id === c.n) : null;
+      if (n) { nCount++; nigiriCards.push(`<span class="pair">${mini('wasabi')}${mini(n.t, '<span class="x3">×3</span>')}</span>`); }
+      else nigiriCards.push(mini('wasabi', '', 'wopen'));
+    } else if (E.isNigiri(c.t) && c.w == null) { nCount++; nigiriCards.push(mini(c.t)); }
+  });
+  if (nigiriCards.length) {
+    G.push({ g: 'nigiri', cards: nigiriCards, title: s.wasabi && !nCount ? '芥末' : '手握', st: nCount ? `${nCount}张` : '', pts: pv.nigiri,
+      note: s.wasabiOpen ? (over ? '芥末没等到手握' : '芥末等待手握') : (s.wasabi ? '芥末上×3' : ''), cls: s.wasabiOpen ? 'w' : '' });
+  }
+  const pud = E.puddingCount(pl);
+  if (pud) G.push({ g: 'pudding', cards: rep('pudding', Math.min(pud, 5)), title: '布丁', st: `${pud}张`, pts: null, note: '游戏结束才计分', cls: '' });
+  const chops = pl.table.filter((c) => c.t === 'chopsticks');
+  if (chops.length) {
+    const pending = chops.some((c) => c.pendingReturn);
+    const usable = st.phase === 'pick' && pl.hand.length >= 2;
+    // 用不上时只显示「0分」（不再写成「0分 · 0分」）；最后一轮明确说这回合用不上了
+    G.push({ g: 'chopsticks', cards: chops.map(() => mini('chopsticks')), title: '筷子', st: chops.length > 1 ? `${chops.length}张` : '', pts: 0,
+      note: pending ? '要放回手牌' : (usable ? '可用：拿2张' : (st.phase === 'pick' ? '这回合用不上了' : '')), cls: pending ? 'w' : (usable ? 'k' : '') });
+  }
+  return G;
+}
+function rep(t, n) { const a = []; for (let i = 0; i < n; i++) a.push(mini(t)); return a; }
+function groupsHTML(st, p, clickable, hidePts) {
+  const G = groupsOf(st, p);
+  if (!G.length) return `<span class="empty-note">桌面还是空的——选的牌会放在这里。</span>`;
+  return G.map((g) => {
+    const tag = clickable ? 'button' : 'div';
+    const ptsTxt = g.pts == null ? '' : `<span class="p">${g.pts}</span>分`;
+    return `<${tag} class="grp" data-g="${g.g}" ${clickable ? `data-act="group" aria-label="${g.title}"` : ''}>` +
+      `<div class="g-cards">${g.cards.join('')}</div>` +
+      `<div class="g-txt"><b>${g.title}</b>${g.st}</div>` +
+      `<div class="g-pts">${hidePts ? '' : ptsTxt}${g.note ? `${ptsTxt && !hidePts ? ' · ' : ''}<span class="${g.cls || ''}">${g.note}</span>` : ''}</div>` +
+      `</${tag}>`;
+  }).join('');
+}
+function chipsHTML(pl) {
+  const s = E.summarize(pl.table);
+  const out = [];
+  // 小标签：「卷」后面是 标记 个数，其他是张数。手握 只写张数（「握2×3」会被读成 6），细节写在提示里
+  const chip = (t, txt, n, cls, tip) => out.push(`<span class="chip ${cls || ''}" style="--cc:var(${META[t].c})" title="${esc(tip || E.TYPES[t].name + n + '张')}">${txt}<b>${n}</b></span>`);
+  if (s.makiIcons) chip('maki2', '卷', s.makiIcons, '', `寿司卷：${s.makiIcons}个标记`);
+  if (s.tempura) chip('tempura', '天', s.tempura);
+  if (s.sashimi) chip('sashimi', '刺', s.sashimi);
+  if (s.dumpling) chip('dumpling', '饺', s.dumpling);
+  if (s.nigiri.length) {
+    const on = s.nigiri.filter((x) => x.onWasabi).length;
+    chip('salmon', '握', s.nigiri.length, '', `手握${s.nigiri.length}张${on ? `（${on}张在芥末上，×3）` : ''}`);
+  }
+  if (s.wasabiOpen) chip('wasabi', '芥', s.wasabiOpen, 'open', `芥末空着${s.wasabiOpen}张：他的下一张手握×3`);
+  if (s.chopsticks) chip('chopsticks', '筷', s.chopsticks);
+  const pud = E.puddingCount(pl);
+  if (pud) chip('pudding', '布', pud);
+  return out.length ? out.join('') : '<span style="font-size:11px;color:var(--soy-3)">桌面空</span>';
+}
+
+// 手里还剩 left 张时，这回合最多还能再拿几张（桌上有筷子的话，手牌 ≥2张的轮可以多拿1张）
+function maxTakes(pl, left) {
+  const chops = pl.table.filter((c) => c.t === 'chopsticks' && !c.pendingReturn).length;
+  return left + Math.min(chops, Math.max(0, left - 1));
+}
+// 寿司卷的名次要到回合结束才定：只有回合最后三分之一才给「按现在算+N」
+function makiLate(st) { return st.turn >= st.handSize * 2 / 3; }
+
+// 选中一张牌时，告诉新手它会带来什么（实际数字）
+function gainText(st, p, t) {
+  const pl = st.players[p];
+  const s = E.summarize(pl.table);
+  const g = E.cardGain(st, p, t);
+  const left = pl.hand.length - 1;
+  const DP = E.DUMPLING_PTS;
+  switch (t) {
+    case 'tempura': return s.tempura % 2 ? `天妇罗凑成一对：<b>+5</b>` : `天妇罗${s.tempura + 1}张：还差1张才成对（单张0分）`;
+    case 'sashimi': {
+      const m = (s.sashimi + 1) % 3;
+      if (m === 0) return `刺身凑齐3张：<b>+10</b>`;
+      return `刺身${m}/3：还差${3 - m}张${maxTakes(pl, left) < 3 - m ? '，<b>剩下的轮数不够了</b>，这回合凑不齐' : `（还剩${left}轮）`}`;
+    }
+    case 'dumpling': return s.dumpling >= 5 ? '煎饺已经5张（15分封顶）：<b>+0</b>' : `煎饺${s.dumpling + 1}张 = ${DP[Math.min(5, s.dumpling + 1)]}分：<b>+${DP[Math.min(5, s.dumpling + 1)] - DP[s.dumpling]}</b>`;
+    case 'maki1': case 'maki2': case 'maki3': {
+      const k = E.makiIcons(t), b = s.makiIcons + k;
+      const icons = st.players.map((x) => E.summarize(x.table).makiIcons);
+      icons[p] = b;
+      // 回合前半段别人还会继续拿寿司卷：不给「+6」这种看起来很稳的数字
+      if (!makiLate(st)) return `寿司卷${s.makiIcons}→${b}个标记，${rankText(icons, p)}。回合结束才比，别人还会抢。`;
+      return `寿司卷${s.makiIcons}→${b}个标记，${rankText(icons, p)}${g > 0 ? `（按现在算<b>+${g}</b>）` : '（名次没变，暂时不加分）'}`;
+    }
+    case 'salmon': case 'squid': case 'egg':
+      return s.wasabiOpen ? `${E.TYPES[t].name}放上芥末：${E.nigiriValue(t)}×3 = <b>+${g}</b>` : `${E.TYPES[t].name}：<b>+${g}</b>`;
+    case 'wasabi': return `芥末本身0分，之后下一张手握×3${left < 1 ? '——<b>但已经没有下一轮了</b>' : ''}`;
+    case 'pudding': return `布丁${E.puddingCount(pl)}→${E.puddingCount(pl) + 1}张：游戏结束时比多少`;
+    case 'chopsticks': return left >= 2 ? '筷子：之后某一轮可以一次拿2张' : '筷子：这回合已经用不上了（下一轮最多只剩1张），0分';
+  }
+  return '';
+}
+
+// =====================================================================================================
+// 飞行动画（克隆一张牌从 A 飞到 B）
+// =====================================================================================================
+function rectOf(x) { return x && x.getBoundingClientRect ? x.getBoundingClientRect() : x; }
+const noSize = (r) => !r || (!r.width && !r.height);
+// 这个动画属于哪个标签页（learn / play）；那个页面没显示时就不画
+function ownerOf(...xs) {
+  for (const x of xs) { const p = x && x.closest ? x.closest('.panel') : null; if (p) return p.id; }
+  return null;
+}
+function ownerHidden(owner) { return !!owner && owner !== currentTab; }
+async function fly(from, to, html, ms, opts) {
+  opts = opts || {};
+  const a = rectOf(from), b = rectOf(to);
+  const owner = ownerOf(from, to);
+  if (D(ms) <= 0 || noSize(a) || noSize(b) || ownerHidden(owner)) return;
+  const g = document.createElement('div');
+  g.className = 'ghost';
+  if (owner) g.dataset.owner = owner;
+  g.innerHTML = html;
+  Object.assign(g.style, { left: a.left + 'px', top: a.top + 'px', width: a.width + 'px', height: a.height + 'px' });
+  const inner = g.firstElementChild;
+  if (inner) { inner.style.setProperty('--cw', a.width + 'px'); inner.style.setProperty('--mw', a.width + 'px'); }
+  document.body.appendChild(g);
+  const dx = b.left + b.width / 2 - (a.left + a.width / 2);
+  const dy = b.top + b.height / 2 - (a.top + a.height / 2);
+  const s = opts.scale != null ? opts.scale : Math.max(0.15, b.width / Math.max(1, a.width));
+  await anim(g, [
+    { transform: 'translate(0,0) scale(1) rotate(0deg)', opacity: 1 },
+    { transform: `translate(${dx * 0.5}px,${dy * 0.5 - (opts.arc || 30)}px) scale(${(1 + s) / 2}) rotate(${opts.rot || 0}deg)`, opacity: 1, offset: 0.5 },
+    { transform: `translate(${dx}px,${dy}px) scale(${s}) rotate(0deg)`, opacity: opts.fade ? 0 : 1 },
+  ], ms, { fill: 'forwards' });
+  g.remove();
+}
+function shout(anchor, text, ms, ownerHint) {
+  const owner = ownerHint || ownerOf(anchor);
+  let r = rectOf(anchor);
+  // 按钮刚被清掉的空按钮栏没有尺寸：往外找一层看得见的容器（操作条）当锚点
+  for (let el = anchor, k = 0; noSize(r) && el && el.parentElement && k < 3; k++) { el = el.parentElement; r = el.getBoundingClientRect(); }
+  if (noSize(r) || ownerHidden(owner)) return Promise.resolve();
+  const b = document.createElement('div');
+  b.className = 'shout';
+  if (owner) b.dataset.owner = owner;
+  b.textContent = text;
+  b.setAttribute('role', 'status');
+  document.body.appendChild(b);
+  const bw = b.offsetWidth;
+  const left = Math.max(8, Math.min(window.innerWidth - bw - 8, r.left + r.width / 2 - bw / 2));
+  Object.assign(b.style, { left: left + 'px', top: Math.max(8, r.top - b.offsetHeight - 12) + 'px' });
+  const d = Math.max(D(ms || 1100), 0);
+  const p = anim(b, [{ transform: 'scale(.4)', opacity: 0 }, { transform: 'scale(1.12)', opacity: 1, offset: 0.25 }, { transform: 'scale(1)', opacity: 1, offset: 0.4 }, { transform: 'scale(1)', opacity: 1, offset: 0.85 }, { transform: 'scale(.9)', opacity: 0 }], ms || 1100, { fill: 'forwards' });
+  return p.then(() => b.remove(), () => b.remove()).then(() => (d <= 0 ? b.remove() : null));
+}
+function floatPts(anchor, text) {
+  const r = rectOf(anchor);
+  const owner = ownerOf(anchor);
+  if (noSize(r) || D(800) <= 0 || ownerHidden(owner)) return;
+  const f = document.createElement('div');
+  f.className = 'float-pts';
+  if (owner) f.dataset.owner = owner;
+  f.textContent = text;
+  Object.assign(f.style, { left: r.left + r.width / 2 - 20 + 'px', top: r.top - 6 + 'px' });
+  document.body.appendChild(f);
+  anim(f, [{ transform: 'translateY(0)', opacity: 1 }, { transform: 'translateY(-28px)', opacity: 0 }], 900, { fill: 'forwards' }).then(() => f.remove());
+}
+
+// =====================================================================================================
+// 桌面视图：对手、回转寿司传送带、你的桌面、手牌、操作条
+// =====================================================================================================
+class TableView {
+  constructor(host) {
+    this.el = h(`<div class="table">
+      <div class="tv-left">
+        <div class="opps" data-region="opps"></div>
+        <div class="belt" data-region="belt">
+          <svg class="belt-svg" aria-hidden="true"><rect class="b-edge"/><rect class="b-band"/><rect class="b-dash"/></svg>
+          <div class="island"><div class="isl-msg" aria-live="polite"></div><div class="my-slot"></div></div>
+          <div class="plates"></div>
+        </div>
+      </div>
+      <div class="tv-right">
+        <div class="mine" data-region="mine"><div class="mine-head"></div><div class="groups"></div></div>
+        <div class="handbox" data-region="hand"><div class="hand-head"></div><div class="hand"></div></div>
+        <div class="actionbar" data-region="actions"><div class="ab-text"></div><div class="ab-btns"></div></div>
+      </div>
+    </div>`);
+    host.appendChild(this.el);
+    this.oppsEl = $('.opps', this.el);
+    this.belt = $('.belt', this.el);
+    this.svg = $('.belt-svg', this.el);
+    this.dash = $('.b-dash', this.el);
+    this.plates = $('.plates', this.el);
+    this.msgEl = $('.isl-msg', this.el);
+    this.slot = $('.my-slot', this.el);
+    this.headEl = $('.mine-head', this.el);
+    this.groupsEl = $('.groups', this.el);
+    this.handHead = $('.hand-head', this.el);
+    this.hand = $('.hand', this.el);
+    this.abText = $('.ab-text', this.el);
+    this.abBtns = $('.ab-btns', this.el);
+    this.state = null;
+    this.ui = {};
+    this.busy = false;
+    this.dashOff = 0;
+    this.seatS = [];
+    this.handler = null;
+    this.el.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-act]');
+      if (!b || !this.el.contains(b) || b.disabled) return;
+      if (b.dataset.act === 'opp') { showOppSheet(this.state, +b.dataset.p); return; }
+      if (this.busy) return;
+      if (this.handler) this.handler(b.dataset.act, b.dataset, b);
+    });
+    this.onResize = () => this.layoutBelt();
+    if (window.ResizeObserver) { this.ro = new ResizeObserver(this.onResize); this.ro.observe(this.belt); }
+    window.addEventListener('resize', this.onResize);
+  }
+  // 换新的一局时整张桌子换掉：旧一局还没跑完的动画只会动这张已经拆掉的桌子
+  destroy() {
+    this.dead = true;
+    if (this.ro) this.ro.disconnect();
+    window.removeEventListener('resize', this.onResize);
+    this.el.remove();
+  }
+  static freshUI() {
+    return { selected: [], chopMode: false, opp: {}, slot: null, pickedIds: [], msg: '', abText: '', actions: [], handFrom: null,
+      handHidden: false, handLocked: false, handTags: {}, focus: null, groupsClickable: false, hidePts: false };
+  }
+  render(st, ui) {
+    if (st) this.state = st;
+    if (ui) this.ui = ui;
+    st = this.state; ui = this.ui;
+    if (!st || this.dead) return;
+    this.el.style.setProperty('--no', Math.max(1, st.players.length - 1));
+    this.renderOpps(); this.renderPlates(); this.renderSlot(); this.renderMine(); this.renderHand(); this.renderActions();
+    this.msgEl.innerHTML = ui.msg || '';
+    this.applyFocus();
+    this.layoutBelt();
+  }
+  renderOpps() {
+    const st = this.state, ui = this.ui;
+    this.oppsEl.dataset.k = st.players.length - 1;
+    this.oppsEl.innerHTML = st.players.slice(1).map((pl, k) => {
+      const p = k + 1;
+      const o = ui.opp[p];
+      let pick = '', stTxt = '';
+      if (o === 'thinking') { pick = '<span class="thinking"></span>'; stTxt = '思考中'; }
+      else if (o === 'ready') { pick = mini('back'); stTxt = '已选好'; }
+      else if (o && o.shown) { pick = o.shown.map((t) => mini(t)).join(''); stTxt = '刚拿了' + o.shown.map((t) => E.TYPES[t].name).join('、'); }
+      return `<button class="opp" data-act="opp" data-p="${p}" aria-label="${esc(pl.name)}，${stTxt ? stTxt + '，' : ''}总分${pl.total}，点开看桌面">` +
+        `<div class="opp-top"><span class="pdot" style="--pc:${PCOL[p % PCOL.length]}"></span><b>${esc(pl.name)}</b><span class="opp-pick" title="${stTxt}">${pick}</span><span class="opp-score">${pl.total}</span></div>` +
+        `<div class="chips">${chipsHTML(pl)}</div></button>`;
+    }).join('');
+  }
+  handCount(p) {
+    const pl = this.state.players[p];
+    let n = pl.hand.length;
+    if (p === 0) n -= (this.ui.pickedIds || []).length;
+    else if (pl.pick && this.state.phase === 'pick') n -= pl.pick.length;
+    return Math.max(0, n);
+  }
+  renderPlates() {
+    const st = this.state;
+    this.plates.innerHTML = st.players.map((pl, p) => {
+      const n = this.handCount(p);
+      return `<div class="plate ${p === 0 ? 'me' : ''} ${n ? '' : 'empty'}" data-p="${p}" title="${esc(pl.name)}的手牌${n}张"><div class="stk"><i></i><i></i><i></i></div><b class="pc">${n}</b></div>`;
+    }).join('');
+    this.placePlates();
+  }
+  renderSlot() {
+    const s = this.ui.slot;
+    if (!s) { this.slot.innerHTML = ''; return; }
+    if (s.faceDown) this.slot.innerHTML = Array.from({ length: s.faceDown }, () => cardDiv('back')).join('');
+    else this.slot.innerHTML = s.types.map((t) => cardDiv(t)).join('');
+  }
+  renderMine() {
+    const st = this.state, ui = this.ui;
+    const me = st.players[0];
+    const pv = E.roundPreview(st)[0];
+    this.headEl.innerHTML = `<span class="mt">你的桌面</span>` +
+      (ui.hidePts ? '' : `<span class="est">${roundOver(st) ? '本回合得分' : '本回合预估'}<b>${pv.total}</b>分</span>`) +
+      `<span>总分<b class="num">${me.total}</b></span>`;
+    this.groupsEl.innerHTML = groupsHTML(st, 0, ui.groupsClickable, ui.hidePts);
+  }
+  renderHand() {
+    const st = this.state, ui = this.ui;
+    const me = st.players[0];
+    const picked = ui.pickedIds || [];
+    const cards = ui.handHidden ? [] : me.hand.filter((c) => picked.indexOf(c.id) < 0);
+    if (!ui.handHidden) this.hand.style.minHeight = '';
+    const from = ui.handFrom != null && ui.handFrom !== 0 && !ui.handHidden && st.phase === 'pick' ? `<span>来自<span class="from">${esc(st.players[ui.handFrom].name)}</span></span>` : '';
+    this.handHead.innerHTML = `<span class="ht">你的手牌</span><span class="num">${cards.length}张</span>${from}`;
+    if (!cards.length) {
+      this.hand.innerHTML = `<span class="none">${esc(ui.handEmptyText || (st.phase === 'roundEnd' || st.phase === 'gameOver' ? '这一回合的手牌出完了。' : '手牌已经放到传送带上。'))}</span>`;
+      return;
+    }
+    this.hand.innerHTML = cards.map((c) => {
+      const si = ui.selected.indexOf(c.id);
+      const badge = si >= 0 && ui.chopMode ? `<span class="order">${si + 1}</span>` : '';
+      const tag = ui.handTags[c.id] ? `<span class="tag">${esc(ui.handTags[c.id])}</span>` : '';
+      return cardBtn(c, si >= 0 ? 'sel' : '', badge + tag, ui.handLocked ? 'disabled' : `aria-pressed="${si >= 0}"`);
+    }).join('');
+  }
+  renderActions() {
+    const ui = this.ui;
+    this.abText.parentElement.classList.toggle('chop', !!ui.chopMode);
+    this.abText.innerHTML = ui.abText || '';
+    this.abBtns.innerHTML = (ui.actions || []).map((a) =>
+      `<button class="btn ${a.cls || ''}" data-act="${a.act}" ${a.disabled ? 'disabled' : ''}>${a.label}</button>`).join('');
+  }
+  applyFocus() {
+    const f = this.ui.focus;
+    $$('.spot', this.el).forEach((x) => x.classList.remove('spot'));
+    $$('[data-region]', this.el).forEach((x) => x.classList.remove('focus'));
+    this.el.classList.toggle('region-dim', !!(f && f.regions));
+    const R = (f && f.regions) || [];
+    this.el.classList.toggle('mine-up', R.indexOf('mine') >= 0 && R.indexOf('hand') < 0 && (R.indexOf('opps') >= 0 || R.indexOf('belt') >= 0));
+    if (!f) return;
+    (f.regions || []).forEach((r) => { const x = $(`[data-region="${r}"]`, this.el); if (x) x.classList.add('focus'); });
+    if (f.spot) $$(f.spot, this.el).forEach((x) => x.classList.add('spot'));
+  }
+  // ---------------- 传送带几何 ----------------
+  layoutBelt() {
+    const st = this.state;
+    if (!st || this.dead) return;
+    const W = this.belt.clientWidth, H = this.belt.clientHeight;
+    if (!W || !H) return;
+    const inset = 15;
+    const x0 = inset, y0 = inset, w = W - 2 * inset, hh = H - 2 * inset;
+    const r = Math.min(hh / 2, W >= 600 ? 46 : 30);
+    this.g = { x0, y0, w, h: hh, r, L: 2 * (w - 2 * r) + 2 * (hh - 2 * r) + 2 * Math.PI * r };
+    this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    $$('rect', this.svg).forEach((rc) => {
+      rc.setAttribute('x', x0); rc.setAttribute('y', y0); rc.setAttribute('width', w); rc.setAttribute('height', hh);
+      rc.setAttribute('rx', r); rc.setAttribute('ry', r);
+    });
+    this.dash.style.strokeDashoffset = this.dashOff;
+    const br = this.belt.getBoundingClientRect();
+    const n = st.players.length;
+    this.seatS = [this.sBottom(W / 2)];
+    const ops = this.oppsEl.children;
+    for (let p = 1; p < n; p++) {
+      const op = ops[p - 1];
+      let cx = W / 2;
+      if (op) { const r2 = op.getBoundingClientRect(); cx = r2.left + r2.width / 2 - br.left; }
+      this.seatS[p] = this.sTop(cx);
+    }
+    this.placePlates();
+  }
+  sTop(x) { const g = this.g; return Math.max(0, Math.min(g.w - 2 * g.r, x - (g.x0 + g.r))); }
+  sBottom(x) {
+    const g = this.g;
+    const base = (g.w - 2 * g.r) + Math.PI * g.r / 2 + (g.h - 2 * g.r) + Math.PI * g.r / 2;
+    return base + Math.max(0, Math.min(g.w - 2 * g.r, (g.x0 + g.w - g.r) - x));
+  }
+  pointAt(s) {
+    const { x0, y0, w, h: hh, r, L } = this.g;
+    s = ((s % L) + L) % L;
+    const a = w - 2 * r, b = hh - 2 * r, q = Math.PI * r / 2;
+    if (s < a) return [x0 + r + s, y0];
+    s -= a; if (s < q) { const t = s / r - Math.PI / 2; return [x0 + w - r + r * Math.cos(t), y0 + r + r * Math.sin(t)]; }
+    s -= q; if (s < b) return [x0 + w, y0 + r + s];
+    s -= b; if (s < q) { const t = s / r; return [x0 + w - r + r * Math.cos(t), y0 + hh - r + r * Math.sin(t)]; }
+    s -= q; if (s < a) return [x0 + w - r - s, y0 + hh];
+    s -= a; if (s < q) { const t = Math.PI / 2 + s / r; return [x0 + r + r * Math.cos(t), y0 + hh - r + r * Math.sin(t)]; }
+    s -= q; if (s < b) return [x0, y0 + hh - r - s];
+    s -= b; { const t = Math.PI + s / r; return [x0 + r + r * Math.cos(t), y0 + r + r * Math.sin(t)]; }
+  }
+  placePlates() {
+    if (!this.g) return;
+    $$('.plate', this.plates).forEach((el) => {
+      const p = +el.dataset.p;
+      if (this.seatS[p] == null) return;
+      const [x, y] = this.pointAt(this.seatS[p]);
+      el.style.transform = `translate(${x}px,${y}px)`;
+    });
+  }
+  plateEl(p) { return $(`.plate[data-p="${p}"]`, this.plates); }
+  // ---------------- 动画 ----------------
+  async pickDown(ids) {
+    const rects = ids.map((id) => { const e = $(`.card[data-id="${id}"]`, this.hand); return e ? e.getBoundingClientRect() : null; });
+    const types = ids.map((id) => this.state.players[0].hand.find((c) => c.id === id).t);
+    this.ui.slot = { faceDown: ids.length };
+    this.ui.pickedIds = ids.slice();
+    this.ui.selected = [];
+    this.render();
+    const targets = $$('.card', this.slot);
+    targets.forEach((t) => (t.style.visibility = 'hidden'));
+    await Promise.all(rects.map((r, i) => (r ? fly(r, targets[i] || targets[0], cardDiv(types[i]), 420, { arc: 10 }) : null)));
+    targets.forEach((t) => (t.style.visibility = ''));
+  }
+  async revealAnim(prev, st, info) {
+    // 1) 同时翻开
+    const ui = this.ui;
+    const shouters = info.plays.filter((pl) => pl.chopsticks != null && pl.p !== 0 && !ui.noBotShout);
+    for (const pl of shouters) shout(this.oppsEl.children[pl.p - 1], 'Sushi Go!', 1000);
+    if (shouters.length) await wait(500);
+    ui.slot = { types: info.plays[0].cards.map((c) => c.t) };
+    info.plays.forEach((pl) => { if (pl.p) ui.opp[pl.p] = { shown: pl.cards.map((c) => c.t) }; });
+    this.render(prev);
+    const flips = $$('.card', this.slot).concat($$('.opp-pick .mini', this.oppsEl));
+    await Promise.all(flips.map((el) => anim(el, [{ transform: 'rotateY(90deg)' }, { transform: 'rotateY(0deg)' }], 380)));
+    await wait(650);
+    // 2) 放进各自的桌面
+    const slotRects = $$('.card', this.slot).map((e) => e.getBoundingClientRect());
+    const chopRect = (() => { const g = $('.grp[data-g="chopsticks"]', this.groupsEl); return g ? g.getBoundingClientRect() : null; })();
+    ui.slot = null;
+    ui.pickedIds = [];
+    this.render(st);
+    const myPlay = info.plays[0];
+    const flights = myPlay.cards.map((c, i) => {
+      const g = c.t === 'wasabi' || E.isNigiri(c.t) ? 'nigiri' : (E.isMaki(c.t) ? 'maki' : c.t);
+      const target = $(`.grp[data-g="${g}"]`, this.groupsEl) || this.groupsEl;
+      if (target.style) target.style.visibility = 'hidden';
+      return fly(slotRects[i], target, cardDiv(c.t), 480, { scale: 0.45, arc: 20 }).then(() => {
+        target.style.visibility = '';
+        target.classList.add('pop');
+        const gain = E.cardGain(prev, 0, c.t);
+        // 寿司卷的「+N」只是现在的名次，回合结束前还会变：不飘分
+        if (gain > 0 && i === 0 && !E.isMaki(c.t)) floatPts(target, '+' + gain);
+      });
+    });
+    $$('.opp', this.oppsEl).forEach((o) => o.classList.add('pop'));
+    await Promise.all(flights);
+    this.lastChopRect = chopRect;
+    await wait(250);
+  }
+  async chopReturnAnim(info, fromRect) {
+    for (const pl of info.plays) {
+      if (pl.chopsticks == null) continue;
+      if (pl.p === 0) {
+        const target = $(`.card[data-id="${pl.chopsticks}"]`, this.hand);
+        const src = fromRect || this.lastChopRect;
+        if (target && src) {
+          target.style.visibility = 'hidden';
+          await fly(src, target, cardDiv('chopsticks'), 600, { arc: 40, rot: -20 });
+          target.style.visibility = '';
+        }
+      } else {
+        const op = this.oppsEl.children[pl.p - 1];
+        const plate = this.plateEl(pl.p);
+        if (op && plate) await fly(op, plate, mini('chopsticks'), 450, { scale: 0.6 });
+      }
+    }
+  }
+  async handToPlate() {
+    const plate = this.plateEl(0);
+    const cards = $$('.card', this.hand);
+    this.hand.style.minHeight = this.hand.offsetHeight + 'px'; // 传牌时手牌区不塌，避免页面跳动
+    if (plate && cards.length && D(400) > 0) {
+      const pr = plate.getBoundingClientRect();
+      const fl = cards.map((c, i) => wait(i * 35).then(() => fly(c, pr, cardDiv('back'), 380, { scale: 0.25, arc: 0 })));
+      cards.forEach((c) => (c.style.visibility = 'hidden'));
+      await Promise.all(fl);
+    }
+    this.ui.handHidden = true;
+    this.renderHand();
+  }
+  async beltMove(dir) {
+    const st = this.state;
+    const n = st.players.length;
+    if (!this.g) this.layoutBelt();
+    if (!this.g) return;
+    const L = this.g.L;
+    const starts = this.seatS.slice();
+    const dists = starts.map((s, i) => {
+      const tgt = starts[(i + dir + n) % n];
+      return dir > 0 ? ((tgt - s + L) % L) : -((s - tgt + L) % L);
+    });
+    const avg = dists.reduce((a, d) => a + Math.abs(d), 0) / n * Math.sign(dir);
+    const plates = $$('.plate', this.plates);
+    const off0 = this.dashOff;
+    await rafLoop(1150, (t) => {
+      const e = easeInOut(t);
+      plates.forEach((el) => {
+        const p = +el.dataset.p;
+        const [x, y] = this.pointAt(starts[p] + dists[p] * e);
+        el.style.transform = `translate(${x}px,${y}px)`;
+      });
+      this.dash.style.strokeDashoffset = off0 - avg * e;
+    });
+    this.dashOff = off0 - avg;
+  }
+  async plateToHand() {
+    const plate = this.plateEl(0);
+    const cards = $$('.card', this.hand);
+    if (!plate || !cards.length || D(400) <= 0) return;
+    const pr = plate.getBoundingClientRect();
+    await Promise.all(cards.map((c, i) => {
+      const r = c.getBoundingClientRect();
+      const dx = pr.left + pr.width / 2 - (r.left + r.width / 2);
+      const dy = pr.top + pr.height / 2 - (r.top + r.height / 2);
+      return anim(c, [{ transform: `translate(${dx}px,${dy}px) scale(.25)`, opacity: 0.3 }, { transform: 'translate(0,0) scale(1)', opacity: 1 }], 420, { delay: D(i * 40), fill: 'backwards' });
+    }));
+  }
+}
+
+// 点对手 → 看他的完整桌面
+function showOppSheet(st, p) {
+  if (!st || !st.players[p]) return;
+  const pl = st.players[p];
+  openModal(`<h2 id="modal-title">${esc(pl.name)}的桌面</h2>
+    <p class="sub">总分<b class="num">${pl.total}</b> · 布丁${E.puddingCount(pl)}张 · 本回合${roundOver(st) ? '得分' : '预估'}${E.roundPreview(st)[p].total}分（桌面上的牌大家都看得见）</p>
+    <div class="detail-groups"><div class="groups">${groupsHTML(st, p, false, false)}</div></div>
+    <div class="acts"><button class="btn primary" data-close>知道了</button></div>`);
+}
+
+// =====================================================================================================
+// 弹窗（回合计分 / 最终结果 / 对手桌面）——不用 alert/confirm
+// =====================================================================================================
+const modal = $('#modal'), modalCard = $('#modal-card');
+let modalOpts = {};
+let lastFocus = null;
+// 弹窗打开时页面主体 inert（键盘 Tab 只能在弹窗和顶栏之间走）；顶栏一直能用，弹窗从顶栏下面开始。
+function setMainInert(on) {
+  const m = $('main');
+  if ('inert' in m) m.inert = on; else if (on) m.setAttribute('inert', ''); else m.removeAttribute('inert');
+}
+function openModal(html, opts) {
+  if (modal.hidden) lastFocus = document.activeElement;
+  opts = opts || {};
+  // 回合计分 / 结果弹窗上面又要弹出别的（「← 大厅」的询问……）：先把计分弹窗停放，
+  // 上面那个关掉（不管是点按钮、Esc 还是点空白）以后它自动回来——不会凭空消失
+  const under = modal.hidden ? '' : modal.dataset.kind;
+  if ((under === 'roundEnd' || under === 'gameOver') && opts.kind !== under) Game.setParked(under);
+  modalOpts = opts;
+  modalCard.innerHTML = html;
+  modal.hidden = false;
+  modal.dataset.kind = modalOpts.kind || 'info';
+  modalCard.scrollTop = 0;
+  setMainInert(true);
+  Pause.hold = !!modalOpts.holdGame;
+  Pause.check();
+  TapGuard.arm('modal'); // 弹窗刚出现：连点的第二下不会点到弹窗里的按钮
+  const f = $('[data-autofocus]', modalCard) || $('.btn.primary', modalCard) || $('button', modalCard);
+  if (f) f.focus({ preventScroll: true });
+}
+// silent = 只是收起来（切标签页时把回合计分弹窗「停放」），不触发 onClose、不挪焦点
+function closeModal(silent) {
+  if (modal.hidden) return;
+  modal.hidden = true;
+  modalCard.innerHTML = '';
+  const cb = modalOpts.onClose;
+  modalOpts = {};
+  modal.dataset.kind = '';
+  setMainInert(false);
+  if (Pause.hold) { Pause.hold = false; Pause.check(); }
+  if (silent) return;
+  TapGuard.arm(currentTab); // 弹窗刚关：连点的第二下不落到下面的页面上
+  if (lastFocus && lastFocus.focus && document.contains(lastFocus)) lastFocus.focus({ preventScroll: true });
+  if (cb) cb();
+  Game.restoreSheet(); // 关掉的是盖在计分弹窗上面的询问：计分弹窗回来
+}
+modal.addEventListener('click', (e) => {
+  if (e.target.closest('[data-close]')) { closeModal(); return; }
+  if (e.target === modal && modalOpts.dismissable !== false) closeModal();
+  const b = e.target.closest('[data-mact]');
+  if (b && modalOpts.onAct) modalOpts.onAct(b.dataset.mact, b);
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    if (!modal.hidden && modalOpts.dismissable !== false) closeModal();
+    if (!$('#settings').hidden) toggleSettings(false);
+  }
+});
+
+// 机器人「思考」计时：暂停时不出牌；回来以后各自再想一小会儿（不会一回来全部同时亮）
+function botLater(ms, fn) {
+  const go = () => {
+    if (!Pause.on()) { fn(); return; }
+    Pause.gate().then(() => { const d = (250 + Math.random() * 650) * kf(); if (d <= 0) go(); else setTimeout(go, d); });
+  };
+  const d = ms * kf();
+  if (d <= 0) Promise.resolve().then(go); else setTimeout(go, d);
+}
+
+// =====================================================================================================
+// 教练解说：一两句话，说清刚才发生了什么、为什么
+// =====================================================================================================
+function rankText(icons, p) {
+  const mine = icons[p];
+  if (!mine) return '还没有标记';
+  const more = icons.filter((v, i) => i !== p && v > mine).length;
+  const same = icons.filter((v, i) => i !== p && v === mine).length;
+  if (more === 0 && !same) return '暂时最多';
+  if (more === 0) return '和别人并列最多';
+  return `暂列第${more + 1}${same ? '（并列）' : ''}`;
+}
+// 你这一轮打出的牌（没用筷子时）。left = 翻开以后你手里还剩几张 = 这回合还剩几轮；
+// 0 = 刚才是这回合最后一张，回合马上结束（除了布丁，桌上的牌都会弃掉）。
+function meSentence(prev, st, play) {
+  const c = play.cards[0], t = c.t;
+  const sb = E.summarize(prev.players[0].table);
+  const me = st.players[0];
+  const left = me.hand.length;
+  const DP = E.DUMPLING_PTS;
+  switch (t) {
+    case 'tempura':
+      if (sb.tempura % 2) return '你的天妇罗凑成一对：+5。';
+      return left ? `你的天妇罗现在${sb.tempura + 1}张，还差1张才成对。` : `最后一张是天妇罗：单张没配对，0分。`;
+    case 'sashimi': {
+      const m = (sb.sashimi + 1) % 3;
+      if (!m) return '你凑齐了3张刺身：+10！';
+      if (!left) return `最后一张是刺身：你的刺身${m}/3，没凑齐，这${m}张0分。`;
+      if (maxTakes(me, left) < 3 - m) return `你的刺身${m}/3，还差${3 - m}张——剩下的轮数不够凑齐了，这回合这${m}张拿不到分。`;
+      return `你的刺身${m}/3，还差${3 - m}张，还剩${left}轮。`;
+    }
+    case 'dumpling': { const n = sb.dumpling + 1; return `你的煎饺${n}张 = ${DP[Math.min(5, n)]}分。`; }
+    case 'maki1': case 'maki2': case 'maki3': {
+      const icons = st.players.map((p) => E.summarize(p.table).makiIcons);
+      if (left) return `你的寿司卷${icons[0]}个标记，${rankText(icons, 0)}。`;
+      // 回合最后一张：名次已经定了，不再说「暂时」
+      const more = icons.filter((v, i) => i && v > icons[0]).length, same = icons.filter((v, i) => i && v === icons[0]).length;
+      const r = more ? `排第${more + 1}${same ? '（并列）' : ''}` : (same ? '并列最多' : '最多');
+      return `你的寿司卷${icons[0]}个标记，${r}：这回合寿司卷得${E.roundPreview(st)[0].maki}分。`;
+    }
+    case 'salmon': case 'squid': case 'egg':
+      return play.onWasabi[0] != null ? `你的${E.TYPES[t].name}放上了芥末：${E.nigiriValue(t)}×3 = ${E.nigiriValue(t) * 3}分！` : `${E.TYPES[t].name}+${E.nigiriValue(t)}。`;
+    case 'wasabi':
+      if (!left) return '最后一张是芥末：后面没有手握了，0分；芥末不会留到下一回合。';
+      return '你的芥末在等手握：下一张手握×3。';
+    case 'pudding': return `布丁留到游戏结束才算：你现在${E.puddingCount(me)}张。`;
+    case 'chopsticks':
+      if (!left) return '最后一张是筷子：这回合马上结束，它0分，也不会留到下一回合。';
+      if (left < 2) return '筷子本身0分：下一轮你只剩1张，这回合用不上了。';
+      return '筷子从下一轮起能用：点「用筷子」一轮拿2张。';
+  }
+  return '';
+}
+// 你手里有 鱿鱼/鲑鱼手握，而你要传给的人桌上有空着的 芥末：你不拿，它到他那里就 ×3
+function feedWarning(st) {
+  const n = st.players.length;
+  const to = (E.passDir(st) + n) % n;
+  if (!to || !E.summarize(st.players[to].table).wasabiOpen) return '';
+  const hand = st.players[0].hand;
+  const t = ['squid', 'salmon'].find((x) => hand.some((c) => c.t === x));
+  if (!t || hand.length < 2) return '';
+  return `注意：${st.players[to].name}有空着的芥末，你没拿的${E.TYPES[t].name}传过去，就是他的${E.nigiriValue(t) * 3}分。`;
+}
+// 第3回合开局：布丁 在这一回合定下来——告诉新手现在各几张、自己是不是最少
+function puddingOpener(st) {
+  const counts = st.players.map((p) => E.puddingCount(p));
+  const mine = counts[0], max = Math.max.apply(null, counts), min = Math.min.apply(null, counts);
+  const list = st.players.map((p, i) => `${p.name}${counts[i]}张`).join('、');
+  let tip;
+  if (st.players.length === 2) tip = max === min ? '2人局不扣分，现在一样多：谁多拿1张，谁+6。' : (mine === max ? '2人局不扣分，你现在多，保住就+6。' : '2人局不扣分，但对手现在比你多，他会+6。');
+  else if (max === min) tip = '现在大家一样多：这回合多拿1张，就不会是最少的。';
+  else if (mine === min) tip = '你现在<b>排最少</b>（游戏结束最少的−6），这回合看到布丁可以拿。';
+  else if (mine === max) tip = '你现在最多（+6），别被人追上。';
+  else tip = '你现在不是最少的，最少的要−6。';
+  return `布丁现在：${list}。${tip}`;
+}
+// 游戏结束：输了就点出和冠军差得最多的那一类牌，给一条下一局能用的建议
+function gameOverAdvice(st) {
+  const R = st.result, me = st.players[0];
+  if (R.winners.indexOf(0) >= 0) return (R.winners.length > 1 ? '并列获胜！' : '赢了！') + '真牌也是一模一样的玩法，可以上桌了。';
+  const W = st.players[R.winners[0]];
+  const d = W.total - me.total;
+  if (d === 0) return `${W.name}和你同分，但布丁比你多，排在前面。下一局记得多拿1–2张布丁。`;
+  const sum = (p, k) => p.rounds.reduce((a, r) => a + (r[k] || 0), 0);
+  const rows = [['maki', '寿司卷'], ['tempura', '天妇罗'], ['sashimi', '刺身'], ['dumpling', '煎饺'], ['nigiri', '手握']]
+    .map(([k, nm]) => ({ k, nm, a: sum(me, k), b: sum(W, k) }));
+  rows.push({ k: 'pudding', nm: '布丁', a: me.puddingScore, b: W.puddingScore });
+  rows.sort((x, y) => (y.b - y.a) - (x.b - x.a));
+  const top = rows[0];
+  const TIP = {
+    maki: '盯住别人的寿司卷标记数：差一点就跟，差太多就放手',
+    tempura: '天妇罗凑对很稳：手里已有1张时，看到第2张就拿',
+    sashimi: '刺身只在剩下轮数够时才开，开了就盯着凑齐3张',
+    dumpling: '煎饺越多越值钱，可以早点开始攒',
+    nigiri: '早点拿芥末，留给后面的鱿鱼手握',
+    pudding: '至少拿1–2张布丁保底，0张很可能−6',
+  };
+  return `${W.name}赢了，比你多${d}分。差得最多的是${top.nm}（你${top.a}分，${W.name}${top.b}分）。下一局${TIP[top.k]}。`;
+}
+function narrate(prev, st, info) {
+  const S = [];
+  const names = st.players.map((p) => p.name);
+  const n = st.players.length;
+  const me = info.plays[0];
+  if (me.chopsticks != null) {
+    const w = me.onWasabi.some((x) => x != null) ? '，手握放上了芥末' : '';
+    S.push(`你用筷子拿了${me.cards.map((c) => nameOf(c.t)).join('和')}${w}；筷子放回手牌，跟着传给了${names[(info.dir + n) % n]}。`);
+  } else S.push(meSentence(prev, st, me));
+  const ev = [];
+  info.plays.forEach((pl) => {
+    if (!pl.p) return;
+    const nm = names[pl.p];
+    const sb = E.summarize(prev.players[pl.p].table);
+    if (pl.chopsticks != null) ev.push([10, `${nm}喊了「Sushi Go!」，用筷子拿了${pl.cards.map((c) => nameOf(c.t)).join('和')}。`]);
+    pl.cards.forEach((c, i) => {
+      if (pl.onWasabi[i] != null) ev.push([8 + E.nigiriValue(c.t) / 10, `${nm}的${E.TYPES[c.t].name}放上了芥末：${E.nigiriValue(c.t) * 3}分。`]);
+      if (c.t === 'sashimi' && (sb.sashimi + 1) % 3 === 0) ev.push([7, `${nm}凑齐了3张刺身（+10）。`]);
+      if (c.t === 'wasabi' && st.players[pl.p].hand.length > 0) ev.push([4, `${nm}拿了芥末——他下一张手握会×3${pl.p === (info.dir + n) % n ? '，而你的手牌正要传给他' : ''}。`]);
+      if (c.t === 'pudding' && st.round === 3) ev.push([3.5, `${nm}在第3回合拿布丁（现在${E.puddingCount(st.players[pl.p])}张）——游戏结束要比布丁。`]);
+      if (c.t === 'tempura' && sb.tempura % 2 === 1) ev.push([2, `${nm}的天妇罗成对（+5）。`]);
+    });
+  });
+  const ib = prev.players.map((p) => E.summarize(p.table).makiIcons);
+  const ia = st.players.map((p) => E.summarize(p.table).makiIcons);
+  const maxA = Math.max.apply(null, ia), maxB = Math.max.apply(null, ib);
+  const leadA = ia.map((v, i) => (v === maxA && v > 0 ? i : -1)).filter((i) => i >= 0);
+  const leadB = ib.map((v, i) => (v === maxB && v > 0 ? i : -1)).filter((i) => i >= 0);
+  if (maxA > 0 && leadA.join() !== leadB.join() && leadA.length === 1 && leadA[0] !== 0) ev.push([5, `寿司卷现在${names[leadA[0]]}领先（${maxA}个标记）。`]);
+  ev.sort((a, b) => b[0] - a[0]);
+  if (ev.length) S.push(ev[0][1]);
+  return S.join('');
+}
+
+// =====================================================================================================
+// 实战
+// =====================================================================================================
+const Game = {
+  view: null, st: null, gen: 0, coachOn: true, cfg: null, resolving: false, lastFrom: null, pickingAnim: false,
+  parked: null, wasFirstGame: false,
+  init() {
+    this.newView();
+    const played = store.get('gamesPlayed', 0);
+    const saved = store.get('setup', null);
+    this.cfg = { n: saved && saved.n >= 2 && saved.n <= 5 ? saved.n : 4, alt: !!(saved && saved.alt), coach: played === 0 ? true : !!(saved ? saved.coach : false) };
+    this.syncSetup();
+    $('#np-seg').addEventListener('click', (e) => { const b = e.target.closest('[data-n]'); if (!b) return; this.cfg.n = +b.dataset.n; this.syncSetup(); });
+    $('#opt-coach').addEventListener('click', () => { this.cfg.coach = !this.cfg.coach; this.syncSetup(); });
+    $('#opt-alt').addEventListener('click', () => { this.cfg.alt = !this.cfg.alt; this.syncSetup(); });
+    $('#start-btn').addEventListener('click', () => this.start());
+    $('#g-coach').addEventListener('click', () => { this.coachOn = !this.coachOn; this.syncCoach(); this.updateActions(); });
+    $('#g-quit').addEventListener('click', () => { $('#g-confirm').hidden = false; $('#g-quit-no').focus(); });
+    $('#g-quit-no').addEventListener('click', () => { $('#g-confirm').hidden = true; });
+    $('#g-quit-yes').addEventListener('click', () => { $('#g-confirm').hidden = true; this.quit(); });
+    this.initLeave();
+  },
+  // 每一局一张新桌子：旧一局还在跑的动画只会动已经拆掉的旧桌子，不会把旧牌画回新的一局
+  newView() {
+    if (this.view) this.view.destroy();
+    this.view = new TableView($('#g-stage'));
+    this.view.handler = (a, d, el) => this.onAct(a, d, el);
+  },
+  inProgress() { return !!this.st && this.st.phase !== 'gameOver'; },
+  // 开新局 / 回到设置：作废旧一局所有还没跑完的异步流程（gen），清掉「正在结算/正在出牌」的标志
+  reset() {
+    this.gen++;
+    this.resolving = false; this.pickingAnim = false;
+    this.setParked(null);
+    closeModal(true);
+    this.newView();
+    TapGuard.arm('play');
+  },
+  syncSetup() {
+    $$('#np-seg [data-n]').forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.n === this.cfg.n)));
+    $('#opt-coach').setAttribute('aria-checked', String(this.cfg.coach));
+    $('#opt-alt').setAttribute('aria-checked', String(this.cfg.alt));
+    const names = ['你'].concat(E.BOT_NAMES).slice(0, this.cfg.n);
+    $('#who-list').innerHTML = names.map((nm, i) => `<span><i class="pdot" style="--pc:${PCOL[i]}"></i>${nm}</span>`).join('');
+    $('#np-hint').textContent = `${this.cfg.n}人局：每回合每人${E.HAND_SIZE[this.cfg.n]}张手牌，共${E.HAND_SIZE[this.cfg.n]}轮。`;
+    store.set('setup', this.cfg);
+  },
+  syncCoach() {
+    $('#g-coach').setAttribute('aria-pressed', String(this.coachOn));
+    $('#g-coach').innerHTML = '<span class="hide-s">教练</span>解说：' + (this.coachOn ? '开' : '关');
+    $('#g-coach').setAttribute('aria-label', '教练解说：' + (this.coachOn ? '开' : '关'));
+    $('#g-coachbox').hidden = !this.coachOn;
+  },
+  say(html) { $('#g-say').innerHTML = html; },
+  showSetup() {
+    this.reset();
+    $('#setup').hidden = false; $('#game').hidden = true; $('#g-confirm').hidden = true;
+    this.st = null;
+  },
+  quit() { this.showSetup(); },
+  start(opts) {
+    opts = Object.assign({}, this.cfg, opts || {});
+    this.reset();
+    this.coachOn = !!opts.coach;
+    this.syncCoach();
+    this.st = E.newGame({ players: opts.n, alternate: opts.alt, seed: opts.seed != null ? opts.seed : undefined });
+    this.lastFrom = null;
+    $('#setup').hidden = true; $('#game').hidden = false; $('#g-confirm').hidden = true;
+    const n = opts.n;
+    this.say(`第1回合开始！每人${E.HAND_SIZE[n]}张手牌。点一张你想留下的牌，再点「出这张」。上面是别人的桌面：「卷3」= 3个寿司卷标记，「天2」= 2张天妇罗；点名字能看全。`);
+    window.scrollTo({ top: 0 });
+    this.startTurn(true);
+  },
+  // ---------------- 回合计分 / 结果弹窗只在「实战」页出现：切走时先收起来，回来再打开 ----------------
+  setParked(kind) {
+    this.parked = kind;
+    this.syncParkDot();
+  },
+  // 标签上的小点 = 实战里有计分 / 结果弹窗还没看；人就在实战页上（弹窗只是被询问盖住）时不亮
+  syncParkDot() {
+    const kind = currentTab === 'play' ? null : this.parked;
+    const t = $('#tab-play');
+    t.classList.toggle('has-dot', !!kind);
+    if (kind) t.setAttribute('aria-label', '实战（' + (kind === 'gameOver' ? '结果' : '回合计分') + '还没看）'); else t.removeAttribute('aria-label');
+  },
+  // 停放的计分 / 结果弹窗该回来了吗：人在实战页上、上面没有别的弹窗
+  restoreSheet() {
+    if (this.parked && currentTab === 'play' && modal.hidden) this.unpark();
+  },
+  // 计分 / 结果弹窗现在不能打开：不在实战页，或者「← 大厅」/「继续这一局」的询问正开着（它关掉后再打开）
+  sheetBlocked() {
+    return currentTab !== 'play' || (!modal.hidden && !!modalOpts.holdGame);
+  },
+  park(kind) {
+    this.setParked(kind);
+    if (!modal.hidden && modal.dataset.kind === kind) closeModal(true);
+  },
+  unpark() {
+    const k = this.parked;
+    this.setParked(null);
+    if (!this.st) return;
+    if (k === 'roundEnd' && this.st.phase === 'roundEnd') this.showRoundEnd();
+    else if (k === 'gameOver' && this.st.phase === 'gameOver') this.showGameOver();
+  },
+  // 从教程回到实战时，正在打的一局不会被悄悄丢掉：在页面里问一句
+  askResume() {
+    const st = this.st;
+    const where = st.phase === 'roundEnd' ? `第${st.round}回合刚打完` : `第${st.round}回合·第${st.turn}/${st.handSize}轮`;
+    openModal(`<h2 id="modal-title">你有一局还没打完</h2>
+      <p class="sub">${where}，你现在${st.players[0].total}分。接着打这一局，还是放弃它？</p>
+      <div class="acts"><button class="btn" data-mact="new">放弃这局，回到设置</button><button class="btn primary big" data-mact="resume" data-autofocus>继续这一局</button></div>`,
+    { kind: 'resume', holdGame: true, onClose: () => { if (this.parked) this.unpark(); }, onAct: (a) => {
+      if (a === 'resume') closeModal();
+      else if (a === 'new') { modalOpts.onClose = null; this.showSetup(); }
+    } });
+  },
+  // 「← 大厅」：一局打到一半时先问一句（网页不保存进度）
+  initLeave() {
+    const link = $('#back-link');
+    let leaving = false;
+    link.addEventListener('click', (e) => {
+      if (leaving || !this.inProgress()) return;
+      e.preventDefault();
+      openModal(`<h2 id="modal-title">这一局还没打完</h2>
+        <p class="sub">回大厅会丢掉这一局（网页不保存进度）。</p>
+        <div class="acts"><button class="btn" data-mact="leave">回大厅</button><button class="btn primary big" data-close data-autofocus>继续玩</button></div>`,
+      { kind: 'leave', holdGame: true, onAct: (a) => { if (a === 'leave') { leaving = true; closeModal(true); link.click(); } } });
+      // 「继续玩」/ Esc / 点空白：closeModal() 会把被盖住的计分弹窗请回来（openModal 里先停放了它）
+    });
+    // 回了大厅又按浏览器「返回」（页面从缓存里原样恢复）：询问照常弹，停放的计分弹窗也回来
+    window.addEventListener('pageshow', (e) => { if (!e.persisted) return; leaving = false; this.restoreSheet(); });
+  },
+  updateStatus() {
+    const st = this.st;
+    if (!st) return;
+    const turnTxt = st.phase === 'pick' ? ` · 第<span class="num">${st.turn}</span>/<span class="num">${st.handSize}</span>轮` : '';
+    $('#g-status').innerHTML = `回合<span class="num">${Math.min(st.round, 3)}</span>/3${turnTxt}`;
+  },
+  dirText() {
+    const st = this.st, n = st.players.length;
+    const d = E.passDir(st);
+    return `<span class="dir">传给${d > 0 ? '左边' : '右边'}：${esc(st.players[(d + n) % n].name)} ${d > 0 ? '↻' : '↺'}</span>`;
+  },
+  startTurn(first) {
+    const st = this.st, gen = this.gen, v = this.view;
+    const ui = TableView.freshUI();
+    ui.handFrom = this.lastFrom;
+    if (st.turn === 1) ui.msg = `第<b>${st.round}</b>回合 · 选1张牌<br>${this.dirText()}`;
+    else ui.msg = `你收到<b>${esc(st.players[this.lastFrom].name)}</b>的手牌<br>${this.dirText()}`;
+    for (let p = 1; p < st.players.length; p++) {
+      ui.opp[p] = 'thinking';
+      const delay = 500 + Math.random() * 1200 + p * 150;
+      botLater(delay, () => {
+        if (gen !== this.gen || !this.st || this.st.phase !== 'pick' || this.st.players[p].pick) return;
+        E.setPick(st, p, E.botPick(st, p));
+        ui.opp[p] = 'ready';
+        v.renderOpps(); v.renderPlates();
+        this.maybeResolve();
+      });
+    }
+    v.render(st, ui);
+    this.updateStatus();
+    this.updateActions();
+    // 新一回合的手牌刚出现（紧跟在「开始第N回合」「再来一局」这类点按后面）：上一下连点不会点到新牌上。
+    // 回合中途的新手牌是自动传来的，前面没有你的点按可连——不挡，牌一落定就能点
+    if (st.turn === 1) TapGuard.arm('play');
+    this.ensureHandVisible();
+    if (st.players[0].hand.length === 1) {
+      ui.handLocked = true;
+      ui.abText = '最后1张：直接打出。';
+      v.renderHand(); v.renderActions();
+      if (this.coachOn && !first) {
+        // 接在上一轮的解说后面，别把它冲掉
+        const before = $('#g-say').innerHTML;
+        this.say((before ? before + '<br>' : '') + '传到你手里只剩1张了：最后一张直接打出，不用选。');
+      }
+      gwait(800).then(async () => {
+        if (gen !== this.gen) return;
+        const id = st.players[0].hand[0].id;
+        E.setPick(st, 0, [id]);
+        this.pickingAnim = true;
+        await v.pickDown([id]);
+        if (gen !== this.gen) return; // 旧一局：标志已经在 reset() 里清过，别去动新一局的
+        this.pickingAnim = false;
+        this.maybeResolve();
+      });
+    }
+  },
+  // minimal = 只往下挪到刚好露出最后一排（选牌、用筷子时操作条变高），不跳回去看对手
+  ensureHandVisible(instant, minimal) {
+    // 手机上：轮到你时，整手牌都要在（吸顶的状态条+教练）和（吸底的操作条）之间。
+    // 放得下就把对手和传送带也留在屏幕上；放不下就让它们滑到上面，手牌优先。
+    if (window.innerWidth >= 720 || currentTab !== 'play' || !this.st) return;
+    const v = this.view;
+    const cards = $$('.hand .card', v.el);
+    if (!cards.length) return;
+    const topEdge = $('.topbar').offsetHeight + $('.gsticky').offsetHeight;
+    const bottomEdge = window.innerHeight - $('.actionbar', v.el).offsetHeight;
+    const handTop = $('.hand-head', v.el).getBoundingClientRect().top - 4;
+    const handBottom = cards[cards.length - 1].getBoundingClientRect().bottom + 8;
+    let dy;
+    if (minimal) {
+      if (handBottom <= bottomEdge) return;                            // 只管底下被盖住的情况
+      dy = Math.min(handBottom - bottomEdge, Math.max(0, handTop - topEdge));
+    } else {
+      // 每轮开始：手牌少了以后，把滑上去的对手再拉回来（回合后半段对手桌面很重要）
+      dy = v.oppsEl.getBoundingClientRect().top - topEdge - 6;         // 理想：对手+传送带+手牌一屏
+      if (handBottom - dy > bottomEdge) dy = handBottom - bottomEdge;  // 放不下：手牌最后一排要露出来
+      if (handTop - dy < topEdge) dy = handTop - topEdge;              // 手牌比屏幕还高：至少从第一排开始
+      if (Math.abs(dy) < 16 && handTop >= topEdge && handBottom <= bottomEdge) return;
+    }
+    if (Math.abs(dy) < 2) return;
+    window.scrollTo({ top: Math.max(0, window.scrollY + dy), behavior: instant || D(300) <= 0 ? 'auto' : 'smooth' });
+  },
+  updateActions() {
+    const st = this.st, v = this.view, ui = v.ui;
+    if (!st || st.phase !== 'pick') return;
+    const me = st.players[0];
+    if (me.pick) {
+      ui.actions = [];
+      ui.abText = E.allPicked(st) ? '大家都选好了……' : '你选好了，等其他人……';
+      v.renderActions();
+      return;
+    }
+    if (me.hand.length === 1) return;
+    const canChop = E.canUseChopsticks(st, 0);
+    if (!canChop) ui.chopMode = false;
+    const need = ui.chopMode ? 2 : 1;
+    const acts = [];
+    if (canChop) acts.push({ act: 'chop', label: ui.chopMode ? '不用筷子' : '用筷子', cls: ui.chopMode ? '' : 'green' });
+    acts.push({ act: 'go', label: ui.chopMode ? 'Sushi Go! 出2张' : '出这张', cls: 'primary', disabled: ui.selected.length !== need });
+    ui.actions = acts;
+    const sel = ui.selected.map((id) => me.hand.find((c) => c.id === id)).filter(Boolean);
+    let txt = '';
+    if (ui.chopMode) {
+      txt = sel.length ? `筷子：${sel.map((c, i) => `${i + 1}. ${nameOf(c.t)}`).join('，')}${sel.length < 2 ? '，再选1张' : ''}` : '用筷子：按顺序选2张（先选的先放到桌上）';
+      if (this.coachOn && sel.length === 2) {
+        if (sel[0].t === 'wasabi' && E.isNigiri(sel[1].t)) txt += '。先芥末后手握→手握×3！';
+        // 顺序反了：手握先放下，这张芥末接不住它（除非桌上本来就有空着的芥末）
+        else if (E.isNigiri(sel[0].t) && sel[1].t === 'wasabi' && !E.summarize(me.table).wasabiOpen) {
+          txt += `。<span class="warn">注意顺序：先选的${E.TYPES[sel[0].t].name}先放下，这张芥末接不住它（只算${E.nigiriValue(sel[0].t)}分）——想×3就先点芥末。</span>`;
+        }
+      }
+    } else if (sel.length) {
+      txt = this.coachOn ? gainText(st, 0, sel[0].t) : `已选：${nameOf(sel[0].t)}`;
+    } else {
+      txt = this.coachOn ? (canChop ? '点一张牌选中它。你有筷子，也可以一轮拿2张。' : '点一张牌选中它，这里会显示它对你值多少。') : '选1张牌';
+      const feed = this.coachOn && feedWarning(st);
+      if (feed) txt = `点一张牌选中它。<span class="warn">${feed}</span>`;
+    }
+    ui.abText = txt;
+    v.renderActions();
+  },
+  onAct(act, d) {
+    const st = this.st, v = this.view, ui = v.ui;
+    if (!st || st.phase !== 'pick' || st.players[0].pick) return;
+    if (act === 'card') {
+      const id = +d.id;
+      const i = ui.selected.indexOf(id);
+      if (ui.chopMode) {
+        if (i >= 0) ui.selected.splice(i, 1);
+        else if (ui.selected.length < 2) ui.selected.push(id);
+        else ui.selected = [ui.selected[0], id];
+      } else {
+        ui.selected = i >= 0 ? [] : [id];
+      }
+      v.renderHand(); this.updateActions();
+      this.ensureHandVisible(true, true); // 提示文字变长、操作条变高时，最后一排手牌也别被盖住
+    } else if (act === 'chop') {
+      ui.chopMode = !ui.chopMode;
+      if (!ui.chopMode) ui.selected = ui.selected.slice(0, 1);
+      TapGuard.armAct('chop'); // 「用筷子」原地变成「不用筷子」：连点第二下不会马上又取消（只挡这个按钮，紧接着点牌照常算）
+      v.renderHand(); this.updateActions();
+      this.ensureHandVisible(true, true); // 窄屏上操作条变高了一行：别让它盖住最后一排手牌
+    } else if (act === 'go') {
+      const need = ui.chopMode ? 2 : 1;
+      if (ui.selected.length !== need) return;
+      this.humanPick(ui.selected.slice());
+    }
+  },
+  async humanPick(ids) {
+    const st = this.st, v = this.view, gen = this.gen;
+    const goBtn = $('[data-act="go"]', v.abBtns);
+    const goRect = goBtn ? goBtn.getBoundingClientRect() : null;
+    E.setPick(st, 0, ids);
+    v.ui.actions = []; v.ui.chopMode = false; v.renderActions();
+    v.busy = true; this.pickingAnim = true;
+    if (ids.length === 2) shout(goRect || v.abBtns, 'Sushi Go!', 1100, 'play');
+    await v.pickDown(ids);
+    if (gen !== this.gen) return;
+    v.busy = false; this.pickingAnim = false;
+    this.updateActions();
+    this.maybeResolve();
+  },
+  maybeResolve() {
+    const st = this.st;
+    if (!st || this.resolving || st.phase !== 'pick' || !E.allPicked(st)) return;
+    if (this.pickingAnim || this.view.ui.slot == null) return; // 你的牌还在飞
+    this.resolveTurn();
+  },
+  // 每个动画阶段之后都：① 看这局还是不是同一局（gen）② 如果切到别的标签页了就停在这里等回来
+  async resolveTurn() {
+    const st = this.st, gen = this.gen, v = this.view;
+    const alive = () => gen === this.gen;
+    this.resolving = true; v.busy = true;
+    v.ui.actions = []; v.ui.abText = '大家一起翻开……'; v.ui.handLocked = true; v.renderActions();
+    await gwait(300);
+    if (!alive()) return;
+    const prev = E.clone(st);
+    const info = E.resolvePicks(st);
+    v.ui.msg = '大家一起翻开！';
+    if (info.plays[0].chopsticks != null) v.ui.handTags = { [info.plays[0].chopsticks]: '要传出' };
+    await v.revealAnim(prev, st, info);
+    await Pause.gate();
+    if (!alive()) return;
+    if (this.coachOn) this.say(narrate(prev, st, info));
+    if (info.plays.some((p) => p.chopsticks != null)) {
+      v.ui.msg = '用过的筷子放回手牌';
+      v.msgEl.innerHTML = v.ui.msg;
+      if (info.plays[0].chopsticks != null) this.ensureHandVisible(true, true); // 让你看见筷子飞回手牌
+      await v.chopReturnAnim(info);
+      if (!alive()) return;
+      await gwait(400);
+      if (!alive()) return;
+    }
+    const roundOver = st.players.every((p) => p.hand.length === 0);
+    if (roundOver) {
+      E.passHands(st);
+      v.ui.msg = `第<b>${st.round}</b>回合结束！`;
+      v.ui.handEmptyText = '这一回合的手牌出完了。';
+      v.ui.abText = `第${st.round}回合结束：看计分。`; // 计分弹窗后面的操作条别还写着「大家一起翻开……」
+      v.render(st);
+      this.updateStatus();
+      await gwait(900);
+      if (!alive()) return;
+      this.resolving = false; v.busy = false;
+      this.showRoundEnd();
+      return;
+    }
+    const n = st.players.length, dir = info.dir;
+    v.ui.msg = `把剩下的手牌传给${dir > 0 ? '左边' : '右边'}的<b>${esc(st.players[(dir + n) % n].name)}</b>`;
+    v.msgEl.innerHTML = v.ui.msg;
+    v.ui.abText = '传送带转动中……'; v.renderActions();
+    await gwait(250);
+    if (!alive()) return;
+    await v.handToPlate();
+    await Pause.gate();
+    if (!alive()) return;
+    E.passHands(st);
+    await v.beltMove(dir);
+    await Pause.gate();
+    if (!alive()) return;
+    this.lastFrom = st.last.from[0];
+    this.resolving = false; v.busy = false;
+    this.startTurn();
+    await v.plateToHand();
+  },
+  showRoundEnd() {
+    if (this.sheetBlocked()) { this.park('roundEnd'); return; }
+    const st = this.st, gen = this.gen;
+    const res = st.roundResult;
+    const icons = res.map((r) => r.makiIcons);
+    const maxI = Math.max.apply(null, icons);
+    const ex = [];
+    if (maxI > 0) {
+      const firsts = res.map((r, i) => (r.makiIcons === maxI ? i : -1)).filter((i) => i >= 0);
+      if (firsts.length > 1) ex.push(`<b>寿司卷</b>：${firsts.map((i) => st.players[i].name).join('、')}并列最多（${maxI}个）平分6分，各${Math.floor(6 / firsts.length)}分；并列第一时不给第二名。`);
+      else {
+        const sec = res.filter((r) => r.makiIcons > 0 && r.makiIcons < maxI).map((r) => r.makiIcons);
+        let t = `<b>寿司卷</b>：${st.players[firsts[0]].name}最多（${maxI}个）得6分`;
+        if (sec.length) {
+          const s2 = Math.max.apply(null, sec);
+          const ss = res.map((r, i) => (r.makiIcons === s2 ? i : -1)).filter((i) => i >= 0);
+          t += `；${ss.map((i) => st.players[i].name).join('、')}第二（${s2}个）${ss.length > 1 ? `平分3分，各${Math.floor(3 / ss.length)}分` : '得3分'}`;
+        }
+        ex.push(t + '。');
+      }
+    } else ex.push('<b>寿司卷</b>：这回合没人拿，都不得分。');
+    const me = res[0];
+    const lost = [];
+    if (me.sashimiCount % 3) lost.push(`${me.sashimiCount % 3}张刺身没凑齐`);
+    if (me.tempuraCount % 2) lost.push('1张天妇罗没配对');
+    if (me.wasabiOpen) lost.push(`${me.wasabiOpen}张芥末没等到手握`);
+    if (lost.length) ex.push(`<b>你</b>：${lost.join('，')}，这些不得分。`);
+    ex.push(`<b>布丁</b>不在这里算，留在各自面前到游戏结束（现在：${st.players.map((p) => `${p.name}${E.puddingCount(p)}张`).join('、')}）。`);
+    const head = `<tr><th></th>${[['maki2', '寿司卷'], ['tempura', '天妇罗'], ['sashimi', '刺身'], ['dumpling', '煎饺'], ['salmon', '手握']].map(([t, l]) => `<th>${mini(t)}${l}</th>`).join('')}<th>本回合</th><th>总分</th></tr>`;
+    const rows = res.map((r, i) => `<tr class="${i === 0 ? 'me' : ''}"><td class="nm">${esc(st.players[i].name)}</td>` +
+      `<td><span class="num">${r.maki}</span><small>${r.makiIcons}个</small></td>` +
+      `<td><span class="num">${r.tempura}</span><small>${r.tempuraCount}张</small></td>` +
+      `<td><span class="num">${r.sashimi}</span><small>${r.sashimiCount}张</small></td>` +
+      `<td><span class="num">${r.dumpling}</span><small>${r.dumplingCount}张</small></td>` +
+      `<td><span class="num">${r.nigiri}</span><small>${r.nigiriList.length}张</small></td>` +
+      `<td class="tot">${r.total}</td><td class="tot">${st.players[i].total}</td></tr>`).join('');
+    const last = st.round >= 3;
+    openModal(`<h2 id="modal-title">第${st.round}回合计分</h2>
+      <p class="sub">${last ? '3个回合都打完了，接下来算布丁。' : '网页替你算好了。真牌这时要每人报分、写在纸上，再把除布丁外的牌弃掉。'}</p>
+      <table class="score-table"><thead>${head}</thead><tbody>${rows}</tbody></table>
+      <ul class="explain">${ex.map((x) => `<li>${x}</li>`).join('')}</ul>
+      <div class="acts"><button class="btn primary big" data-mact="next-round" data-act="next-round">${last ? '算布丁，看结果' : `开始第${st.round + 1}回合`}</button></div>`,
+    { kind: 'roundEnd', dismissable: false, onAct: (a) => { if (a === 'next-round' && gen === this.gen) this.nextRound(); } });
+  },
+  nextRound() {
+    const st = this.st;
+    closeModal();
+    E.advance(st);
+    if (st.phase === 'gameOver') { this.recordResult(); this.showGameOver(); return; }
+    this.lastFrom = null;
+    const alt = st.options.alternate ? (st.round === 2 ? '<b>这一回合向右传！</b>' : '这一回合又向左传。') : '';
+    if (this.coachOn) {
+      if (st.round === 3) this.say(`最后一个回合！每人再摸${st.handSize}张（抽牌堆不重新洗）。${alt}${puddingOpener(st)}`);
+      else this.say(`第${st.round}回合：每人从抽牌堆再摸${st.handSize}张（抽牌堆不重新洗）。桌上只留下了布丁。${alt}`);
+    }
+    this.startTurn(true);
+  },
+  // 一局结束只记一次（弹窗可能因为切标签页被收起再打开，打开几次都不重复记）
+  recordResult() {
+    const st = this.st;
+    const played = store.get('gamesPlayed', 0);
+    store.set('gamesPlayed', played + 1);
+    this.wasFirstGame = played === 0;
+    if (played === 0) store.set('setup', Object.assign({}, this.cfg, { coach: false })); // 教练解说只在第一局默认打开
+    this.updateStatus();
+    if (this.coachOn) this.say(gameOverAdvice(st));
+  },
+  showGameOver() {
+    if (this.sheetBlocked()) { this.park('gameOver'); return; }
+    const st = this.st, gen = this.gen;
+    const firstGame = this.wasFirstGame;
+    const R = st.result;
+    const winNames = R.winners.map((i) => st.players[i].name);
+    const iWin = R.winners.indexOf(0) >= 0;
+    let wt;
+    if (iWin && R.winners.length === 1) wt = '恭喜你赢得了游戏！<br>我们去吃点甜点庆祝一下吧！';
+    else if (iWin) wt = `你和${winNames.filter((x) => x !== '你').join('、')}并列获胜！`;
+    else wt = `${winNames.join('、')}赢了！<br>再来一局，你会更熟练。`;
+    const counts = st.players.map((p) => p.puddings.length);
+    const pudLine = st.players.map((p, i) => `${p.name}${counts[i]}张 → <b>${signed(p.puddingScore)}</b>`).join('，');
+    let pudNote = '';
+    if (Math.max.apply(null, counts) === Math.min.apply(null, counts)) pudNote = '所有人布丁一样多，谁都不得分。';
+    else if (st.players.length === 2) pudNote = '2人游戏不扣分，只有最多的+6。';
+    else pudNote = '最多的+6，最少的−6（并列就平分，0张也算最少）。';
+    // 同分：每一组总分相同的人都解释一下名次怎么来的（不只第一名）
+    const byTotal = {};
+    R.rows.forEach((r) => { (byTotal[r.total] = byTotal[r.total] || []).push(r); });
+    const tieLines = Object.keys(byTotal).map((k) => byTotal[k]).filter((g) => g.length > 1)
+      .sort((a, b) => b[0].total - a[0].total).map((g) => {
+        const nm = g.map((r) => st.players[r.p].name);
+        const who = nm.length > 2 ? nm.slice(0, -1).join('、') + '和' + nm[nm.length - 1] : nm.join('和');
+        if (g.every((r) => r.puddings === g[0].puddings)) {
+          return `<li><b>同分</b>：${who}都是${g[0].total}分，布丁也一样多（各${g[0].puddings}张），${g[0].rank === 1 ? '并列获胜（说明书没写这种情况，这里按官方规则）' : '名次并列'}。</li>`;
+        }
+        return `<li><b>同分</b>：${who}都是${g[0].total}分，比布丁（${g.map((r) => `${st.players[r.p].name}${r.puddings}张`).join('、')}），布丁多的排前面。</li>`;
+      }).join('');
+    const rows = R.rows.map((r) => {
+      const p = st.players[r.p];
+      return `<tr class="${r.p === 0 ? 'me' : ''} ${r.rank === 1 ? 'win' : ''}"><td><span class="num">${r.rank}</span></td><td class="nm">${esc(p.name)}</td>` +
+        p.rounds.map((x) => `<td><span class="num">${x.total}</span></td>`).join('') +
+        `<td><span class="num">${signed(p.puddingScore)}</span><small>${p.puddings.length}张</small></td><td class="tot">${p.total}</td></tr>`;
+    }).join('');
+    openModal(`<h2 id="modal-title">游戏结束</h2>
+      <div class="winner"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#a-pudding"/></svg><div class="wt">${wt}</div></div>
+      <table class="score-table"><thead><tr><th>名次</th><th></th><th>回合1</th><th>回合2</th><th>回合3</th><th>${mini('pudding')}布丁</th><th>总分</th></tr></thead><tbody>${rows}</tbody></table>
+      <ul class="explain"><li><b>布丁</b>：${pudLine}。${pudNote}</li>${tieLines}<li>剩下的抽牌堆（${st.removed.length}张）移出游戏。</li></ul>
+      <div class="acts"><button class="btn" data-mact="setup">改设置</button><button class="btn primary big" data-mact="again" data-act="again">再来一局</button></div>`,
+    { kind: 'gameOver', dismissable: false, onAct: (a) => {
+      if (gen !== this.gen) return;
+      if (a === 'again') { closeModal(); this.start({ coach: this.coachOn }); }
+      if (a === 'setup') { this.cfg.coach = firstGame ? false : this.coachOn; this.syncSetup(); this.showSetup(); }
+    } });
+    this.updateStatus();
+  },
+};
+
+// =====================================================================================================
+// 教程
+// =====================================================================================================
+const CANCEL = { cancel: true };
+const FOOT_CHOP = '中文说明书漏了「用完把筷子放回手牌」这一步（卡上写着「SWAP FOR 2」）。说明书没写清楚，这里按官方规则。';
+const FOOT_MAKI = '说明书只写了「平分6分」，没说还给不给第二名。说明书没写清楚，这里按官方规则：不给。';
+const FOOT_TIE = '说明书只说同分比布丁，没说布丁也一样多怎么办。说明书没写清楚，这里按官方规则：并列获胜。';
+const NAMES3 = ['你', '小东', '小西'];
+
+function barsHTML(rows, o) {
+  o = o || {};
+  const max = o.max || Math.max(1, ...rows.map((r) => r.val));
+  return `<div class="bars">${rows.map((r) => {
+    const pts = r.pts == null ? '<span style="color:var(--soy-3)">?</span>' : `${signed(r.pts)}分`;
+    return `<div class="bar"><span class="bn">${esc(r.name)}</span><span class="bt"><i class="${o.pud ? 'pud' : ''}" style="width:${Math.max(4, (r.val / max) * 100)}%"></i><span>${r.val}${o.unit || ''}</span></span>` +
+      `<span class="bp ${r.pts > 0 ? 'pos' : r.pts < 0 ? 'neg' : ''}">${pts}</span></div>`;
+  }).join('')}</div>`;
+}
+function quiz(opts) { return opts.map(([t, ok, why]) => ({ t, ok, why })); }
+// 测验选项按「课+步骤」固定打乱：正确答案不总在第一个；同一题每次顺序一样，按钮的 data-i 仍是原来的序号（QA 用它找答案）
+function seededOrder(key, n) {
+  let a = 0;
+  key = 'sushi' + key;
+  for (let i = 0; i < key.length; i++) a = (Math.imul(a, 31) + key.charCodeAt(i)) | 0;
+  const rnd = () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const o = Array.from({ length: n }, (_, i) => i);
+  for (let i = n - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [o[i], o[j]] = [o[j], o[i]]; }
+  return o;
+}
+
+const MENU = [
+  { t: 'tempura', k: '天妇罗', en: 'TEMPURA', d: '每<b>2张 = 5分</b>；单张不得分。', ex: '3张还是5分（第3张没配对）；4张 = 10分。' },
+  { t: 'sashimi', k: '刺身', en: 'SASHIMI', d: '每<b>3张 = 10分</b>；1张、2张都是0分。', ex: '很值钱，但要凑齐——先想想还能不能拿到第3张。' },
+  { t: 'dumpling', k: '煎饺', en: 'DUMPLING', d: '越多越值钱：<b>1 / 2 / 3 / 4 / 5张 = 1 / 3 / 6 / 10 / 15分</b>。', ex: '5张以上都算15分。' },
+  { t: 'maki3', k: '寿司卷', en: 'MAKI ROLL', d: '卡上画着1–3个卷（<b>标记</b>）。回合结束时比标记总数：<b>最多6分，第二多3分</b>。', ex: '并列就平分6或3分（舍去小数）。一个标记都没有就不参加。' },
+  { t: 'squid', k: '手握', en: 'SQUID / SALMON / EGG NIGIRI', d: '<b>鱿鱼3分、鲑鱼2分、鸡蛋1分</b>。放在芥末上×3。', ex: '三种手握卡面颜色一样，看卡上的数字。', also: ['salmon', 'egg'] },
+  { t: 'wasabi', k: '芥末', en: 'WASABI', d: '本身<b>0分</b>。之后拿到的下一张手握放在它上面，<b>×3</b>。', ex: '鱿鱼手握放上去 = 9分！' },
+  { t: 'chopsticks', k: '筷子', en: 'CHOPSTICKS', d: '本身<b>0分</b>。之后某一轮，可以用它<b>一次拿2张</b>，然后把筷子放回手牌传出去。', ex: '第6课细讲。' },
+  { t: 'pudding', k: '布丁', en: 'PUDDING', d: '回合结束不算分，一直留到<b>游戏结束</b>：最多的<b>+6</b>，最少的<b>−6</b>。', ex: '3个回合的布丁加在一起比。' },
+];
+
+const LESSONS = [
+  // ------------------------------------------------------------------ 1
+  { title: '目标与菜单', short: '菜单', steps: [
+    { view: 'widget', expect: 'menu',
+      say: '<b>目标</b>：3个回合里，收集最值钱的寿司组合；最后加上布丁，<b>总分最高的人赢</b>。<br>先看菜单：点每一种牌，看它怎么得分（8种都点一下）。',
+      widget: (T) => menuHTML(T) },
+    { view: 'widget', expect: 'next',
+      say: '记住：除了布丁，<b>每一回合结束都会计分，然后把牌弃掉</b>。下一课用一个<b>教学局</b>学怎么出牌和传牌。',
+      widget: (T) => menuHTML(T, true) },
+  ] },
+  // ------------------------------------------------------------------ 2
+  { title: '每轮怎么玩', short: '每轮', steps: [
+    { view: 'table', expect: 'next',
+      setup: (T) => T.scene({ hands: [['tempura', 'sashimi', 'maki2', 'salmon', 'pudding'], ['dumpling', 'wasabi', 'maki3', 'tempura', 'egg'], ['squid', 'dumpling', 'pudding', 'maki1', 'sashimi']] }, '第1回合 · 第1轮'),
+      focus: { regions: ['opps', 'belt', 'hand'] },
+      say: '这是<b>教学局</b>：3个人（你、小东、小西），每人5张手牌（正式3人局是每人9张）。下面是<b>你的手牌</b>，只有你看得见。上面是对手，中间那圈是回转寿司传送带。' },
+    { view: 'table', expect: 'pickAny', bots: { 1: 'maki3', 2: 'squid' }, holdReveal: true,
+      focus: { regions: ['hand', 'actions'] },
+      say: '每一轮，所有人<b>同时</b>行动：从手牌里选1张想留下的牌。<b>点一张牌</b>选中它，再点<b>「出这张」</b>。这一步选哪张都行。' },
+    { view: 'table', expect: 'btn', btn: 'reveal', btnLabel: '一起翻开',
+      focus: { regions: ['belt', 'opps', 'actions'], spot: '[data-act="reveal"]' },
+      say: '你的牌<b>面朝下</b>放在你面前了。小东和小西也选好了（面朝下）。所有人都选好以后——<b>一起翻开</b>！',
+      after: async (T, ck) => { await T.revealOnly(ck); } },
+    { view: 'table', expect: 'btn', btn: 'pass', btnLabel: '把手牌传给左边',
+      focus: { regions: ['opps', 'belt', 'mine', 'actions'], spot: '[data-act="pass"]' },
+      say: '大家一起翻开了：小东、小西的牌在上面名字旁边，你的放进了下面的<b>「你的桌面」</b>，回合结束按桌面计分。现在把<b>剩下的手牌</b>面朝下<b>传给左边</b>。',
+      after: async (T, ck) => { await T.passOnly(ck); } },
+    { view: 'table', expect: 'next',
+      focus: { regions: ['opps', 'belt', 'hand'], spot: '.hand-head' },
+      say: (T) => `看传送带：你的旧手牌转到了你左边的<b>小东</b>那里；你现在拿的是<b>小西</b>刚才的手牌（${T.st.players[0].hand.length}张）。牌就这样一圈圈转。<br>真牌没有传送带：就是大家同时把剩下的手牌递给左手边的人。` },
+    { view: 'table', expect: 'pickAny', bots: 'ai',
+      focus: { regions: ['hand', 'actions'] },
+      say: '再来一轮，这次自己完成：<b>选1张 → 出这张</b>。翻开和传牌会自动进行，留意传送带。' },
+    { view: 'table', expect: 'btn', btn: 'ff', btnLabel: '快进到回合结束',
+      focus: { regions: ['hand', 'actions'], spot: '[data-act="ff"]' },
+      say: '一直这样转下去，手牌越来越少。<b>最后传到你手里只剩1张时，直接打出它</b>。手牌出完 = 这一<b>回合</b>结束。点「快进」看完这一回合。',
+      after: async (T, ck) => { await T.fastForward(ck); } },
+    { view: 'table', expect: 'next', focus: { regions: ['mine', 'opps'] },
+      say: '这一回合结束了！回合结束时按桌面计分，然后开始下一回合，<b>整局共3回合</b>。下一课：每种牌具体怎么得分。' },
+  ] },
+  // 教学局手牌的排列：要你选的那张不总在第一个（H3，免得新手学会「点第一张」）
+  // ------------------------------------------------------------------ 3
+  { title: '天妇罗·刺身·煎饺', short: '成套', steps: [
+    { view: 'table', expect: 'next',
+      // 3 人正式局（每人 9 张）的第 6 轮：桌面 5 张 + 手牌 4 张
+      setup: (T) => T.scene({ turn: 6, handSize: 9,
+        tables: [['tempura', 'sashimi', 'sashimi', 'dumpling', 'dumpling'], ['maki2', 'pudding', 'salmon', 'maki1', 'tempura'], ['wasabi', 'maki3', 'sashimi', 'dumpling', 'pudding']],
+        hands: [['tempura', 'dumpling', 'sashimi', 'egg'], ['egg', 'dumpling', 'maki3', 'squid'], ['dumpling', 'tempura', 'maki1', 'pudding']] }, '换一个局面 · 第6轮'),
+      focus: { regions: ['mine'] },
+      say: '换一个局面：3人局（每人9张）打到第6轮了。先看<b>你的桌面</b>：天妇罗1张、刺身2张、煎饺2张。每组下面的小字是<b>现在能得几分</b>、还差什么。' },
+    { view: 'table', expect: 'pick', pick: 'sashimi', bots: { 1: 'maki3', 2: 'pudding' },
+      focus: { regions: ['hand', 'actions', 'mine'] },
+      say: '天妇罗每2张5分，刺身每3张10分，煎饺越多越值钱。<b>选中一张牌，下面会显示它马上能加几分</b>。这一轮，出<b>加分最多</b>的那张。',
+      wrong: {
+        tempura: '天妇罗凑成一对是+5，不错；但你已经有2张刺身，第3张 = 一整套<b>+10</b>，更多。',
+        dumpling: '煎饺从2张变3张：3分 → 6分，只+3。刺身凑齐3张能<b>+10</b>。',
+        egg: '鸡蛋手握只值1分。刺身凑齐3张能<b>+10</b>。' } },
+    { view: 'table', expect: 'pick', pick: 'tempura', bots: { 1: 'tempura', 2: 'squid' },
+      focus: { regions: ['opps', 'hand', 'actions', 'mine'] },
+      say: '刺身3张 = <b>10分</b>！反过来也要记住：回合结束时只有1、2张刺身 = <b>0分</b>（小西那张孤零零的刺身就是0）。<br>新手牌里又有天妇罗和煎饺——哪张加分多？',
+      wrong: {
+        dumpling: '煎饺2 → 3张：3分变6分，只+3；天妇罗1 → 2张凑成一对，<b>+5</b>。',
+        maki1: '寿司卷要和别人比数量，第5课再讲。天妇罗凑成一对能马上<b>+5</b>。' } },
+    { view: 'table', expect: 'pick', pick: 'dumpling', bots: { 1: 'maki1', 2: 'dumpling' }, lastCard: true,
+      focus: { regions: ['hand', 'actions', 'mine'] },
+      say: '天妇罗成对 = 5分（第3张又是单张 = 0，要第4张才再+5）。<br>最后看煎饺：<b>1 / 2 / 3 / 4 / 5张 = 1 / 3 / 6 / 10 / 15分</b>，张数越多每张越值钱。拿下这张煎饺。',
+      wrong: { egg: '鸡蛋手握+1；煎饺第3张能<b>+3</b>（3分 → 6分）。' } },
+    { view: 'table', expect: 'next', focus: { regions: ['mine'] },
+      say: '回合结束，你的桌面：天妇罗2张 = 5，刺身3张 = 10，煎饺3张 = 6，鸡蛋手握 = 1。<br><b>小结</b>：天妇罗成对才算，刺身3张才算，凑不齐 = 0；煎饺多多益善（5张封顶）。' },
+  ] },
+  // ------------------------------------------------------------------ 4
+  { title: '芥末+手握', short: '芥末', steps: [
+    { view: 'table', expect: 'pick', pick: 'wasabi', bots: { 1: 'maki2', 2: 'chopsticks' },
+      setup: (T) => T.scene({ turn: 3, handSize: 6,
+        tables: [['salmon', 'maki2'], ['tempura', 'dumpling'], ['pudding', 'sashimi']],
+        hands: [['tempura', 'maki1', 'wasabi', 'dumpling'], ['egg', 'maki2', 'pudding', 'sashimi'], ['egg', 'squid', 'tempura', 'chopsticks']] }, '换一个局面 · 第3轮'),
+      focus: { regions: ['hand', 'actions', 'mine'] },
+      say: '换一个局面。你的桌面上已经有1张<b>鲑鱼手握</b>（2分）。手牌里有<b>芥末</b>：芥末本身0分，但<b>之后</b>拿到的下一张手握会放在它上面，分数<b>×3</b>。先拿芥末！',
+      wrong: {
+        tempura: '天妇罗现在只有单张 = 0分。这一课练芥末：先拿芥末，下一张手握就能×3。',
+        maki1: '寿司卷下一课讲。先拿芥末，下一张手握就能×3。',
+        dumpling: '煎饺1张只有1分。先拿芥末，下一张手握就能×3。' } },
+    { view: 'table', expect: 'pick', pick: 'squid', bots: { 1: 'tempura', 2: 'sashimi' },
+      focus: { regions: ['hand', 'actions', 'mine'] },
+      say: '你的芥末正在<b>等待手握</b>。新手牌里有鱿鱼手握（3分）和鸡蛋手握（1分）——放到芥末上×3，选哪张最赚？',
+      wrong: {
+        egg: '鸡蛋手握×3 = 3分；鱿鱼手握×3 = <b>9分</b>。一张芥末只能放1张手握，当然放最值钱的。',
+        tempura: '天妇罗单张不得分。芥末在等手握：鱿鱼手握放上去 = <b>9分</b>！' } },
+    { view: 'table', expect: 'quiz', hidePts: true, focus: { regions: ['mine'], spot: '.grp[data-g="nigiri"]' },
+      say: '鱿鱼手握自动放到了芥末上。现在你桌面上的<b>手握</b>一共多少分？',
+      quiz: quiz([
+        ['11分', true, '对！鱿鱼3×3 = 9，加上之前的鲑鱼2 = 11。鲑鱼是在芥末<b>之前</b>打出的，不会挪过去，也不会×3。'],
+        ['15分', false, '鲑鱼是在芥末<b>之前</b>打出的——芥末只管它<b>之后</b>的手握，所以鲑鱼还是2分：9 + 2 = 11。'],
+        ['9分', false, '别忘了之前那张鲑鱼手握，它还是2分：9 + 2 = 11。'],
+      ]) },
+    { view: 'table', expect: 'next', focus: { regions: ['mine'] },
+      say: '记住3点：① 有空着的芥末时，下一张手握<b>必须</b>放上去；② 一张芥末只放<b>1张</b>手握；③ 在芥末之前打出的手握不会挪过去。芥末一直没等到手握 = 0分。' },
+  ] },
+  // ------------------------------------------------------------------ 5
+  { title: '寿司卷：比标记', short: '寿司卷', steps: [
+    { view: 'table', expect: 'next',
+      setup: (T) => T.scene({ turn: 5, handSize: 6,
+        tables: [['maki3', 'tempura', 'salmon', 'dumpling'], ['maki1', 'maki2', 'dumpling', 'dumpling'], ['maki2', 'sashimi', 'pudding', 'egg']],
+        hands: [['egg', 'maki2'], ['tempura', 'pudding'], ['dumpling', 'salmon']] }, '回合快结束了'),
+      focus: { regions: ['opps', 'mine'] },
+      say: '寿司卷比的是卡上画的<b>标记</b>总数（每张1、2或3个卷）。回合结束时：<b>最多的6分，第二多的3分</b>。现在：你3个，小东3个（他名字下面写着「卷3」），小西2个。' },
+    { view: 'table', expect: 'pick', pick: 'maki2', bots: { 1: 'pudding', 2: 'salmon' }, lastCard: true,
+      focus: { regions: ['hand', 'actions', 'opps'] },
+      say: '只剩2轮了。这一轮拿哪张，能让你在寿司卷上<b>独得第一</b>？',
+      wrong: { egg: '拿鸡蛋手握只+1分。更糟的是：你不拿的寿司卷（2个标记）会跟着手牌传给左边的小东——最后一张他只能打出它，变成5个，<b>独得6分</b>，你只剩第二名3分。自己拿走它：你5个，独得6分。' } },
+    { view: 'widget', expect: 'next',
+      widget: () => `<div class="wbox"><h3>这一回合的寿司卷</h3>${barsHTML([{ name: '你', val: 5, pts: 6 }, { name: '小东', val: 3, pts: 3 }, { name: '小西', val: 2, pts: 0 }], { unit: '个' })}</div>`,
+      say: '回合结束：你5个 → 第一<b>6分</b>；小东3个 → 第二<b>3分</b>；小西2个 → 第三，<b>0分</b>。<br>留意：<b>你没拿的牌会传给左边的人</b>。刚才你要是没拿寿司卷，它就到了小东手里。' },
+    { view: 'widget', expect: 'quiz',
+      widget: (T) => `<div class="wbox"><h3>说明书上的例子</h3>${barsHTML([{ name: '小西', val: 6, pts: T.data.q1 ? 6 : null }, { name: '小东', val: 3, pts: T.data.q1 ? 1 : null }, { name: '小南', val: 3, pts: T.data.q1 ? 1 : null }, { name: '小北', val: 2, pts: T.data.q1 ? 0 : null }], { unit: '个' })}</div>`,
+      say: '说明书的例子：小西6个，小东3个，小南3个，小北2个。<b>小东得几分？</b>',
+      onRight: (T) => { T.data.q1 = true; },
+      quiz: quiz([
+        ['1分', true, '对！小西第一6分。小东和小南并列第二，平分3分 = 各1.5，<b>舍去小数 → 各1分</b>。小北第三，不得分。'],
+        ['3分', false, '第二名有两个人（小东、小南），要<b>平分</b>3分：3 ÷ 2 = 1.5，舍去小数 → 各1分。'],
+        ['0分', false, '第二多也有分（3分）。小东和小南并列第二，平分 → 各1分。'],
+      ]) },
+    { view: 'widget', expect: 'quiz',
+      widget: (T) => `<div class="wbox"><h3>并列第一</h3>${barsHTML([{ name: '小西', val: 6, pts: T.data.q2 ? 3 : null }, { name: '小东', val: 6, pts: T.data.q2 ? 3 : null }, { name: '小南', val: 3, pts: T.data.q2 ? 0 : null }], { unit: '个' })}</div>`,
+      say: '如果小西和小东都是6个（<b>并列第一</b>），小南3个，结果是？',
+      onRight: (T) => { T.data.q2 = true; },
+      foot: FOOT_MAKI,
+      quiz: quiz([
+        ['小西3、小东3、小南0', true, '对！并列第一平分6分（各3分），这时<b>不再给第二名</b>，所以小南0分。'],
+        ['小西3、小东3、小南3', false, '并列第一已经把名次占满了：平分6分后<b>不再给第二名</b>，小南0分。'],
+        ['小西6、小东6、小南3', false, '并列要<b>平分</b>：6 ÷ 2 = 各3分；而且并列第一时不给第二名。'],
+      ]) },
+    { view: 'widget', expect: 'next',
+      widget: () => `<div class="wbox"><h3>寿司卷小结</h3><p style="margin:0;font-size:14px">最多6 · 第二3 · 并列就平分（舍去小数）· 并列第一时不给第二名 · 0个标记不参加。</p></div>`,
+      say: '寿司卷是靠「抢」的：盯着别人桌面上的标记数。差一点就跟，差太多就放弃，把那一轮用在别的牌上。<br>实战里寿司卷显示的「暂时最多」只是现在的名次，别人还会继续拿——别为了它放弃稳拿的分。' },
+  ] },
+  // ------------------------------------------------------------------ 6
+  { title: '筷子：拿2张', short: '筷子', steps: [
+    { view: 'table', expect: 'chop',
+      setup: (T) => T.scene({ turn: 3, handSize: 6,
+        tables: [['chopsticks', 'tempura'], ['maki2', 'sashimi'], ['dumpling', 'pudding']],
+        hands: [['maki1', 'squid', 'dumpling', 'wasabi'], ['tempura', 'egg', 'pudding', 'salmon'], ['sashimi', 'sashimi', 'maki2', 'maki3']] }, '换一个局面 · 第3轮'),
+      focus: { regions: ['mine', 'actions'], spot: '[data-act="chop"]' },
+      say: '换一个局面。你面前有一张<b>筷子</b>（之前某一轮拿的）。有筷子，就能在之后的某一轮<b>一次拿2张</b>！先点「用筷子」。',
+      wrongCard: '先点下面的<b>「用筷子」</b>按钮，再选2张。' },
+    { view: 'table', expect: 'chopPair', pair: ['wasabi', 'squid'],
+      focus: { regions: ['hand', 'actions'] },
+      say: '<b>顺序很重要</b>：先点<b>芥末</b>，再点<b>鱿鱼手握</b>——先放下的芥末才能接住后面的鱿鱼，×3。' },
+    { view: 'table', expect: 'btn', btn: 'go', btnLabel: 'Sushi Go! 出2张', keepChop: true,
+      focus: { regions: ['hand', 'actions'], spot: '[data-act="go"]' },
+      say: '选好2张了，点按钮喊<b>「Sushi Go!」</b>。<br>真牌上是这样：先选1张面朝下放好 → 喊「Sushi Go!」（让大家等你一下）→ 再选第2张。',
+      after: async (T, ck) => { await T.chopReveal(ck); } },
+    { view: 'table', expect: 'group', group: 'chopsticks',
+      focus: { regions: ['mine'], spot: '.grp[data-g="chopsticks"]' },
+      say: '鱿鱼放上了芥末 = 9分！<b>关键一步</b>：用过的筷子要放回<b>你要传出去的手牌</b>里。点你桌面上的<b>筷子</b>。',
+      wrongGroup: '点浅蓝色的<b>筷子</b>那一组，把它放回手牌。',
+      after: async (T, ck) => { await T.chopReturnAndPass(ck); } },
+    { view: 'table', expect: 'next', focus: { regions: ['opps', 'belt', 'hand'] },
+      foot: FOOT_CHOP,
+      say: '这张筷子进了传给小东的手牌——以后谁把它选到自己面前，下一轮起才能用。这样大家手牌一样多：你<span class="nw">4 − 2 + 1 = <b>3张</b></span>，别人<span class="nw">4 − 1 = <b>3张</b></span>。' },
+    { view: 'table', expect: 'next', focus: { regions: ['mine'] },
+      say: '还有3条限制：每轮最多用<b>1张</b>筷子；手牌至少<b>2张</b>才能用；这一轮刚拿到的筷子，要<b>下一轮</b>才能用。<br>真牌上翻开时，把鱿鱼直接压在芥末上，大家一看就知道它×3。' },
+  ] },
+  // ------------------------------------------------------------------ 7
+  { title: '回合结束计分', short: '计分', steps: [
+    { view: 'widget', expect: 'tally',
+      setup: (T) => { T.data.tally = 0; T.data.tallyQ = null; },
+      widget: (T) => tallyHTML(T),
+      say: '第1回合结束了。3人局一回合9轮，所以你面前正好9张。我们一组一组算（小东的寿司卷4个，小西2个）：<b>点一下亮着红框的那一行</b>。' },
+    { view: 'widget', expect: 'wbtn', wbtn: 'clear',
+      widget: (T) => tallyHTML(T, true),
+      say: '本回合合计<b>14分</b>。真牌上这时要<b>先写在纸上</b>，再收拾桌面：<b>除了布丁，其他牌都弃掉</b>。点「收拾桌面」。',
+      after: async (T, ck) => { await T.clearTable(ck); } },
+    { view: 'widget', expect: 'next',
+      widget: (T) => tallyHTML(T, true, true),
+      say: '下一回合：每人从抽牌堆再摸新手牌（<b>抽牌堆不重新洗</b>）。你面前只剩那张<b>布丁</b>——3个回合的布丁会一直攒着，游戏结束才比。' },
+  ] },
+  // ------------------------------------------------------------------ 8
+  { title: '终局·上真桌子', short: '终局', steps: [
+    { view: 'widget', expect: 'quiz',
+      widget: (T) => `<div class="wbox"><h3>布丁（说明书的例子）</h3>${barsHTML([{ name: '小东', val: 4, pts: T.data.p1 ? 6 : null }, { name: '小西', val: 3, pts: T.data.p1 ? 0 : null }, { name: '小南', val: 0, pts: T.data.p1 ? -3 : null }, { name: '小北', val: 0, pts: T.data.p1 ? -3 : null }], { unit: '张', pud: true, max: 4 })}</div>`,
+      say: '3个回合后算布丁：<b>最多的+6，最少的−6</b>（并列就平分，舍去小数）。例子：小东4张，小西3张，小南0，小北0。<b>谁扣分？</b>',
+      onRight: (T) => { T.data.p1 = true; },
+      quiz: quiz([
+        ['小南−3、小北−3', true, '对！最少的是小南和小北——<b>0张也算最少</b>，平分−6 = 各−3。小东最多+6，小西不加不减。'],
+        ['小南−6、小北−6', false, '两人并列最少，要<b>平分</b>−6：各−3。'],
+        ['没人扣分：0张不算', false, '0张也算「最少」——没拿布丁的人正好要扣分：小南、小北各−3。'],
+      ]) },
+    { view: 'widget', expect: 'next',
+      widget: () => `<div class="wbox"><h3>两个特殊情况</h3><p style="margin:0 0 6px;font-size:14px"><b>2人游戏</b>：不扣分，只有最多的+6。</p>${barsHTML([{ name: '你', val: 3, pts: 6 }, { name: '小东', val: 1, pts: 0 }], { unit: '张', pud: true, max: 4 })}<p style="margin:12px 0 6px;font-size:14px"><b>所有人一样多</b>：谁都不得分。</p>${barsHTML([{ name: '你', val: 2, pts: 0 }, { name: '小东', val: 2, pts: 0 }, { name: '小西', val: 2, pts: 0 }], { unit: '张', pud: true, max: 4 })}</div>`,
+      say: '两个特殊情况：<b>2人游戏不扣分</b>（只有最多的+6）；如果<b>所有人布丁一样多</b>，谁都不得分。' },
+    { view: 'widget', expect: 'quiz',
+      widget: () => `<div class="wbox"><h3>谁赢？</h3>${barsHTML([{ name: '你', val: 48, pts: null }, { name: '小东', val: 48, pts: null }], { unit: '分', max: 60 })}<p style="margin:8px 0 0;font-size:14px">布丁：你2张，小东3张</p></div>`,
+      say: '<b>胜负</b>：3个回合+布丁的总分最高的人赢。你和小东都是48分；你有2张布丁，小东有3张。<b>谁赢？</b>',
+      foot: FOOT_TIE,
+      quiz: quiz([
+        ['小东赢', true, '对！总分相同时，<b>布丁多的赢</b>。布丁也一样多，才算并列获胜。'],
+        ['你赢', false, '总分相同时比布丁：小东3张比你多，小东赢。'],
+        ['平局，一起赢', false, '先比布丁：小东多1张，所以小东赢。布丁也一样多才并列。'],
+      ]) },
+    { view: 'widget', expect: 'quiz',
+      widget: () => `<div class="wbox"><h3>小测验1/3</h3><div class="mini-table">${['tempura', 'tempura', 'sashimi', 'sashimi', 'sashimi', 'dumpling'].map((t) => mini(t)).join('')}<span class="pair" style="display:inline-flex;margin-left:6px">${mini('wasabi')}<span style="margin-left:-16px;transform:translateY(-8px) rotate(6deg);display:inline-block">${mini('squid', '<span class="x3">×3</span>')}</span></span></div><p style="margin:8px 0 0;font-size:13px;color:var(--soy-2)">天妇罗2、刺身3、煎饺1、芥末上放着鱿鱼手握</p></div>`,
+      say: '小测验1：这桌牌这一回合多少分？',
+      quiz: quiz([
+        ['25分', true, '对！天妇罗一对5 + 刺身一套10 + 煎饺1张1 + 鱿鱼在芥末上3×3 = 9，合计25。'],
+        ['19分', false, '鱿鱼手握放在芥末上要×3：9分，不是3分。5 + 10 + 1 + 9 = 25。'],
+        ['50分', false, '天妇罗是2张一对5分（不是每张5分 = 10），刺身是3张一套10分（不是每张10分 = 30）：<span class="nw">5 + 10 + 1 + 9 = 25</span>。'],
+      ]) },
+    { view: 'widget', expect: 'quiz',
+      widget: () => `<div class="wbox"><h3>小测验2/3</h3><div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap"><div><div style="font-size:12px;color:var(--soy-2)">你的桌面</div>${mini('chopsticks')} ${mini('maki2')}</div><div><div style="font-size:12px;color:var(--soy-2)">传到你手里</div><div class="card" style="--cw:52px;--cc:var(--c-nigiri)" role="img" aria-label="鱿鱼手握">${cardInner('squid')}</div></div></div></div>`,
+      say: '小测验2：你面前有筷子，但传到手里的只剩<b>1张</b>了——能用筷子吗？',
+      quiz: quiz([
+        ['不能', true, '对！筷子是「从手牌里拿2张」，手牌至少要2张。最后1张直接打出。'],
+        ['能', false, '只剩1张，没东西可以多拿：筷子要手牌<b>至少2张</b>才能用。'],
+      ]) },
+    { view: 'widget', expect: 'quiz',
+      widget: () => `<div class="wbox"><h3>小测验3/3</h3><div style="display:flex;align-items:center;gap:8px;font-size:13px">先打出${mini('egg')} <span>→</span> 后打出${mini('wasabi')}</div></div>`,
+      say: '小测验3：你先打出了鸡蛋手握，后来才拿到芥末。这张鸡蛋手握值几分？',
+      quiz: quiz([
+        ['1分', true, '对！芥末只对它<b>之后</b>的手握有效，之前的不会挪上去：还是1分。这张芥末还在等下一张手握。'],
+        ['3分', false, '鸡蛋是在芥末<b>之前</b>打出的，不会挪到芥末上：还是1分。'],
+        ['0分', false, '鸡蛋手握本身就有1分；只是不会被芥末×3。'],
+      ]) },
+    { view: 'widget', expect: 'next',
+      widget: () => `<div class="wbox"><h3>上桌前3个小窍门</h3><ol class="wlist">
+        <li><b>看你要传给谁</b>：他桌上有空着的芥末，就别把鱿鱼手握传给他（到他那里就是9分）。</li>
+        <li><b>刺身要3张</b>：只在剩下的轮数够时才开始拼。</li>
+        <li><b>布丁至少拿1–2张</b>：0张很可能被扣6分。</li></ol>
+        <p class="wnote">人少时，你传出去的牌还会转回来——记住它们。</p></div>`,
+      say: '规则都学完了。最后3个小窍门，第一局就能少丢很多分。' },
+    { view: 'widget', expect: 'next',
+      widget: () => realTableHTML(),
+      say: '<b>上真桌子</b>：网页替你做的几件事，真牌上要自己来。' },
+    { view: 'widget', expect: 'final',
+      widget: () => `<div class="wbox" style="text-align:center"><svg viewBox="0 0 100 100" style="width:96px;height:96px" aria-hidden="true"><use href="#a-pudding"/></svg><h3 style="font-size:22px;margin:4px 0">全部学完！</h3><p style="margin:0 0 14px;font-size:14px">你已经可以上桌了。玩真牌时打开「速查」：最上面就是开局步骤。</p><button class="btn primary big" data-wact="start-play" data-act="start-play">${Game.inProgress() ? '回到实战（继续这一局）' : '开始实战'}</button></div>`,
+      say: '恭喜！先和机器人打一局，教练会在旁边解说。' },
+  ] },
+];
+
+// 第 8 课「上真桌子」：网页替你做的事 → 真牌上自己做（速查的「开局步骤」是同一套，按顺序写）
+function realTableHTML() {
+  return `<div class="wbox"><h3>上真桌子</h3><ol class="wlist">
+    <li><b>开局</b>：108张牌全部洗匀，面朝下放中间当抽牌堆，谁发都行。每人摸：<span class="nw">2人10张</span> · <span class="nw">3人9张</span> · <span class="nw">4人8张</span> · <span class="nw">5人7张</span>，别给别人看。备好纸笔。</li>
+    <li><b>出牌</b>：每人选1张，面朝下放在自己面前；大家都放好了，一起翻开。</li>
+    <li><b>传牌</b>（网页的传送带）：翻开后，大家一起把剩下的手牌递给左手边的人。</li>
+    <li><b>摆牌</b>（网页的自动分组）：同类的牌摆在一起，手握直接压在芥末上。</li>
+    <li><b>筷子</b>：先选1张面朝下放好，喊「Sushi Go!」，再选1张；翻开后自己把筷子放进要传出去的手牌。</li>
+    <li><b>记分</b>（网页的计分表）：回合结束每人报分，一个人用纸笔记下来。<b>记完再弃牌</b>，弃了就算不回来了。布丁留在面前。</li>
+    <li><b>下一回合</b>：从剩下的抽牌堆接着摸，不重新洗。</li>
+  </ol></div>`;
+}
+
+function menuHTML(T, all) {
+  const seen = T.data.seen || {};
+  const cur = T.data.menuCur;
+  const items = MENU.map((m, i) => `<button class="mitem ${seen[i] ? 'seen' : ''}" data-wact="menu" data-i="${i}" aria-pressed="${cur === i}" aria-label="${m.k}">${cardDiv(m.t)}</button>`).join('');
+  let detail = '<div class="mdetail" aria-live="polite"><p style="color:var(--soy-3);align-self:center">点下面任意一张牌，这里会告诉你它怎么得分。</p></div>';
+  if (cur != null) {
+    const m = MENU[cur];
+    detail = `<div class="mdetail" aria-live="polite">${cardDiv(m.t)}<div><h3>${m.k}</h3><p>${m.d}</p><p class="ex">${m.ex}</p><p class="en">真牌卡面上的英文：<b>${m.en}</b></p>${m.also ? `<div style="display:flex;gap:6px;margin-top:6px">${m.also.map((t) => mini(t)).join('')}<span style="font-size:12px;color:var(--soy-2);align-self:center">鲑鱼2 · 鸡蛋1</span></div>` : ''}</div></div>`;
+  }
+  const n = Object.keys(seen).length;
+  return `<div class="menuwrap">${detail}<div class="menucol"><div class="menu">${items}</div><div class="seen-count">${all || n >= MENU.length ? '8种都看过了。共108张牌。' : `已看${n}/8`}</div></div></div>`;
+}
+
+// 3 人局一回合 9 轮、每轮多 1 张：回合结束时面前正好 9 张（3 + 5 + 0 + 6 = 14 分）
+const TALLY = [
+  { g: 'maki', cards: ['maki3'], name: '寿司卷', desc: '你3个；小东4个，小西2个 → 你第二多', pts: 3 },
+  { g: 'tempura', cards: ['tempura', 'tempura', 'tempura'], name: '天妇罗3张', pts: 5, desc: '1对 = 5，第3张单张 = 0',
+    q: '3张天妇罗得几分？', opts: quiz([['15分', false, '不是每张5分：<b>每2张一对</b>才5分。3张 = 1对+1张单张 = 5分。'], ['5分', true, '对！2张一对 = 5分，第3张没配对 = 0。'], ['10分', false, '只有1对：第3张单张不得分，要4张才10分。']]) },
+  { g: 'sashimi', cards: ['sashimi', 'sashimi'], name: '刺身2张', pts: 0, desc: '没凑齐3张 = 0',
+    q: '2张刺身呢？', opts: quiz([['0分', true, '对！刺身要3张一套才10分；2张 = 0。'], ['10分', false, '还差1张！刺身凑齐3张才算，2张 = 0。'], ['6分', false, '刺身不按张数给分：3张一套10分，不满一套 = 0。']]) },
+  { g: 'nigiri', cards: ['wasabi', 'salmon'], name: '芥末+鲑鱼手握', pts: 6, desc: '鲑鱼在芥末上：2×3 = 6' },
+  { g: 'pudding', cards: ['pudding'], name: '布丁', pts: null, desc: '现在不算！留到游戏结束' },
+];
+function tallyHTML(T, finished, cleared) {
+  const k = finished ? TALLY.length : T.data.tally;
+  const sum = TALLY.slice(0, k).reduce((a, r) => a + (r.pts || 0), 0);
+  const rows = TALLY.map((r, i) => {
+    if (cleared && r.g !== 'pudding') return '';
+    const done = i < k, cur = i === k;
+    const cards = r.g === 'nigiri' ? `<span class="pair" style="display:inline-flex">${mini('wasabi')}<span style="margin-left:-12px;transform:translateY(-5px) rotate(6deg);display:inline-block">${mini('salmon', '<span class="x3">×3</span>')}</span></span>` : r.cards.map((t) => mini(t)).join('');
+    const val = done ? (r.pts == null ? '—' : r.pts) : '?';
+    return `<button class="trow ${done ? 'done' : ''} ${cur ? 'cur spot' : ''}" data-wact="tally" data-i="${i}" data-g="${r.g}" aria-label="${r.name}">` +
+      `<span class="tl"><span class="tc">${cards}</span><span><span class="tn">${r.name}</span><br><span class="tx">${done || cleared ? r.desc : (cur ? '点这里算分' : '')}</span></span></span>` +
+      `<span class="tv ${done ? '' : 'q'}">${cleared ? '' : val}</span></button>`;
+  }).join('');
+  if (cleared) {
+    return `<div class="wbox"><h3>第2回合开始前，你面前</h3><div class="pudarea">${mini('pudding')}<span><b>布丁1张</b>：留在你面前。3个回合的布丁一起攒，游戏结束才计分。</span></div>` +
+      `<p style="margin:10px 0 0;font-size:13px;color:var(--soy-2)">其他8张（寿司卷、天妇罗、刺身、芥末、鲑鱼手握）都弃掉了，这一局不会再出现。</p></div>`;
+  }
+  return `<div class="wbox"><h3>你的桌面（第1回合结束）</h3><div class="tally">${rows}</div>` +
+    `<div class="tsum"><span>本回合合计</span><b>${sum}</b></div>` +
+    (finished ? `<div style="text-align:right;margin-top:6px"><button class="btn primary" data-wact="clear" data-act="clear">收拾桌面</button></div>` : '') + '</div>';
+}
+
+const Tut = {
+  li: 0, si: 0, gen: 0, st: null, view: null, data: {}, stepDone: false, snaps: {}, locked: false, note: null, menuSeen: {},
+  init() {
+    this.stage = $('#l-stage');
+    this.edu = h('<div class="edu" style="margin-bottom:8px;font-size:13px;color:var(--soy-2)"></div>');
+    this.tableHost = h('<div></div>');
+    this.widgetHost = h('<div class="widget"></div>');
+    this.stage.append(this.edu, this.widgetHost, this.tableHost);
+    this.view = new TableView(this.tableHost);
+    this.view.handler = (a, d, el) => this.onAct(a, d, el);
+    this.widgetHost.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-wact]');
+      if (b && !this.locked) this.onWidget(b.dataset.wact, b.dataset, b);
+    });
+    $('#l-prev').addEventListener('click', () => this.prev());
+    $('#l-next').addEventListener('click', () => this.next());
+    $('#l-skip').addEventListener('click', () => this.skip());
+    $('#l-opts').addEventListener('click', (e) => { const b = e.target.closest('[data-i]'); if (b) this.answer(+b.dataset.i, b); });
+    $('#l-cta').addEventListener('click', (e) => {
+      const b = e.target.closest('[data-act]');
+      if (!b) return;
+      if (b.dataset.act === 'next') this.next();
+      if (b.dataset.act === 'start-play') this.finishAll();
+    });
+    $('#lmap').addEventListener('click', (e) => { const b = e.target.closest('[data-l]'); if (b) this.open(+b.dataset.l); });
+    // 字体后台加载完、转屏：课名重新量一次
+    window.addEventListener('resize', () => this.fitTitle());
+    if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', () => this.fitTitle());
+    this.renderMap();
+  },
+  get lesson() { return LESSONS[this.li]; },
+  get step() { return this.lesson.steps[this.si]; },
+  done() { return store.get('lessonsDone', []); },
+  renderMap() {
+    const done = this.done();
+    $('#lmap').innerHTML = LESSONS.map((L, i) => `<li><button data-l="${i}" class="${done.indexOf(i) >= 0 ? 'done' : ''}" ${i === this.li ? 'aria-current="step"' : ''} aria-label="第${i + 1}课：${L.title}${done.indexOf(i) >= 0 ? '（已完成）' : ''}">` +
+      `<span class="ln">${i + 1}</span><span class="lt"><span class="short">${L.short}</span><span class="full">${L.title}</span></span>${done.indexOf(i) >= 0 ? '<span class="tick" aria-hidden="true">✓</span>' : ''}</button></li>`).join('');
+    const cur = $('#lmap [aria-current]');
+    if (cur && cur.scrollIntoView && window.innerWidth < 980) { const m = $('.lmap'); m.scrollLeft = Math.max(0, cur.parentElement.offsetLeft - 16); }
+  },
+  open(li, si) {
+    this.li = Math.max(0, Math.min(LESSONS.length - 1, li));
+    this.si = si || 0;
+    this.data = {};
+    this.snaps = {};
+    this.menuSeen = {};
+    this.st = null;
+    this.view.state = null;
+    this.renderMap();
+    if (window.scrollY > 0 && currentTab === 'learn') window.scrollTo({ top: 0 });
+    this.enter();
+  },
+  snapshot() { return { st: this.st ? E.clone(this.st) : null, data: JSON.parse(JSON.stringify(this.data)), ui: JSON.parse(JSON.stringify(this.view.ui || {})), dash: this.view.dashOff }; },
+  enter(fromSnap) {
+    this.gen++;
+    this.locked = false; this.view.busy = false; this.note = null;
+    // 连点「下一步」：第二下不会落到新一步的按钮/选项上。
+    // 例外：「用筷子」原地变成「不用筷子」、下一步紧接着就要点芥末——只挡这个按钮的第二下，马上点牌照常算
+    if (this.quickAct) TapGuard.armAct(this.quickAct); else TapGuard.arm('learn');
+    this.quickAct = null;
+    const S = this.step;
+    if (fromSnap) {
+      this.st = fromSnap.st; this.data = fromSnap.data; this.view.ui = fromSnap.ui; this.view.dashOff = fromSnap.dash || 0;
+    } else {
+      this.snaps[this.si] = this.snapshot();
+    }
+    this.data.answers = {}; this.data.tallyAns = {};
+    if (S.setup) S.setup(this);
+    this.stepDone = S.expect === 'next';
+    if (S.expect === 'menu') {
+      // 菜单看过哪几张记在步骤快照外面：「上一步」回来不用重新点8张
+      this.data.seen = Object.assign({}, this.menuSeen);
+      this.stepDone = Object.keys(this.data.seen).length >= MENU.length;
+    }
+    const ui = this.view.ui;
+    if (this.st && S.view !== 'widget') {
+      Object.assign(ui, { selected: [], actions: [], abText: S.expect === 'next' ? '读完点上面的「下一步」。' : (S.expect === 'quiz' ? '在上面选一个答案。' : ''), handLocked: true, focus: S.focus || null, groupsClickable: false, hidePts: !!S.hidePts });
+      if (!S.keepChop) ui.chopMode = false;
+      if (S.expect === 'pick' || S.expect === 'pickAny') {
+        ui.handLocked = false;
+        ui.actions = [{ act: 'go', label: '出这张', cls: 'primary', disabled: true }];
+        ui.abText = '点一张牌选中它。';
+      } else if (S.expect === 'chop') {
+        ui.handLocked = false;
+        ui.actions = [{ act: 'chop', label: '用筷子', cls: 'green' }, { act: 'go', label: '出这张', cls: 'primary', disabled: true }];
+        ui.abText = '你有筷子：可以一轮拿2张。';
+      } else if (S.expect === 'chopPair') {
+        ui.handLocked = false; ui.chopMode = true;
+        ui.actions = [{ act: 'chop', label: '不用筷子', cls: '' }, { act: 'go', label: 'Sushi Go! 出2张', cls: 'primary', disabled: true }];
+        ui.abText = '用筷子：按顺序选2张（先选的先放到桌上）。';
+      } else if (S.expect === 'btn') {
+        if (S.keepChop) { ui.handLocked = true; ui.selected = this.data.chopSel ? this.data.chopSel.slice() : []; }
+        ui.actions = [{ act: S.btn, label: S.btnLabel, cls: 'primary' }];
+        if (S.btn === 'go') ui.abText = this.data.chopSel ? `筷子：1. ${nameOf(this.typeOf(this.data.chopSel[0]))}，2. ${nameOf(this.typeOf(this.data.chopSel[1]))}` : '';
+      } else if (S.expect === 'group') {
+        ui.groupsClickable = true;
+      }
+      if (this.st.phase === 'roundEnd') ui.handEmptyText = '这一回合的手牌出完了。';
+      this.view.render(this.st, ui);
+    }
+    this.renderStage();
+    this.renderCoach();
+    this.updateNav();
+    this.scrollToFocus();
+    if (S.expect === 'wbtn') this.scrollToEl($(`[data-wact="${S.wbtn}"]`, this.widgetHost));
+  },
+  scrollToFocus(onlyIfHidden) {
+    // 手机上：让要操作的区域刚好出现在（吸顶的）教练气泡下面
+    if (window.innerWidth >= 720 || currentTab !== 'learn') return;
+    const S = this.step;
+    if (S.view === 'widget' && this.si === 0 && !onlyIfHidden) return;
+    let target = this.stage;
+    if (S.view !== 'widget' && S.focus && S.focus.regions) {
+      const els = S.focus.regions.map((r) => $(`[data-region="${r}"]`, this.view.el)).filter(Boolean);
+      if (els.length) target = els.sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top)[0];
+      if (S.focus.spot && S.expect === 'quiz') target = $(S.focus.spot, this.view.el) || target;
+    }
+    if (onlyIfHidden) {
+      const stickyBottom = $('.lsticky').getBoundingClientRect().bottom;
+      if (target.getBoundingClientRect().top >= stickyBottom - 4) return;
+    }
+    const top = $('.topbar').offsetHeight + $('.lsticky').offsetHeight + 8;
+    let dy = target.getBoundingClientRect().top - top;
+    // 要你点牌的步骤：整手牌必须露在吸底操作条上面；屏幕太矮时让上面的对手/传送带滑走一点
+    if (!onlyIfHidden && S.view !== 'widget' && ['pick', 'pickAny', 'chopPair'].indexOf(S.expect) >= 0) {
+      const hand = $('[data-region="hand"]', this.view.el), bar = $('.actionbar', this.view.el);
+      if (hand && bar) {
+        const r = hand.getBoundingClientRect();
+        const bottomEdge = window.innerHeight - bar.offsetHeight - 6;
+        if (r.bottom - dy > bottomEdge) dy = Math.min(r.bottom - bottomEdge, r.top - top);
+      }
+    }
+    window.scrollTo({ top: Math.max(0, window.scrollY + dy), behavior: 'auto' });
+  },
+  // 手机上把某个元素（计分表亮着的那一行、「收拾桌面」按钮）滚到教练气泡下面、屏幕底边以上
+  scrollToEl(el) {
+    if (!el || window.innerWidth >= 720 || currentTab !== 'learn') return;
+    const top = $('.topbar').offsetHeight + $('.lsticky').offsetHeight + 8;
+    const r = el.getBoundingClientRect();
+    let dy = 0;
+    if (r.bottom > window.innerHeight - 10) dy = r.bottom - (window.innerHeight - 10);
+    if (r.top - dy < top) dy = r.top - top;
+    if (Math.abs(dy) >= 2) window.scrollTo({ top: Math.max(0, window.scrollY + dy), behavior: 'auto' });
+  },
+  typeOf(id) { const c = this.st.players[0].hand.find((x) => x.id === id) || this.st.players[0].table.find((x) => x.id === id); return c ? c.t : 'tempura'; },
+  renderStage() {
+    const S = this.step;
+    const showTable = S.view === 'table' || S.view === 'both';
+    const showWidget = S.view === 'widget' || S.view === 'both';
+    this.tableHost.hidden = !showTable;
+    this.widgetHost.hidden = !showWidget;
+    this.edu.hidden = !showTable;
+    if (showTable) this.edu.innerHTML = `<span class="edu-tag">教学局</span>3人 · 规则和正式局一样`;
+    if (showWidget) this.widgetHost.innerHTML = S.widget ? S.widget(this) : '';
+    if (showTable) this.view.layoutBelt();
+  },
+  renderCoach() {
+    const S = this.step, L = this.lesson;
+    $('#l-title').innerHTML = `<span class="lnum">${this.li + 1}</span>${esc(L.title)}`;
+    $('#l-step').textContent = `${this.si + 1}/${L.steps.length}`;
+    this.fitTitle(); // 步数（「1/5」「2/5」宽度不一样）先写好再量
+    $('#l-say').innerHTML = typeof S.say === 'function' ? S.say(this) : S.say;
+    const nt = this.note;
+    $('#l-note').innerHTML = nt ? `<p class="note ${nt.cls}">${nt.html}</p>` : '';
+    // 脚注放在画面下面（不放进吸顶的教练气泡里，手机上气泡别太高）
+    $('#l-foot').innerHTML = S.foot && (this.stepDone || S.expect === 'next') ? `<p class="foot">${S.foot}</p>` : '';
+    const opts = $('#l-opts');
+    if (S.expect === 'quiz') {
+      const ans = this.data.answers || {};
+      // 选项位置固定打乱；答对以后只留下正确的那个（气泡变矮，下面的图能露出来）
+      const order = seededOrder(`q${this.li}.${this.si}`, S.quiz.length).filter((i) => !this.stepDone || S.quiz[i].ok);
+      opts.innerHTML = order.map((i) => { const o = S.quiz[i]; return `<button class="btn ${ans[i] === true || (this.stepDone && o.ok) ? 'right' : ans[i] === false ? 'wrong' : ''}" data-i="${i}" ${this.stepDone ? 'disabled' : ''}>${this.stepDone ? '✓ ' : ''}${o.t}</button>`; }).join('');
+    } else if (S.expect === 'tally' && this.data.tallyQ != null) {
+      const r = TALLY[this.data.tallyQ];
+      const ans = this.data.tallyAns || {};
+      opts.innerHTML = `<div style="font-weight:700">${r.q}</div>` + seededOrder('t' + this.data.tallyQ, r.opts.length).map((i) => `<button class="btn ${ans[i] === false ? 'wrong' : ''}" data-i="${i}">${r.opts[i].t}</button>`).join('');
+    } else opts.innerHTML = '';
+    const cta = $('#l-cta');
+    const last = this.si === L.steps.length - 1;
+    if (S.expect === 'final') cta.innerHTML = '';
+    else if (this.stepDone && !this.locked) cta.innerHTML = `<button class="btn primary" data-act="next">${last ? (this.li === LESSONS.length - 1 ? '完成' : '下一课 →') : '下一步 →'}</button>`;
+    else cta.innerHTML = '';
+  },
+  // 课名永远一行：窄屏放不下（「天妇罗·刺身·煎饺」）就把字缩小一点，不让最后一个字掉到第二行、把吸顶气泡撑高
+  // 量的是文字的实际宽度（带小数）：差不到1px也会被「…」截掉，所以留半个像素的余量，缩完再量一次
+  fitTitle() {
+    const t = $('#l-title');
+    t.style.fontSize = '';
+    const box = t.getBoundingClientRect().width;
+    if (!box) return;
+    t.style.textOverflow = 'clip'; // 量的时候别让「…」先把字截短
+    const rg = document.createRange();
+    const need = () => { rg.selectNodeContents(t); return rg.getBoundingClientRect().width; };
+    let w = need();
+    if (w > box - 0.5) {
+      let fs = parseFloat(getComputedStyle(t).fontSize);
+      fs = Math.max(12, Math.floor(2 * fs * (box - 1) / w) / 2);
+      t.style.fontSize = fs + 'px';
+      while (fs > 12 && (w = need()) > box - 0.5) { fs -= 0.5; t.style.fontSize = fs + 'px'; }
+    }
+    t.style.textOverflow = '';
+  },
+  updateNav() {
+    $('#l-prev').disabled = this.si === 0 || this.locked;
+    $('#l-next').disabled = !this.stepDone || this.locked || this.step.expect === 'final';
+    const sk = this.li === LESSONS.length - 1 || window.innerWidth < 720 ? '跳过' : '跳过本课';
+    if ($('#l-skip').textContent !== sk) { $('#l-skip').textContent = sk; this.fitTitle(); } // 按钮变宽：课名重新量
+  },
+  setNote(html, cls, el) {
+    this.note = { html, cls };
+    this.renderCoach();
+    if (el && el.classList) { el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); }
+    if (window.innerWidth < 720 && !this.locked) this.scrollToFocus(true);
+  },
+  checker() { const gen = this.gen; return () => { if (gen !== this.gen) throw CANCEL; }; },
+  async complete(arg) {
+    const S = this.step;
+    const ck = this.checker();
+    this.stepDone = true;
+    if (S.after) {
+      this.locked = true; this.view.busy = true;
+      this.view.ui.actions = []; this.view.renderActions();
+      this.renderCoach(); this.updateNav();
+      try { await S.after(this, ck, arg); } catch (e) { if (e === CANCEL) return; throw e; }
+      if (!this.alive(ck)) return;
+      this.locked = false; this.view.busy = false;
+    }
+    if (S.stay) { this.renderCoach(); this.updateNav(); return; }
+    this.go(this.si + 1);
+  },
+  alive(ck) { try { ck(); return true; } catch (e) { return false; } },
+  go(si) {
+    if (si >= this.lesson.steps.length) { this.finishLesson(); return; }
+    this.si = si;
+    this.enter();
+  },
+  next() {
+    if (!this.stepDone || this.locked) return;
+    this.go(this.si + 1);
+  },
+  prev() {
+    if (this.si === 0 || this.locked) return;
+    const snap = this.snaps[this.si - 1];
+    this.si -= 1;
+    if (snap) this.enter(JSON.parse(JSON.stringify(snap))); else this.enter();
+    if (this.step.expect !== 'next' && this.step.expect !== 'menu') { this.stepDone = false; this.renderCoach(); this.updateNav(); }
+  },
+  skip() {
+    if (this.li < LESSONS.length - 1) this.open(this.li + 1);
+    else this.finishAll(true);
+  },
+  markDone(li) {
+    const done = this.done();
+    if (done.indexOf(li) < 0) { done.push(li); store.set('lessonsDone', done); }
+  },
+  finishLesson() {
+    this.markDone(this.li);
+    if (this.li < LESSONS.length - 1) this.open(this.li + 1);
+    else this.finishAll();
+  },
+  finishAll(skipped) {
+    if (!skipped) this.markDone(LESSONS.length - 1);
+    if (!skipped || this.done().length >= LESSONS.length) store.set('tutorialDone', true);
+    this.renderMap();
+    // 实战里还有一局没打完：不悄悄丢掉，回到实战后先问「继续这一局」还是放弃
+    const live = Game.inProgress();
+    if (!live) Game.showSetup();
+    showTab('play', { noUnpark: live, hold: live });
+    if (live) Game.askResume();
+  },
+  // ---------------------------------------------------------------- 场景 & 动作
+  scene(spec, label) {
+    this.st = E.scenario(Object.assign({ names: NAMES3 }, spec));
+    this.data.sceneLabel = label || '';
+    this.view.dashOff = 0;
+    this.view.ui = TableView.freshUI();
+    this.view.ui.msg = label ? `${esc(label)}<br><span class="dir">传给左边：小东 ↻</span>` : '';
+    this.view.render(this.st, this.view.ui);
+  },
+  setBots(spec) {
+    const st = this.st;
+    for (let p = 1; p < st.players.length; p++) {
+      if (st.players[p].pick) continue;
+      const t = spec && spec !== 'ai' ? spec[p] : null;
+      const c = t ? st.players[p].hand.find((x) => x.t === t) : null;
+      E.setPick(st, p, c ? [c.id] : E.botPick(st, p));
+    }
+  },
+  onAct(act, d, el) {
+    if (this.locked) return;
+    const S = this.step, ui = this.view.ui, st = this.st;
+    if (!st) return;
+    const me = st.players[0];
+    if (S.expect === 'pick' || S.expect === 'pickAny') {
+      if (act === 'card') {
+        const id = +d.id;
+        ui.selected = ui.selected[0] === id ? [] : [id];
+        ui.actions = [{ act: 'go', label: '出这张', cls: 'primary', disabled: !ui.selected.length }];
+        ui.abText = ui.selected.length ? gainText(st, 0, d.t) : '点一张牌选中它。';
+        this.view.renderHand(); this.view.renderActions();
+      } else if (act === 'go' && ui.selected.length) {
+        const c = me.hand.find((x) => x.id === ui.selected[0]);
+        if (S.expect === 'pick' && c.t !== S.pick) {
+          const msg = (S.wrong && (S.wrong[c.t] || S.wrong.default)) || `这一步要练的是${E.TYPES[S.pick].name}。`;
+          ui.selected = []; ui.actions = [{ act: 'go', label: '出这张', cls: 'primary', disabled: true }]; ui.abText = '再选一次。';
+          this.view.renderHand(); this.view.renderActions();
+          this.setNote(msg, 'bad', $(`.card[data-id="${c.id}"]`, this.view.hand));
+          return;
+        }
+        this.note = null;
+        this.complete();
+      }
+      return;
+    }
+    if (S.expect === 'chop') {
+      if (act === 'chop') { ui.chopMode = true; this.note = null; this.quickAct = 'chop'; this.complete(); this.quickAct = null; }
+      else if (act === 'card') this.setNote(S.wrongCard, 'bad', el);
+      return;
+    }
+    if (S.expect === 'chopPair') {
+      if (act === 'chop') { this.setNote('这一课就是练筷子，留着它：先点<b>芥末</b>，再点<b>鱿鱼手握</b>。', 'bad', el); return; }
+      if (act !== 'card') return;
+      const id = +d.id, t = d.t;
+      const [a, b] = S.pair;
+      if (ui.selected.indexOf(id) >= 0) { ui.selected = ui.selected.filter((x) => x !== id); this.view.renderHand(); return; }
+      if (!ui.selected.length) {
+        if (t === a) { ui.selected = [id]; this.note = null; this.renderCoach(); }
+        else if (t === b) { this.setNote('先拿手握的话，芥末还没放下，鱿鱼就只值3分。<b>先点芥末</b>。', 'bad', el); return; }
+        else { this.setNote('这次试试<b>芥末+鱿鱼手握</b>的组合：一轮拿到9分！先点芥末。', 'bad', el); return; }
+      } else if (t === b) {
+        ui.selected.push(id);
+        this.data.chopSel = ui.selected.slice();
+        this.view.renderHand();
+        this.complete();
+        return;
+      } else { this.setNote('第二张选<b>鱿鱼手握</b>，让它落在芥末上。', 'bad', el); return; }
+      ui.abText = `筷子：1. ${nameOf(t)}，再选1张`;
+      this.view.renderHand(); this.view.renderActions();
+      return;
+    }
+    if (S.expect === 'btn') {
+      if (act === S.btn) { this.note = null; this.complete(); }
+      else if (act === 'card') this.setNote(`现在点下面的<b>「${S.btnLabel}」</b>。`, 'bad', el);
+      return;
+    }
+    if (S.expect === 'group') {
+      if (act === 'group' && d.g === S.group) { this.note = null; this.complete(); }
+      else if (act === 'group' || act === 'card') this.setNote(S.wrongGroup, 'bad', el);
+      return;
+    }
+    if (act === 'card' && S.expect === 'next') this.setNote('这一步先看说明，看完点<b>「下一步」</b>。', 'info', null);
+  },
+  onWidget(act, d, el) {
+    const S = this.step;
+    if (act === 'menu' && S.expect === 'menu') {
+      const i = +d.i;
+      this.data.seen = this.data.seen || {};
+      this.data.seen[i] = true;
+      this.menuSeen[i] = true;
+      this.data.menuCur = i;
+      this.renderStage();
+      const btn = $(`.mitem[data-i="${i}"]`, this.widgetHost);
+      if (btn) btn.focus({ preventScroll: true });
+      if (Object.keys(this.data.seen).length >= MENU.length && !this.stepDone) {
+        this.stepDone = true;
+        this.setNote('8种都看过了！不用背：实战时下面会提示；真牌的卡面上也印着得分（英文，比如「SASHIMI ×3=10」）。', 'good');
+        this.updateNav();
+      }
+      return;
+    }
+    if (act === 'menu' && S.expect === 'next') { this.data.menuCur = +d.i; this.renderStage(); return; }
+    if (act === 'tally' && S.expect === 'tally') {
+      const i = +d.i, k = this.data.tally;
+      if (this.data.tallyQ != null) { this.setNote('先回答上面的问题。', 'bad', el); return; }
+      if (i !== k) { this.setNote(`按顺序来：先算亮着的<b>${TALLY[k].name}</b>。`, 'bad', el); return; }
+      if (TALLY[k].q) { this.data.tallyQ = k; this.data.tallyAns = {}; this.note = null; this.renderCoach(); return; }
+      this.advanceTally();
+      return;
+    }
+    if (act === 'clear' && S.expect === 'wbtn' && S.wbtn === 'clear') { this.complete(); return; }
+    if (act === 'start-play' && S.expect === 'final') { this.finishAll(); }
+  },
+  advanceTally(why) {
+    const r = TALLY[this.data.tally];
+    this.data.tally += 1;
+    this.data.tallyQ = null;
+    TapGuard.arm('learn'); // 连点同一行：第二下不会变成「按顺序来」的错误
+    this.renderStage();
+    this.setNote(why || `<b>${r.name}</b>：${r.desc}${r.pts != null ? `，<b>${r.pts}分</b>` : ''}。`, 'good');
+    if (this.data.tally >= TALLY.length) {
+      this.stepDone = true;
+      this.setNote('全部算完：<span class="nw">3 + 5 + 0 + 6 = <b>14分</b></span>。布丁不在这里算。', 'good');
+      this.updateNav();
+    }
+    // 下一行亮起来时可能在屏幕下面：滚到看得见
+    this.scrollToEl($('.trow.cur', this.widgetHost) || $('.tsum', this.widgetHost));
+  },
+  answer(i, btn) {
+    const S = this.step;
+    if (this.locked) return;
+    if (S.expect === 'tally' && this.data.tallyQ != null) {
+      const r = TALLY[this.data.tallyQ];
+      const o = r.opts[i];
+      if (o.ok) this.advanceTally(o.why);
+      else { this.data.tallyAns[i] = false; this.setNote(o.why, 'bad', btn); }
+      return;
+    }
+    if (S.expect !== 'quiz' || this.stepDone) return;
+    const o = S.quiz[i];
+    this.data.answers = this.data.answers || {};
+    this.data.answers[i] = o.ok;
+    if (o.ok) {
+      this.stepDone = true;
+      TapGuard.arm('learn');
+      if (S.onRight) S.onRight(this);
+      // 测验时藏起来的分数（不然题目自己就把答案写出来了）：答对以后再亮出来当确认
+      if (this.view.ui.hidePts && S.view !== 'widget') { this.view.ui.hidePts = false; this.view.render(); }
+      this.renderStage();
+      this.setNote(o.why, 'good');
+      this.updateNav();
+    } else {
+      this.setNote(o.why, 'bad', btn);
+    }
+  },
+  // ---------------------------------------------------------------- 动画流程（教程用）
+  async revealOnly(ck) {
+    const st = this.st, v = this.view;
+    const prev = E.clone(st);
+    v.ui.msg = '大家一起翻开！';
+    const info = E.resolvePicks(st);
+    this.data.info = info;
+    await v.revealAnim(prev, st, info); ck();
+    v.ui.msg = '翻开了！<br><span class="dir">传给左边：小东 ↻</span>';
+    v.msgEl.innerHTML = v.ui.msg;
+    return info;
+  },
+  async passOnly(ck) {
+    const st = this.st, v = this.view;
+    const info = this.data.info || st.last;
+    if (info && info.plays.some((p) => p.chopsticks != null && p.p !== 0)) { await v.chopReturnAnim({ plays: info.plays.filter((p) => p.p !== 0) }); ck(); }
+    if (st.players.every((p) => p.hand.length === 0) && !st.players.some((p) => p.table.some((c) => c.pendingReturn))) {
+      E.passHands(st);
+      v.ui.msg = '这一回合结束了！';
+      v.ui.handEmptyText = '这一回合的手牌出完了。';
+      v.render(st);
+      return;
+    }
+    const n = st.players.length, dir = info ? info.dir : 1;
+    v.ui.msg = `把手牌传给左边的<b>${esc(st.players[(dir + n) % n].name)}</b>`;
+    v.msgEl.innerHTML = v.ui.msg;
+    await wait(200); ck();
+    await v.handToPlate(); ck();
+    E.passHands(st);
+    await v.beltMove(dir); ck();
+    const from = st.last.from[0];
+    const ui = TableView.freshUI();
+    ui.handFrom = from;
+    ui.msg = `你收到<b>${esc(st.players[from].name)}</b>的手牌<br><span class="dir">传给左边：小东 ↻</span>`;
+    v.render(st, ui);
+    await v.plateToHand(); ck();
+  },
+  async humanTurn(ck, ids, bots) {
+    const st = this.st, v = this.view;
+    E.setPick(st, 0, ids);
+    this.setBots(bots);
+    await v.pickDown(ids); ck();
+    for (let p = 1; p < st.players.length; p++) v.ui.opp[p] = 'ready';
+    v.renderOpps();
+    await wait(350); ck();
+    await this.revealOnly(ck);
+    await this.passOnly(ck);
+  },
+  async lastCardTurn(ck) {
+    const st = this.st, v = this.view;
+    if (st.phase !== 'pick' || st.players[0].hand.length !== 1) return;
+    v.ui.abText = '最后1张：直接打出。';
+    v.renderActions();
+    v.ui.msg = '每人只剩1张：直接打出';
+    v.msgEl.innerHTML = v.ui.msg;
+    await wait(700); ck();
+    st.players.forEach((pl, p) => { if (p) E.setPick(st, p, [pl.hand[0].id]); });
+    await this.humanTurn(ck, [st.players[0].hand[0].id], 'ai');
+  },
+  async fastForward(ck) {
+    const st = this.st;
+    let guard = 0;
+    while (st.phase === 'pick' && guard++ < 20) {
+      if (st.players[0].hand.length === 1) { await this.lastCardTurn(ck); break; }
+      const ids = E.botPick(st, 0);
+      this.view.ui.abText = '快进中：替你选了' + ids.map((id) => nameOf(this.typeOf(id))).join('、');
+      this.view.renderActions();
+      await this.humanTurn(ck, ids.slice(0, 1), 'ai');
+    }
+  },
+  async chopReveal(ck) {
+    const st = this.st, v = this.view;
+    const ids = this.data.chopSel;
+    E.setPick(st, 0, ids);
+    this.setBots({ 1: 'tempura', 2: 'maki3' });
+    shout(v.abBtns, 'Sushi Go!', 1300);
+    await wait(500); ck();
+    await v.pickDown(ids); ck();
+    for (let p = 1; p < st.players.length; p++) v.ui.opp[p] = 'ready';
+    v.renderOpps();
+    await wait(300); ck();
+    const prev = E.clone(st);
+    v.ui.msg = '大家一起翻开！';
+    const info = E.resolvePicks(st, { deferChopsticks: true });
+    this.data.info = info;
+    await v.revealAnim(prev, st, info); ck();
+    v.ui.msg = '用过的筷子 → 放回手牌';
+    v.msgEl.innerHTML = v.ui.msg;
+  },
+  async chopReturnAndPass(ck) {
+    const st = this.st, v = this.view;
+    const g = $('.grp[data-g="chopsticks"]', v.groupsEl);
+    const from = g ? g.getBoundingClientRect() : null;
+    const id = E.returnChopsticks(st, 0);
+    v.ui.groupsClickable = false;
+    v.ui.handTags = { [id]: '要传出' };
+    v.ui.focus = { regions: ['hand', 'mine'] };
+    v.render(st);
+    await v.chopReturnAnim({ plays: [{ p: 0, chopsticks: id }] }, from); ck();
+    await wait(900); ck();
+    await this.passOnly(ck);
+  },
+  async clearTable(ck) {
+    const rows = $$('.trow', this.widgetHost).filter((r) => r.dataset.g !== 'pudding');
+    await Promise.all(rows.map((r, i) => anim(r, [{ transform: 'translateX(0)', opacity: 1 }, { transform: 'translateX(60px)', opacity: 0 }], 380, { delay: D(i * 60), fill: 'forwards' })));
+    ck();
+  },
+};
+// 出牌类步骤：选对后真正打出这张牌（补上 after）
+LESSONS.forEach((L) => L.steps.forEach((S) => {
+  if ((S.expect === 'pick' || S.expect === 'pickAny') && !S.after) {
+    S.after = async (T, ck) => {
+      const st = T.st, v = T.view;
+      const ids = v.ui.selected.slice();
+      if (S.holdReveal) {
+        E.setPick(st, 0, ids);
+        T.setBots(S.bots);
+        await v.pickDown(ids); ck();
+        for (let p = 1; p < st.players.length; p++) v.ui.opp[p] = 'thinking';
+        v.renderOpps();
+        await wait(500); ck();
+        for (let p = 1; p < st.players.length; p++) v.ui.opp[p] = 'ready';
+        v.renderOpps(); v.renderPlates();
+        return;
+      }
+      await T.humanTurn(ck, ids, S.bots);
+      if (S.lastCard) await T.lastCardTurn(ck);
+    };
+  }
+}));
+
+// =====================================================================================================
+// 速查
+// =====================================================================================================
+function renderRef() {
+  const row = (t, n, en, r) => `<li>${mini(t)}<div><div class="rn">${n}<span class="ren">${en}</span></div><div class="rr">${r}</div></div></li>`;
+  // 计分格子里每一小段不拆行（窄屏上别把「鸡蛋1」「最少−6」拆成两行），只在「·」处换行
+  const sc = (t, n, ...parts) => `<div class="sc">${mini(t)}<span><b>${n}</b>${parts.map((x) => `<span class="nw">${x}</span>`).join(' · ')}</span></div>`;
+  // 顺序（手机上从上往下看）：开局步骤 → 计分（最常看）→ 卡牌说明 → 折叠起来的变体 / 小贴士 / 说明书没写清楚的地方
+  $('#ref-body').innerHTML = `
+  <div class="rbox">
+    <h3>开局步骤（真牌）</h3>
+    <ol class="steps">
+      <li><b>洗匀</b>全部108张，面朝下放中间当<b>抽牌堆</b>。备好<b>纸笔</b>记分。</li>
+      <li>每人摸手牌，别给别人看：</li>
+    </ol>
+    <div class="hs"><div><b>10</b>2人</div><div><b>9</b>3人</div><div><b>8</b>4人</div><div><b>7</b>5人</div></div>
+    <ol class="steps" start="3">
+      <li><b>每轮</b>：各选1张面朝下放在面前 → 一起翻开 → 把剩下的手牌递给<b>左手边</b>的人。最后1张直接打出。</li>
+      <li>翻开的牌<b>同类摆在一起</b>，手握直接压在芥末上。</li>
+      <li><b>回合结束</b>：每人报分、写在纸上，<b>记完再弃牌</b>（布丁留在面前）。共3个回合，下一回合从同一个抽牌堆接着摸，<b>不重新洗</b>。</li>
+      <li><b>3个回合后</b>算布丁，剩下的抽牌堆不用了。总分最高的赢；同分比布丁多少<sup>*</sup>。</li>
+    </ol>
+    <p class="rnote"><b>和网页不一样</b>：没有传送带、提示和自动计分，都要自己来。用筷子要自己喊「Sushi Go!」，再自己把筷子放回要传出去的手牌。</p>
+  </div>
+  <div class="rbox">
+    <h3>计分（每回合结束）</h3>
+    <div class="sgrid">
+      ${sc('maki3', '寿司卷', '标记最多6', '第二多3')}
+      ${sc('tempura', '天妇罗', '每2张 = 5')}
+      ${sc('sashimi', '刺身', '每3张 = 10')}
+      ${sc('dumpling', '煎饺', '1', '3', '6', '10', '15')}
+      ${sc('squid', '手握', '鱿鱼3', '鲑鱼2', '鸡蛋1')}
+      ${sc('wasabi', '芥末', '下一张手握×3<sup>*</sup>')}
+      ${sc('chopsticks', '筷子', '0分', '一轮拿2张')}
+      ${sc('pudding', '布丁', '游戏结束算', '最多+6', '最少−6<sup>*</sup>')}
+    </div>
+    <p class="rnote">没凑齐的天妇罗、刺身 = 0；单独的芥末 = 0。布丁不在回合里算，留到游戏结束。</p>
+  </div>
+  <div class="rbox">
+    <h3>卡牌说明</h3>
+    <ul class="rlist">
+      ${row('maki3', '寿司卷', 'MAKI ROLL · 26张', '卡上画着1–3个卷（标记）。比标记总数：最多<b>6</b>，第二多<b>3</b>。并列就平分（舍去小数）；并列第一时不给第二名<sup>*</sup>；0个标记不参加。')}
+      ${row('tempura', '天妇罗', 'TEMPURA · 14张', '每2张<b>5</b>；单张0。')}
+      ${row('sashimi', '刺身', 'SASHIMI · 14张', '每3张<b>10</b>；1、2张0。')}
+      ${row('dumpling', '煎饺', 'DUMPLING · 14张', '1 / 2 / 3 / 4 / 5张以上 = <b>1 / 3 / 6 / 10 / 15</b>。')}
+      ${row('squid', '手握', 'NIGIRI · 20张', '鱿鱼<b>3</b> · 鲑鱼<b>2</b> · 鸡蛋<b>1</b>；压在芥末上×3 → <b>9 / 6 / 3</b>。')}
+      ${row('wasabi', '芥末', 'WASABI · 6张', '0分。之后的下一张手握<b>必须</b>压上去，×3<sup>*</sup>；一张芥末只放一张手握；之前打出的手握不挪过去。')}
+      ${row('chopsticks', '筷子', 'CHOPSTICKS · 4张', '0分。之后某一轮：先选1张 → 喊「Sushi Go!」→ 再选1张，和大家一起翻开；然后把筷子<b>放回要传出去的手牌</b><sup>*</sup>（卡上写着「SWAP FOR 2」）。每轮最多用1张；手牌至少2张；当轮拿到的下一轮才能用。配芥末：先芥末、后手握才×3。')}
+      ${row('pudding', '布丁', 'PUDDING · 10张', '<b>游戏结束</b>才算：最多<b>+6</b>，最少<b>−6</b><sup>*</sup>（0张也算最少）；并列平分。2人局不扣分；大家一样多都不得分。')}
+    </ul>
+    <p class="fn">标<sup>*</sup>的地方说明书写得不清楚，点开「说明书没写清楚的地方」看。</p>
+  </div>
+  <details class="rbox">
+    <summary>变体（可选）</summary>
+    <div class="dbody">
+      <p><b>两边传递</b>：第1、3回合传给左边，第2回合传给右边。</p>
+      <p><b>两人「虚拟玩家」</b>：按3人局发牌（每份9张），第三份面朝下当虚拟玩家的牌堆。两人轮流替它出牌：轮到你时先从它的牌堆摸1张放进自己手牌，然后你给自己选1张、再给虚拟玩家选1张；对手只给自己选。翻开、传牌，按正常规则计分。（网页实战用的是标准2人局：每人10张。）</p>
+    </div>
+  </details>
+  <details class="rbox">
+    <summary>上桌小贴士</summary>
+    <div class="dbody"><ul>
+      <li>先看别人的桌面：谁在拼刺身？谁在抢寿司卷？</li>
+      <li>刺身只在剩下的轮数够时才开始拼。</li>
+      <li>芥末早拿，留给鱿鱼。别把鱿鱼传给有空芥末的人。</li>
+      <li>布丁至少拿1–2张：最少的−6。</li>
+      <li>人少时，你传出去的牌还会转回来。</li>
+    </ul></div>
+  </details>
+  <details class="rbox">
+    <summary>说明书没写清楚的地方（5条）</summary>
+    <div class="dbody">
+      <p class="fn"><b>* 筷子放回手牌</b>：中文说明书漏写了这一步（卡上写着「SWAP FOR 2」）。说明书没写清楚，这里按官方规则：放回你要传出去的手牌——这样大家手牌张数才一样。</p>
+      <p class="fn"><b>* 寿司卷并列第一</b>：说明书只写了「平分6分」，没说还给不给第二名。说明书没写清楚，这里按官方规则：不给。</p>
+      <p class="fn"><b>* 芥末×3、布丁−6</b>：说明书上的「游戏概要」写着芥末「分数翻倍」、布丁「最少:6」，和正文对不上。以正文为准：手握压在芥末上<b>×3</b>（9 / 6 / 3），布丁最少的<b>扣6分</b>。说明书没写清楚，这里按官方规则。</p>
+      <p class="fn"><b>* 布丁也一样多</b>：说明书只说同分比布丁。再一样多怎么办没写，这里按官方规则：并列获胜。</p>
+      <p class="fn"><b>平分「忽略余数」</b>：舍去小数，负分也往0舍。两人分3分各1；四人分6分各1；布丁两人分−6各−3，四人分−6各−1（不是−2）。</p>
+    </div>
+  </details>`;
+}
+
+// =====================================================================================================
+// 标签页 / 设置 / 启动
+// =====================================================================================================
+// opts.noUnpark：先别重新打开收起的计分弹窗；opts.hold：切过去以后实战先别动（马上要问一句）
+function showTab(name, opts) {
+  opts = opts || {};
+  const prevTab = currentTab;
+  currentTab = name;
+  document.body.dataset.tab = name;
+  $$('.tab').forEach((t) => t.setAttribute('aria-selected', String(t.dataset.tab === name)));
+  ['learn', 'play', 'ref'].forEach((id) => { $('#' + id).hidden = id !== name; });
+  if (name !== prevTab) {
+    // 回合计分 / 结果弹窗属于实战：切走时收起来（标签上亮一个点），回到实战再打开；别的弹窗直接关掉
+    if (!modal.hidden) {
+      const k = modal.dataset.kind;
+      if (k === 'roundEnd' || k === 'gameOver') Game.park(k); else closeModal();
+    }
+    $$('.ghost, .shout, .float-pts').forEach((e) => e.remove()); // 正在飞的牌、气泡不跟到别的页面
+  }
+  toggleSettings(false);
+  if (name === 'learn') Tut.fitTitle(); // 在别的标签页上量不到宽度
+  requestAnimationFrame(() => { Tut.view.layoutBelt(); Game.view.layoutBelt(); });
+  if (opts.hold) Pause.hold = true;
+  Game.syncParkDot();
+  if (name === 'play' && !opts.noUnpark) Game.restoreSheet();
+  Pause.check();
+}
+$$('.tab').forEach((t) => t.addEventListener('click', () => showTab(t.dataset.tab)));
+$('.tabs').addEventListener('keydown', (e) => {
+  if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+  const tabs = $$('.tab');
+  const i = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
+  const j = (i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length;
+  showTab(tabs[j].dataset.tab); tabs[j].focus();
+});
+function toggleSettings(open) {
+  const s = $('#settings'), g = $('#gear');
+  const o = open == null ? s.hidden : open;
+  s.hidden = !o;
+  g.setAttribute('aria-expanded', String(o));
+}
+$('#gear').addEventListener('click', (e) => { e.stopPropagation(); toggleSettings(); });
+document.addEventListener('click', (e) => { if (!$('#settings').hidden && !e.target.closest('#settings') && !e.target.closest('#gear')) toggleSettings(false); });
+function syncSpeed() { $$('#speed-seg [data-speed]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.speed === userSpeed))); }
+$('#speed-seg').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-speed]');
+  if (!b) return;
+  userSpeed = b.dataset.speed; store.set('speed', userSpeed); syncSpeed();
+});
+syncSpeed();
+
+Tut.init();
+Game.init();
+renderRef();
+(function boot() {
+  const hash = (location.hash || '').replace('#', '');
+  const done = store.get('lessonsDone', []);
+  let first = LESSONS.findIndex((_, i) => done.indexOf(i) < 0);
+  if (first < 0) first = 0;
+  Tut.open(first);
+  if (hash === 'ref') showTab('ref');
+  else if (hash === 'play' || (store.get('tutorialDone', false) && hash !== 'learn')) { showTab('play'); Game.showSetup(); }
+  else showTab('learn');
+})();
+
+// =====================================================================================================
+// 测试钩子（普通用户看不到）
+// =====================================================================================================
+window.GameDebug = {
+  engine: E,
+  setSpeed(f) { debugSpeed = Math.max(0, Number(f) || 0); return debugSpeed; },
+  getState() { const st = currentTab === 'learn' ? Tut.st : Game.st; return st ? E.clone(st) : null; },
+  gameState() { return Game.st ? E.clone(Game.st) : null; }, // 实战的状态（不管现在在哪个标签页）
+  tab(name) { showTab(name); return currentTab; },
+  lesson(i) { showTab('learn'); Tut.open(i - 1); return this.tut(); },
+  lessonCount: LESSONS.length,
+  tut() {
+    const S = Tut.step;
+    const tq = Tut.data.tallyQ;
+    return {
+      lesson: Tut.li + 1, step: Tut.si + 1, steps: Tut.lesson.steps.length, expect: S.expect, view: S.view,
+      pick: S.pick || null, btn: S.btn || null, group: S.group || null, pair: S.pair || null, wbtn: S.wbtn || null,
+      quizRight: S.quiz ? S.quiz.findIndex((o) => o.ok) : null, quizWrong: S.quiz ? S.quiz.findIndex((o) => !o.ok) : null,
+      // 屏幕上从左到右的选项顺序（data-i 序号）；quizRight/quizWrong 仍是 data-i
+      quizOrder: S.quiz ? seededOrder(`q${Tut.li}.${Tut.si}`, S.quiz.length) : null,
+      tallyQ: tq == null ? null : tq, tallyRight: tq == null ? null : TALLY[tq].opts.findIndex((o) => o.ok),
+      done: Tut.stepDone, busy: Tut.locked, note: Tut.note ? Tut.note.html : null,
+    };
+  },
+  lessonsDone() { return store.get('lessonsDone', []); },
+  startGame(opts) { showTab('play'); Game.start(Object.assign({}, Game.cfg, opts || {})); return this.game(); },
+  game() {
+    const st = Game.st;
+    if (!st) return { phase: 'setup' };
+    return { phase: st.phase, round: st.round, turn: st.turn, myTurn: st.phase === 'pick' && !st.players[0].pick && !Game.view.busy && st.players[0].hand.length > 1,
+      resolving: Game.resolving, busy: Game.view.busy, modal: modal.hidden ? null : modal.dataset.kind, parked: Game.parked, paused: Pause.on(),
+      canChop: st.phase === 'pick' ? E.canUseChopsticks(st, 0) : false, totals: st.players.map((p) => p.total) };
+  },
+  suggest() { return Game.st && Game.st.phase === 'pick' ? E.botPick(E.clone(Game.st), 0) : null; },
+};
+})();
+</script>
+</body>
+</html>
